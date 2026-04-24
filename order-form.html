@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Order Form — FBI Apostille · US Authentication Services</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy:       #042c53;
+  --navy-dark:  #021d38;
+  --navy-light: #eaf0f7;
+  --orange:     #f97316;
+  --orange-dk:  #ea6c0a;
+  --green:      #1a9e75;
+  --green-light:#e1f5ee;
+  --red:        #d94040;
+  --border:     #d5dce8;
+  --text:       #1a2236;
+  --text-muted: #6b7694;
+  --bg:         #f4f7fb;
+  --white:      #ffffff;
+  --radius:     10px;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'DM Sans', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ── TOP BAR ── */
+.form-topbar {
+  background: var(--white);
+  border-bottom: 1.5px solid var(--border);
+  padding: 14px 5%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 16px rgba(4,44,83,0.07);
+}
+.topbar-logo { display: flex; align-items: center; flex-shrink: 0; text-decoration: none; }
+.topbar-logo img { height: 52px; width: auto; object-fit: contain; }
+.topbar-divider { width: 1.5px; height: 38px; background: var(--border); flex-shrink: 0; }
+.topbar-title { flex: 1; }
+.form-brand-name {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--navy);
+  letter-spacing: -.02em;
+  line-height: 1.2;
+}
+.form-brand-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
+.topbar-trust {
+  display: flex;
+  gap: 18px;
+  flex-shrink: 0;
+}
+.topbar-trust span {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--green);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+@media(max-width:700px){ .topbar-trust { display: none; } }
+
+/* ── STEPPER ── */
+.stepper-wrap {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 5%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: auto;
+}
+.stepper-inner { display: flex; align-items: center; width: 100%; max-width: 900px; }
+.step-item { display: flex; align-items: center; gap: 8px; flex: 1; }
+.step-item:not(:last-child)::after { content: ''; flex: 1; height: 2px; background: var(--border); margin: 0 8px; border-radius: 2px; transition: background .3s; }
+.step-item.completed:not(:last-child)::after { background: var(--navy); }
+.step-circle {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: var(--text-muted);
+  background: white; flex-shrink: 0; transition: all .3s;
+}
+.step-item.active .step-circle { border-color: var(--navy); background: var(--navy); color: white; }
+.step-item.completed .step-circle { border-color: var(--green); background: var(--green); color: white; }
+.step-label { font-size: 11px; font-weight: 500; color: var(--text-muted); white-space: nowrap; display: none; }
+.step-item.active .step-label { color: var(--navy); font-weight: 600; display: block; }
+@media(min-width:560px){ .step-label { display: block; } }
+
+/* ── FORM BODY ── */
+.form-outer { padding: 2.5rem 5% 4rem; }
+.panel { display: none; animation: fadeUp .3s ease; max-width: 1200px; margin: 0 auto; }
+.panel.active { display: block; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+.panel-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 2rem 2.5rem; }
+
+/* ── PANEL TITLE ── */
+.panel-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem; color: var(--navy);
+  border-bottom: 2px solid var(--navy-light);
+  padding-bottom: .6rem; margin-bottom: 1.75rem;
+  font-weight: 500; display: flex; align-items: baseline; gap: 10px;
+}
+.panel-title span { font-family: var(--font-body); font-size: 11px; font-weight: 600; color: var(--text-muted); background: var(--bg); padding: 3px 9px; border-radius: 20px; border: 1px solid var(--border); }
+
+/* ── FIELDS ── */
+.field-row { display: grid; gap: 14px; margin-bottom: 14px; }
+.field-row.cols-2 { grid-template-columns: 1fr 1fr; }
+.field-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+.field-row.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; }
+.field label .req { color: var(--red); margin-left: 2px; }
+.field input, .field select, .field textarea {
+  border: 1.5px solid var(--border); border-radius: var(--radius);
+  padding: 9px 12px; font-size: .9rem; font-family: var(--font-body);
+  color: var(--text); background: white; transition: border-color .2s, box-shadow .2s;
+}
+.field textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none; border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(4,44,83,.08);
+}
+.field input.error, .field select.error { border-color: var(--red); }
+.field .err-msg { font-size: 11px; color: var(--red); display: none; }
+.field .err-msg.show { display: block; }
+
+/* ── SERVICE TYPE TOGGLE ── */
+.svc-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
+.svc-card { border: 2px solid var(--border); border-radius: 10px; padding: 14px 16px; cursor: pointer; transition: border-color .2s, background .2s; position: relative; }
+.svc-card:hover { border-color: var(--navy); background: var(--navy-light); }
+.svc-card.selected { border-color: var(--navy); background: var(--navy-light); }
+.svc-card input[type="radio"] { position: absolute; opacity: 0; }
+.svc-card-title { font-size: 13.5px; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+.svc-card-desc { font-size: 11.5px; color: var(--text-muted); line-height: 1.5; }
+.svc-card-badge { display: inline-block; margin-top: 6px; font-size: 10.5px; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
+.svc-card-badge.green { background: var(--green-light); color: var(--green); }
+.svc-card-badge.orange { background: rgba(249,115,22,.1); color: var(--orange-dk); }
+
+/* ── DOC COUNT ── */
+.doc-count-bar { display: flex; align-items: center; gap: 14px; background: var(--navy-light); border-radius: var(--radius); padding: .9rem 1.2rem; margin-bottom: 1.4rem; border: 1px solid rgba(4,44,83,.1); }
+.doc-count-bar label { font-size: .9rem; font-weight: 500; color: var(--navy); flex: 1; }
+.count-controls { display: flex; align-items: center; border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; background: white; }
+.count-btn { width: 36px; height: 36px; border: none; background: white; color: var(--navy); font-size: 1.2rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .15s; }
+.count-btn:hover { background: var(--navy-light); }
+.count-display { width: 44px; text-align: center; font-size: 1rem; font-weight: 700; color: var(--navy); border-left: 1px solid var(--border); border-right: 1px solid var(--border); height: 36px; line-height: 36px; }
+
+/* ── DOCUMENT CARDS ── */
+.doc-cards { display: flex; flex-direction: column; gap: 16px; margin-bottom: 1.5rem; }
+.doc-card { border: 1.5px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: border-color .2s; }
+.doc-card.has-file { border-color: var(--green); }
+.doc-card-header { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; padding: 10px 16px; background: var(--bg); border-bottom: 1px solid var(--border); }
+.doc-card-num { display: flex; align-items: center; gap: 8px; }
+.slot-badge { width: 26px; height: 26px; background: var(--navy); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+.doc-card-label { font-size: 13px; font-weight: 600; color: var(--text); }
+.doc-price-badge { background: var(--navy); color: white; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; white-space: nowrap; min-width: 52px; text-align: center; }
+.doc-price-badge.tbd { background: rgba(107,118,148,.45); }
+.doc-card-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+
+/* Upload */
+.upload-zone { padding: 14px 16px; border-right: 1px solid var(--border); }
+.upload-box { border: 1.5px dashed var(--border); border-radius: 8px; padding: 12px 14px; background: white; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: border-color .2s, background .2s; position: relative; overflow: hidden; }
+.upload-box:hover { border-color: var(--navy); background: var(--navy-light); }
+.upload-box.has-file { border-color: var(--green); border-style: solid; background: var(--green-light); }
+.upload-box input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 2; }
+.upload-icon svg { width: 22px; height: 22px; flex-shrink: 0; }
+.upload-text .up-primary { font-size: 12.5px; font-weight: 500; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 220px; }
+.upload-text .up-secondary { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+.check-icon { display: none; width: 22px; height: 22px; background: var(--green); border-radius: 50%; align-items: center; justify-content: center; flex-shrink: 0; margin-left: auto; }
+.upload-box.has-file .check-icon { display: flex; }
+
+/* Doc options */
+.doc-options { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+.doc-checks { display: flex; flex-direction: column; gap: 9px; }
+.doc-check { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--text); cursor: pointer; user-select: none; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border); background: white; transition: border-color .15s, background .15s; }
+.doc-check:hover { border-color: var(--navy); background: var(--navy-light); }
+.doc-check input[type="checkbox"] { accent-color: var(--navy); width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; }
+.check-info { display: flex; flex-direction: column; gap: 2px; }
+.check-title { font-size: 12.5px; font-weight: 600; color: var(--text); }
+.check-price-line { font-size: 11px; color: var(--text-muted); }
+.check-price-computed { font-size: 11.5px; font-weight: 700; color: var(--green); }
+
+/* ── DOC SUBTOTAL ── */
+.doc-subtotal-bar { background: var(--navy); color: white; border-radius: 10px; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; }
+.doc-subtotal-bar .sub-label { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; opacity: .7; }
+.doc-subtotal-bar .sub-amount { font-family: var(--font-display); font-size: 1.55rem; font-weight: 600; }
+
+/* Destination country */
+.dest-country-wrap { margin-top: 1.2rem; margin-bottom: 0; }
+
+/* ── MAILING ── */
+.mailing-grid { display: grid; grid-template-columns: 1fr 280px; gap: 2rem; align-items: start; }
+.mailing-sidebar { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem; }
+.mailing-sidebar .card-title { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; text-align: center; margin-bottom: 12px; }
+.mail-opt { display: flex; align-items: center; gap: 9px; font-size: 13px; color: var(--text); cursor: pointer; margin-bottom: 8px; padding: 8px 10px; border-radius: 8px; transition: background .15s; }
+.mail-opt:hover { background: var(--navy-light); }
+.mail-opt input[type="radio"] { accent-color: var(--navy); }
+.sig-sub { display: flex; align-items: center; gap: 8px; margin-left: 24px; margin-bottom: 8px; font-size: 12px; color: var(--text-muted); }
+.sig-sub input { width: 48px; border: 1px solid var(--border); border-radius: 6px; padding: 4px 6px; font-size: 12px; font-family: var(--font-body); }
+.hr-div { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
+.grand-total-bar { background: var(--navy); color: white; border-radius: 8px; padding: 10px 14px; font-size: 13px; font-weight: 700; display: flex; justify-content: space-between; margin-top: 10px; }
+
+/* ── ORDER SUMMARY ── */
+.order-summary { background: var(--navy-light); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem 1.4rem; margin-top: 1.4rem; }
+.order-summary .os-title { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 10px; }
+.os-line { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
+.os-line.total { font-size: 15px; font-weight: 700; color: var(--navy); border-top: 1px solid var(--border); padding-top: 8px; margin-top: 8px; }
+
+/* ── REVIEW STEP ── */
+.review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 1.5rem; }
+.review-block { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; }
+.review-block-title { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.review-block-title .edit-link { margin-left: auto; font-size: 11px; font-weight: 600; color: var(--navy); cursor: pointer; text-transform: none; letter-spacing: 0; text-decoration: underline; text-underline-offset: 2px; }
+.review-row { display: flex; justify-content: space-between; font-size: 12.5px; margin-bottom: 5px; gap: 12px; }
+.review-row .label { color: var(--text-muted); flex-shrink: 0; }
+.review-row .value { color: var(--text); font-weight: 500; text-align: right; }
+.review-total-bar { background: var(--navy); color: white; border-radius: 10px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+.review-total-bar .rt-label { font-size: 13px; font-weight: 600; opacity: .75; }
+.review-total-bar .rt-amount { font-family: var(--font-display); font-size: 1.8rem; font-weight: 600; }
+
+/* ── SIGNATURE ── */
+.auth-block { background: var(--navy-light); border-left: 3px solid var(--navy); border-radius: 0 var(--radius) var(--radius) 0; padding: 1rem 1.2rem; font-size: 12.5px; color: var(--text-muted); line-height: 1.75; margin-bottom: 1.4rem; font-style: italic; }
+.sign-row { display: grid; grid-template-columns: 1fr 200px; gap: 16px; align-items: end; }
+.sign-line label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; display: block; margin-bottom: 5px; }
+.sign-line input { border: none; border-bottom: 2px solid var(--navy); border-radius: 0; padding: 7px 2px; font-size: 1.05rem; font-family: var(--font-display); width: 100%; background: transparent; color: var(--text); }
+.sign-line input:focus { outline: none; }
+
+/* ── NAV BUTTONS ── */
+.nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+.btn-back { background: transparent; border: 1.5px solid var(--border); color: var(--text-muted); border-radius: var(--radius); padding: 10px 22px; font-size: 13.5px; font-family: var(--font-body); font-weight: 500; cursor: pointer; transition: border-color .2s, color .2s; }
+.btn-back:hover { border-color: var(--navy); color: var(--navy); }
+.btn-next { background: var(--navy); border: none; color: white; border-radius: var(--radius); padding: 10px 26px; font-size: 13.5px; font-family: var(--font-body); font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: background .2s, transform .1s; }
+.btn-next:hover { background: var(--navy-dark); }
+.btn-next:active { transform: scale(.98); }
+.btn-next svg { width: 16px; height: 16px; }
+.btn-submit { width: 100%; margin-top: 1.5rem; background: var(--orange); border: none; color: white; border-radius: var(--radius); padding: 14px 28px; font-size: 1rem; font-family: var(--font-body); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: background .2s, transform .1s; box-shadow: 0 4px 18px rgba(249,115,22,.35); }
+.btn-submit:hover { background: var(--orange-dk); }
+.btn-submit:active { transform: scale(.98); }
+.btn-submit:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; }
+.spinner { display: inline-block; width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.4); border-top-color: white; border-radius: 50%; animation: spin .7s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
+
+/* ── SUCCESS ── */
+.success-panel { text-align: center; padding: 3rem 1rem; }
+.success-icon { width: 72px; height: 72px; background: var(--green-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.2rem; }
+.success-panel h2 { font-family: var(--font-display); color: var(--navy); font-size: 1.6rem; margin-bottom: .6rem; }
+.success-panel p { font-size: 14px; color: var(--text-muted); line-height: 1.75; }
+.order-ref { display: inline-block; background: var(--navy-light); color: var(--navy); font-size: 12px; font-weight: 700; padding: 6px 16px; border-radius: 20px; margin: 1rem 0; letter-spacing: .05em; }
+.next-steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 2rem; text-align: left; }
+.next-step-card { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.next-step-num { font-size: 22px; font-weight: 800; color: var(--navy); opacity: .15; line-height: 1; margin-bottom: 6px; }
+.next-step-title { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.next-step-body { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+
+/* ── FOOTER ── */
+.form-footer { text-align: center; font-size: 11.5px; color: var(--text-muted); padding: 1.5rem 5% 2.5rem; line-height: 1.9; border-top: 1px solid var(--border); background: var(--white); margin-top: 2rem; }
+
+/* ── PLAN SELECTION CARDS ── */
+.plan-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 1.25rem; }
+.plan-card {
+  border: 2px solid var(--border); border-radius: 14px; padding: 22px 20px;
+  cursor: pointer; transition: border-color .2s, background .2s, box-shadow .2s;
+  position: relative; background: white; display: flex; flex-direction: column;
+}
+.plan-card:hover { border-color: var(--navy); background: var(--navy-light); }
+.plan-card.selected { border-color: var(--navy); background: var(--navy-light); box-shadow: 0 0 0 4px rgba(4,44,83,.09); }
+.plan-card.featured { border-color: rgba(4,44,83,.35); }
+.plan-card input[type="radio"] { position: absolute; opacity: 0; pointer-events: none; }
+.plan-badge { display: inline-block; font-size: 10.5px; font-weight: 700; padding: 3px 11px; border-radius: 20px; background: var(--navy); color: white; margin-bottom: 12px; align-self: flex-start; }
+.plan-badge-placeholder { height: 22px; margin-bottom: 12px; }
+.plan-tier { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 6px; }
+.plan-price { font-size: 40px; font-weight: 800; color: var(--navy); letter-spacing: -.04em; line-height: 1; margin-bottom: 3px; }
+.plan-price sup { font-size: 18px; vertical-align: top; margin-top: 5px; }
+.plan-price .per-doc { font-size: 12px; font-weight: 500; color: var(--text-muted); letter-spacing: 0; }
+.plan-turn { font-size: 12.5px; color: var(--text-muted); margin-bottom: 16px; }
+.plan-div { border: none; border-top: 1px solid var(--border); margin: 0 0 16px; }
+.plan-features { list-style: none; padding: 0; margin: 0; flex: 1; }
+.plan-features li { font-size: 12.5px; color: var(--text); padding: 5px 0; display: flex; align-items: flex-start; gap: 8px; border-bottom: 0.5px solid var(--navy-light); }
+.plan-features li:last-child { border-bottom: none; }
+.plan-check { color: var(--green); font-weight: 700; flex-shrink: 0; font-size: 13px; }
+.plan-cross { color: #bcc5d8; font-weight: 700; flex-shrink: 0; font-size: 13px; }
+.plan-subtotal-bar { background: var(--navy); color: white; border-radius: 10px; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; margin-top: .75rem; margin-bottom: .25rem; }
+.plan-subtotal-bar .sub-label { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; opacity: .7; }
+.plan-subtotal-bar .sub-amount { font-family: var(--font-display); font-size: 1.55rem; font-weight: 600; }
+.plan-err { font-size: 12px; color: var(--red); margin-bottom: 1rem; display: none; }
+.plan-err.show { display: block; }
+@media(max-width:768px){ .plan-cards { grid-template-columns: 1fr; } }
+
+/* ── PHONE WITH COUNTRY CODE ── */
+.phone-input-wrap {
+  display: flex;
+  gap: 0;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: white;
+  transition: border-color .2s, box-shadow .2s;
+}
+.phone-input-wrap:focus-within {
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(4,44,83,.08);
+}
+.phone-input-wrap.error { border-color: var(--red); }
+.phone-code-sel {
+  border: none;
+  border-right: 1.5px solid var(--border);
+  border-radius: 0;
+  padding: 9px 8px 9px 10px;
+  font-size: .82rem;
+  font-family: var(--font-body);
+  color: var(--navy);
+  background: var(--navy-light);
+  cursor: pointer;
+  min-width: 90px;
+  max-width: 110px;
+  flex-shrink: 0;
+  font-weight: 600;
+  outline: none;
+}
+.phone-code-sel:focus { outline: none; }
+.phone-input-wrap input[type="tel"] {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  flex: 1;
+  min-width: 0;
+  padding: 9px 12px;
+}
+.phone-input-wrap input[type="tel"]:focus {
+  outline: none;
+  box-shadow: none;
+  border: none;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .panel-card { padding: 1.4rem 1.2rem; }
+  .field-row.cols-2,.field-row.cols-3,.field-row.cols-4 { grid-template-columns: 1fr; }
+  .doc-card-body { grid-template-columns: 1fr; }
+  .upload-zone { border-right: none; border-bottom: 1px solid var(--border); }
+  .mailing-grid { grid-template-columns: 1fr; }
+  .review-grid { grid-template-columns: 1fr; }
+  .sign-row { grid-template-columns: 1fr; }
+  .svc-cards { grid-template-columns: 1fr; }
+  .next-steps { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── TOP BAR ── -->
+<div class="form-topbar">
+  <a href="index.html" class="topbar-logo">
+    <img src="brand_assets/logo.jpeg" alt="FBI Apostille Logo"/>
+  </a>
+  <div class="topbar-divider"></div>
+  <div class="topbar-title">
+    <div class="form-brand-name">FBI APOSTILLE ORDER FORM</div>
+    <div class="form-brand-sub">US Authentication Services &nbsp;·&nbsp; Washington DC</div>
+  </div>
+  <div class="topbar-trust">
+    <span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      Free Document Review
+    </span>
+    <span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="11" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Secure &amp; Encrypted
+    </span>
+    <span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      8–9 Business Days
+    </span>
+  </div>
+</div>
+
+<!-- ── STEPPER ── -->
+<div class="stepper-wrap">
+  <div class="stepper-inner">
+    <div class="step-item active" id="step-1">
+      <div class="step-circle">1</div>
+      <div class="step-label">Contact</div>
+    </div>
+    <div class="step-item" id="step-2">
+      <div class="step-circle">2</div>
+      <div class="step-label">Choose Plan</div>
+    </div>
+    <div class="step-item" id="step-3">
+      <div class="step-circle">3</div>
+      <div class="step-label">Documents</div>
+    </div>
+    <div class="step-item" id="step-4">
+      <div class="step-circle">4</div>
+      <div class="step-label">Mailing</div>
+    </div>
+    <div class="step-item" id="step-5">
+      <div class="step-circle">5</div>
+      <div class="step-label">Review &amp; Sign</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── FORM PANELS ── -->
+<div class="form-outer">
+
+  <!-- ════════════════════════════════
+       PANEL 1 — CONTACT INFORMATION
+  ═════════════════════════════════ -->
+  <div class="panel active" id="panel-1">
+    <div class="panel-card">
+      <div class="panel-title">Contact Information <span>Step 1 of 5</span></div>
+      <div class="field-row cols-2">
+        <div class="field">
+          <label>First Name <span class="req">*</span></label>
+          <input type="text" id="first_name" placeholder="Jane" oninput="clearErr(this)"/>
+          <span class="err-msg">First name is required</span>
+        </div>
+        <div class="field">
+          <label>Last Name <span class="req">*</span></label>
+          <input type="text" id="last_name" placeholder="Doe" oninput="clearErr(this)"/>
+          <span class="err-msg">Last name is required</span>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Email Address <span class="req">*</span></label>
+          <input type="email" id="email" placeholder="jane@example.com" oninput="clearErr(this)"/>
+          <span class="err-msg">Please enter a valid email address</span>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Phone Number <span class="req">*</span></label>
+          <div class="phone-input-wrap" id="phone-wrap">
+            <select id="phone_code" class="phone-code-sel" onchange="clearPhoneErr()">
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+44">🇬🇧 +44</option>
+              <option value="+91">🇮🇳 +91</option>
+              <option value="+971">🇦🇪 +971</option>
+              <option value="+93">🇦🇫 +93</option>
+              <option value="+355">🇦🇱 +355</option>
+              <option value="+213">🇩🇿 +213</option>
+              <option value="+376">🇦🇩 +376</option>
+              <option value="+244">🇦🇴 +244</option>
+              <option value="+54">🇦🇷 +54</option>
+              <option value="+374">🇦🇲 +374</option>
+              <option value="+61">🇦🇺 +61</option>
+              <option value="+43">🇦🇹 +43</option>
+              <option value="+994">🇦🇿 +994</option>
+              <option value="+1-242">🇧🇸 +1-242</option>
+              <option value="+973">🇧🇭 +973</option>
+              <option value="+880">🇧🇩 +880</option>
+              <option value="+375">🇧🇾 +375</option>
+              <option value="+32">🇧🇪 +32</option>
+              <option value="+501">🇧🇿 +501</option>
+              <option value="+229">🇧🇯 +229</option>
+              <option value="+975">🇧🇹 +975</option>
+              <option value="+591">🇧🇴 +591</option>
+              <option value="+387">🇧🇦 +387</option>
+              <option value="+267">🇧🇼 +267</option>
+              <option value="+55">🇧🇷 +55</option>
+              <option value="+673">🇧🇳 +673</option>
+              <option value="+359">🇧🇬 +359</option>
+              <option value="+226">🇧🇫 +226</option>
+              <option value="+257">🇧🇮 +257</option>
+              <option value="+238">🇨🇻 +238</option>
+              <option value="+855">🇰🇭 +855</option>
+              <option value="+237">🇨🇲 +237</option>
+              <option value="+1">🇨🇦 +1</option>
+              <option value="+236">🇨🇫 +236</option>
+              <option value="+235">🇹🇩 +235</option>
+              <option value="+56">🇨🇱 +56</option>
+              <option value="+86">🇨🇳 +86</option>
+              <option value="+57">🇨🇴 +57</option>
+              <option value="+269">🇰🇲 +269</option>
+              <option value="+243">🇨🇩 +243</option>
+              <option value="+242">🇨🇬 +242</option>
+              <option value="+506">🇨🇷 +506</option>
+              <option value="+225">🇨🇮 +225</option>
+              <option value="+385">🇭🇷 +385</option>
+              <option value="+53">🇨🇺 +53</option>
+              <option value="+357">🇨🇾 +357</option>
+              <option value="+420">🇨🇿 +420</option>
+              <option value="+45">🇩🇰 +45</option>
+              <option value="+253">🇩🇯 +253</option>
+              <option value="+1-767">🇩🇲 +1-767</option>
+              <option value="+1-809">🇩🇴 +1-809</option>
+              <option value="+593">🇪🇨 +593</option>
+              <option value="+20">🇪🇬 +20</option>
+              <option value="+503">🇸🇻 +503</option>
+              <option value="+240">🇬🇶 +240</option>
+              <option value="+291">🇪🇷 +291</option>
+              <option value="+372">🇪🇪 +372</option>
+              <option value="+268">🇸🇿 +268</option>
+              <option value="+251">🇪🇹 +251</option>
+              <option value="+679">🇫🇯 +679</option>
+              <option value="+358">🇫🇮 +358</option>
+              <option value="+33">🇫🇷 +33</option>
+              <option value="+241">🇬🇦 +241</option>
+              <option value="+220">🇬🇲 +220</option>
+              <option value="+995">🇬🇪 +995</option>
+              <option value="+49">🇩🇪 +49</option>
+              <option value="+233">🇬🇭 +233</option>
+              <option value="+30">🇬🇷 +30</option>
+              <option value="+1-473">🇬🇩 +1-473</option>
+              <option value="+502">🇬🇹 +502</option>
+              <option value="+224">🇬🇳 +224</option>
+              <option value="+245">🇬🇼 +245</option>
+              <option value="+592">🇬🇾 +592</option>
+              <option value="+509">🇭🇹 +509</option>
+              <option value="+504">🇭🇳 +504</option>
+              <option value="+36">🇭🇺 +36</option>
+              <option value="+354">🇮🇸 +354</option>
+              <option value="+62">🇮🇩 +62</option>
+              <option value="+98">🇮🇷 +98</option>
+              <option value="+964">🇮🇶 +964</option>
+              <option value="+353">🇮🇪 +353</option>
+              <option value="+972">🇮🇱 +972</option>
+              <option value="+39">🇮🇹 +39</option>
+              <option value="+1-876">🇯🇲 +1-876</option>
+              <option value="+81">🇯🇵 +81</option>
+              <option value="+962">🇯🇴 +962</option>
+              <option value="+7">🇰🇿 +7</option>
+              <option value="+254">🇰🇪 +254</option>
+              <option value="+686">🇰🇮 +686</option>
+              <option value="+383">🇽🇰 +383</option>
+              <option value="+965">🇰🇼 +965</option>
+              <option value="+996">🇰🇬 +996</option>
+              <option value="+856">🇱🇦 +856</option>
+              <option value="+371">🇱🇻 +371</option>
+              <option value="+961">🇱🇧 +961</option>
+              <option value="+266">🇱🇸 +266</option>
+              <option value="+231">🇱🇷 +231</option>
+              <option value="+218">🇱🇾 +218</option>
+              <option value="+423">🇱🇮 +423</option>
+              <option value="+370">🇱🇹 +370</option>
+              <option value="+352">🇱🇺 +352</option>
+              <option value="+261">🇲🇬 +261</option>
+              <option value="+265">🇲🇼 +265</option>
+              <option value="+60">🇲🇾 +60</option>
+              <option value="+960">🇲🇻 +960</option>
+              <option value="+223">🇲🇱 +223</option>
+              <option value="+356">🇲🇹 +356</option>
+              <option value="+692">🇲🇭 +692</option>
+              <option value="+222">🇲🇷 +222</option>
+              <option value="+230">🇲🇺 +230</option>
+              <option value="+52">🇲🇽 +52</option>
+              <option value="+691">🇫🇲 +691</option>
+              <option value="+373">🇲🇩 +373</option>
+              <option value="+377">🇲🇨 +377</option>
+              <option value="+976">🇲🇳 +976</option>
+              <option value="+382">🇲🇪 +382</option>
+              <option value="+212">🇲🇦 +212</option>
+              <option value="+258">🇲🇿 +258</option>
+              <option value="+264">🇳🇦 +264</option>
+              <option value="+674">🇳🇷 +674</option>
+              <option value="+977">🇳🇵 +977</option>
+              <option value="+31">🇳🇱 +31</option>
+              <option value="+64">🇳🇿 +64</option>
+              <option value="+505">🇳🇮 +505</option>
+              <option value="+227">🇳🇪 +227</option>
+              <option value="+234">🇳🇬 +234</option>
+              <option value="+389">🇲🇰 +389</option>
+              <option value="+47">🇳🇴 +47</option>
+              <option value="+968">🇴🇲 +968</option>
+              <option value="+92">🇵🇰 +92</option>
+              <option value="+680">🇵🇼 +680</option>
+              <option value="+970">🇵🇸 +970</option>
+              <option value="+507">🇵🇦 +507</option>
+              <option value="+675">🇵🇬 +675</option>
+              <option value="+595">🇵🇾 +595</option>
+              <option value="+51">🇵🇪 +51</option>
+              <option value="+63">🇵🇭 +63</option>
+              <option value="+48">🇵🇱 +48</option>
+              <option value="+351">🇵🇹 +351</option>
+              <option value="+974">🇶🇦 +974</option>
+              <option value="+40">🇷🇴 +40</option>
+              <option value="+7">🇷🇺 +7</option>
+              <option value="+250">🇷🇼 +250</option>
+              <option value="+1-869">🇰🇳 +1-869</option>
+              <option value="+1-758">🇱🇨 +1-758</option>
+              <option value="+1-784">🇻🇨 +1-784</option>
+              <option value="+685">🇼🇸 +685</option>
+              <option value="+378">🇸🇲 +378</option>
+              <option value="+239">🇸🇹 +239</option>
+              <option value="+966">🇸🇦 +966</option>
+              <option value="+221">🇸🇳 +221</option>
+              <option value="+381">🇷🇸 +381</option>
+              <option value="+248">🇸🇨 +248</option>
+              <option value="+232">🇸🇱 +232</option>
+              <option value="+65">🇸🇬 +65</option>
+              <option value="+421">🇸🇰 +421</option>
+              <option value="+386">🇸🇮 +386</option>
+              <option value="+677">🇸🇧 +677</option>
+              <option value="+252">🇸🇴 +252</option>
+              <option value="+27">🇿🇦 +27</option>
+              <option value="+82">🇰🇷 +82</option>
+              <option value="+211">🇸🇸 +211</option>
+              <option value="+34">🇪🇸 +34</option>
+              <option value="+94">🇱🇰 +94</option>
+              <option value="+249">🇸🇩 +249</option>
+              <option value="+597">🇸🇷 +597</option>
+              <option value="+46">🇸🇪 +46</option>
+              <option value="+41">🇨🇭 +41</option>
+              <option value="+963">🇸🇾 +963</option>
+              <option value="+886">🇹🇼 +886</option>
+              <option value="+992">🇹🇯 +992</option>
+              <option value="+255">🇹🇿 +255</option>
+              <option value="+66">🇹🇭 +66</option>
+              <option value="+670">🇹🇱 +670</option>
+              <option value="+228">🇹🇬 +228</option>
+              <option value="+676">🇹🇴 +676</option>
+              <option value="+1-868">🇹🇹 +1-868</option>
+              <option value="+216">🇹🇳 +216</option>
+              <option value="+90">🇹🇷 +90</option>
+              <option value="+993">🇹🇲 +993</option>
+              <option value="+688">🇹🇻 +688</option>
+              <option value="+256">🇺🇬 +256</option>
+              <option value="+380">🇺🇦 +380</option>
+              <option value="+598">🇺🇾 +598</option>
+              <option value="+998">🇺🇿 +998</option>
+              <option value="+678">🇻🇺 +678</option>
+              <option value="+379">🇻🇦 +379</option>
+              <option value="+58">🇻🇪 +58</option>
+              <option value="+84">🇻🇳 +84</option>
+              <option value="+967">🇾🇪 +967</option>
+              <option value="+260">🇿🇲 +260</option>
+              <option value="+263">🇿🇼 +263</option>
+            </select>
+            <input type="tel" id="phone" placeholder="703 000 0000" oninput="clearPhoneErr()"/>
+          </div>
+          <span class="err-msg" id="phone-err">Please enter a valid phone number (digits only)</span>
+        </div>
+      </div>
+      <div class="nav-row">
+        <div></div>
+        <button class="btn-next" onclick="goNext(1)">
+          Next — Choose Plan
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       PANEL 2 — CHOOSE PLAN
+  ═════════════════════════════════ -->
+  <div class="panel" id="panel-2">
+    <div class="panel-card">
+      <div class="panel-title">Choose Your Plan <span>Step 2 of 5</span></div>
+
+      <div class="plan-cards">
+
+        <!-- ECONOMY -->
+        <label class="plan-card" id="plan-economy-card" onclick="selectPlan('economy',69,'Economy — 5+ weeks')">
+          <input type="radio" name="selected_plan" value="economy"/>
+          <div class="plan-badge-placeholder"></div>
+          <div class="plan-tier">Economy</div>
+          <div class="plan-price"><sup>$</sup>69 <span class="per-doc">/ doc</span></div>
+          <div class="plan-turn">5+ weeks turnaround</div>
+          <hr class="plan-div"/>
+          <ul class="plan-features">
+            <li><span class="plan-check">✓</span> All government fees included</li>
+            <li><span class="plan-check">✓</span> PDF upload online</li>
+            <li><span class="plan-check">✓</span> Email confirmation</li>
+            <li><span class="plan-cross">✗</span> Return shipping</li>
+            <li><span class="plan-cross">✗</span> Free document pre-screening</li>
+            <li><span class="plan-cross">✗</span> Digital copy emailed</li>
+          </ul>
+        </label>
+
+        <!-- STANDARD -->
+        <label class="plan-card featured" id="plan-standard-card" onclick="selectPlan('standard',89,'Standard — 15 business days')">
+          <input type="radio" name="selected_plan" value="standard"/>
+          <div class="plan-badge">Most popular</div>
+          <div class="plan-tier">Standard</div>
+          <div class="plan-price"><sup>$</sup>89 <span class="per-doc">/ doc</span></div>
+          <div class="plan-turn">15 business days</div>
+          <hr class="plan-div"/>
+          <ul class="plan-features">
+            <li><span class="plan-check">✓</span> All government fees included</li>
+            <li><span class="plan-check">✓</span> PDF upload online</li>
+            <li><span class="plan-check">✓</span> Email confirmation</li>
+            <li><span class="plan-cross">✗</span> Return shipping</li>
+            <li><span class="plan-check">✓</span> Free document pre-screening</li>
+            <li><span class="plan-cross">✗</span> Digital copy emailed</li>
+          </ul>
+        </label>
+
+        <!-- EXPRESS -->
+        <label class="plan-card" id="plan-express-card" onclick="selectPlan('express',109,'Express — 8–9 business days')">
+          <input type="radio" name="selected_plan" value="express"/>
+          <div class="plan-badge-placeholder"></div>
+          <div class="plan-tier">Express</div>
+          <div class="plan-price"><sup>$</sup>109 <span class="per-doc">/ doc</span></div>
+          <div class="plan-turn">8–9 business days*</div>
+          <hr class="plan-div"/>
+          <ul class="plan-features">
+            <li><span class="plan-check">✓</span> All government fees included</li>
+            <li><span class="plan-check">✓</span> PDF upload online</li>
+            <li><span class="plan-check">✓</span> Email confirmation</li>
+            <li><span class="plan-check">✓</span> Free document pre-screening</li>
+            <li><span class="plan-check">✓</span> Digital copy emailed</li>
+            <li><span class="plan-check">✓</span> FedEx shipping available globally</li>
+          </ul>
+        </label>
+
+      </div>
+
+      <div class="plan-err" id="plan-err">Please select a plan to continue.</div>
+
+      <div class="plan-subtotal-bar">
+        <span class="sub-label">Plan Subtotal</span>
+        <span class="sub-amount" id="plan-subtotal-display">—</span>
+      </div>
+
+      <p style="font-size:11px;color:var(--text-muted);margin-top:.6rem">* Fridays are not counted as a working day at the US Dept. of State for the Express option.</p>
+
+      <div class="nav-row">
+        <button class="btn-back" onclick="goBack(2)">← Back</button>
+        <button class="btn-next" onclick="goNext(2)">
+          Next — Documents
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       PANEL 3 — DOCUMENT UPLOAD
+  ═════════════════════════════════ -->
+  <div class="panel" id="panel-3">
+    <div class="panel-card">
+      <div class="panel-title">Document Upload <span>Step 3 of 5</span></div>
+
+      <!-- Number of documents toggle -->
+      <div class="doc-count-bar">
+        <label>Total Number of Documents <span style="font-size:11px;color:var(--text-muted);font-weight:400">(min 1, max 10)</span></label>
+        <div class="count-controls">
+          <button type="button" class="count-btn" onclick="changeDocCount(-1)">−</button>
+          <div class="count-display" id="doc-count-display">1</div>
+          <button type="button" class="count-btn" onclick="changeDocCount(1)">+</button>
+        </div>
+      </div>
+
+      <!-- Dynamic document cards -->
+      <div class="doc-cards" id="doc-cards-container">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Country where documents will be used -->
+      <div class="dest-country-wrap field-row">
+        <div class="field">
+          <label>Country Documents to be Used In <span class="req">*</span></label>
+          <select id="destination_country" onchange="clearErr(this)">
+            <option value="">— Select destination country —</option>
+            <option>Afghanistan</option>
+            <option>Albania</option>
+            <option>Andorra</option>
+            <option>Angola</option>
+            <option>Antigua and Barbuda</option>
+            <option>Argentina</option>
+            <option>Armenia</option>
+            <option>Australia</option>
+            <option>Austria</option>
+            <option>Azerbaijan</option>
+            <option>Bahamas</option>
+            <option>Bahrain</option>
+            <option>Bangladesh</option>
+            <option>Belarus</option>
+            <option>Belgium</option>
+            <option>Belize</option>
+            <option>Bolivia</option>
+            <option>Bosnia and Herzegovina</option>
+            <option>Brazil</option>
+            <option>Bulgaria</option>
+            <option>Cambodia</option>
+            <option>Canada</option>
+            <option>Chile</option>
+            <option>China</option>
+            <option>Colombia</option>
+            <option>Costa Rica</option>
+            <option>Croatia</option>
+            <option>Cuba</option>
+            <option>Cyprus</option>
+            <option>Czech Republic</option>
+            <option>Denmark</option>
+            <option>Dominican Republic</option>
+            <option>Ecuador</option>
+            <option>Egypt</option>
+            <option>El Salvador</option>
+            <option>Estonia</option>
+            <option>Ethiopia</option>
+            <option>Finland</option>
+            <option>France</option>
+            <option>Georgia</option>
+            <option>Germany</option>
+            <option>Ghana</option>
+            <option>Greece</option>
+            <option>Guatemala</option>
+            <option>Honduras</option>
+            <option>Hungary</option>
+            <option>Iceland</option>
+            <option>India</option>
+            <option>Indonesia</option>
+            <option>Ireland</option>
+            <option>Israel</option>
+            <option>Italy</option>
+            <option>Japan</option>
+            <option>Jordan</option>
+            <option>Kazakhstan</option>
+            <option>Kenya</option>
+            <option>Kuwait</option>
+            <option>Latvia</option>
+            <option>Lebanon</option>
+            <option>Lithuania</option>
+            <option>Luxembourg</option>
+            <option>Malaysia</option>
+            <option>Malta</option>
+            <option>Mexico</option>
+            <option>Moldova</option>
+            <option>Monaco</option>
+            <option>Montenegro</option>
+            <option>Morocco</option>
+            <option>Netherlands</option>
+            <option>New Zealand</option>
+            <option>Nicaragua</option>
+            <option>Nigeria</option>
+            <option>North Macedonia</option>
+            <option>Norway</option>
+            <option>Oman</option>
+            <option>Pakistan</option>
+            <option>Panama</option>
+            <option>Paraguay</option>
+            <option>Peru</option>
+            <option>Philippines</option>
+            <option>Poland</option>
+            <option>Portugal</option>
+            <option>Qatar</option>
+            <option>Romania</option>
+            <option>Russia</option>
+            <option>Saudi Arabia</option>
+            <option>Serbia</option>
+            <option>Singapore</option>
+            <option>Slovakia</option>
+            <option>Slovenia</option>
+            <option>South Africa</option>
+            <option>South Korea</option>
+            <option>Spain</option>
+            <option>Sri Lanka</option>
+            <option>Sweden</option>
+            <option>Switzerland</option>
+            <option>Taiwan</option>
+            <option>Thailand</option>
+            <option>Turkey</option>
+            <option>Ukraine</option>
+            <option>United Arab Emirates</option>
+            <option>United Kingdom</option>
+            <option>United States</option>
+            <option>Uruguay</option>
+            <option>Uzbekistan</option>
+            <option>Venezuela</option>
+            <option>Vietnam</option>
+          </select>
+          <span class="err-msg">Please select the destination country</span>
+        </div>
+      </div>
+
+      <!-- Add-ons subtotal -->
+      <div class="doc-subtotal-bar" style="margin-top:1.2rem">
+        <div>
+          <div class="sub-label">Add-ons Subtotal</div>
+          <div style="font-size:10.5px;opacity:.55;margin-top:2px">Translation + Scanning charges</div>
+        </div>
+        <span class="sub-amount" id="doc-subtotal-display">$0.00</span>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn-back" onclick="goBack(3)">← Back</button>
+        <button class="btn-next" onclick="goNext(3)">
+          Next — Mailing
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       PANEL 4 — RETURN MAILING
+  ═════════════════════════════════ -->
+  <div class="panel" id="panel-4">
+    <div class="panel-card">
+      <div class="panel-title">Return Mailing Information <span>Step 4 of 5</span></div>
+      <div class="mailing-grid">
+        <div>
+          <div class="field-row cols-2">
+            <div class="field">
+              <label>Full Name <span class="req">*</span></label>
+              <input type="text" id="return_name" placeholder="Jane Doe"/>
+              <span class="err-msg">Required</span>
+            </div>
+            <div class="field">
+              <label>Company (optional)</label>
+              <input type="text" id="return_company" placeholder="Acme Corp"/>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Street Address <span class="req">*</span></label>
+              <input type="text" id="return_address" placeholder="123 Main St, Apt 4B"/>
+              <span class="err-msg">Required</span>
+            </div>
+          </div>
+          <div class="field-row cols-3">
+            <div class="field">
+              <label>City <span class="req">*</span></label>
+              <input type="text" id="return_city" placeholder="Springfield"/>
+              <span class="err-msg">Required</span>
+            </div>
+            <div class="field">
+              <label>State / Province</label>
+              <input type="text" id="return_state" placeholder="VA"/>
+            </div>
+            <div class="field">
+              <label>Postal Code <span class="req">*</span></label>
+              <input type="text" id="return_postal" placeholder="22150"/>
+              <span class="err-msg">Required</span>
+            </div>
+          </div>
+          <div class="field-row cols-2">
+            <div class="field">
+              <label>Country <span class="req">*</span></label>
+              <input type="text" id="return_country" placeholder="USA"/>
+              <span class="err-msg">Required</span>
+            </div>
+            <div class="field">
+              <label>Contact Phone</label>
+              <input type="tel" id="return_phone" placeholder="+1 (703) 000-0000"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="mailing-sidebar">
+          <div class="card-title">Select Return Shipping</div>
+          <label class="mail-opt">
+            <input type="radio" name="return_mailing" value="fedex_domestic" onchange="calcOrderTotal()"/>
+            FedEx Domestic — $35
+          </label>
+          <div class="sig-sub">
+            Signature required?
+            <input type="text" id="fedex_signature" placeholder="Y/N" maxlength="1"/>
+          </div>
+          <label class="mail-opt">
+            <input type="radio" name="return_mailing" value="fedex_international" onchange="calcOrderTotal()"/>
+            FedEx International — $85
+          </label>
+          <label class="mail-opt">
+            <input type="radio" name="return_mailing" value="scan_only" onchange="calcOrderTotal()"/>
+            Digital Scan Only — $0
+          </label>
+          <div class="hr-div"></div>
+          <div class="grand-total-bar">
+            <span>Order Total</span>
+            <span id="order-total-display">$0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="order-summary">
+        <div class="os-title">Order Summary</div>
+        <div class="os-line"><span>Plan subtotal</span><span id="os-plan">$0.00</span></div>
+        <div class="os-line"><span>Add-ons (translation &amp; scan)</span><span id="os-docs">$0.00</span></div>
+        <div class="os-line"><span>Return shipping</span><span id="os-shipping">—</span></div>
+        <div class="os-line total"><span>Total</span><span id="os-total">$0.00</span></div>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn-back" onclick="goBack(4)">← Back</button>
+        <button class="btn-next" onclick="goNext(4)">
+          Next — Review &amp; Sign
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       PANEL 5 — REVIEW & SIGNATURE
+  ═════════════════════════════════ -->
+  <div class="panel" id="panel-5">
+    <div class="panel-card">
+      <div class="panel-title">Review &amp; Sign <span>Step 5 of 5</span></div>
+
+      <!-- Order total banner -->
+      <div class="review-total-bar">
+        <div>
+          <div class="rt-label">Order Total</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.55);margin-top:2px">Includes all documents &amp; shipping</div>
+        </div>
+        <div class="rt-amount" id="review-total">$0.00</div>
+      </div>
+
+      <!-- Summary blocks -->
+      <div class="review-grid" id="review-grid">
+        <!-- Populated by JS -->
+      </div>
+
+      <!-- Authorization text -->
+      <div class="auth-block">
+        I authorize US Authentication Services to obtain Apostille or Document Authentications on my behalf. I agree to indemnify and to hold US Authentication Services, its employees, agents and affiliates harmless from all liability and expenses, including reasonable attorney's fees that may be incurred as a result of my instructions. I understand that US Authentication Services cannot, and does not, make any guarantees or warranties regarding my request to Apostille or certify my document(s) and also cannot guarantee any shipping and delivery times.
+      </div>
+
+      <div class="sign-row">
+        <div class="sign-line">
+          <label>Sign or Print Full Name <span class="req" style="color:var(--red)">*</span></label>
+          <input type="text" id="signature" placeholder="Your full legal name"/>
+          <span class="err-msg" id="sig-err" style="display:none;color:var(--red);font-size:11px">Signature is required to submit</span>
+        </div>
+        <div class="field">
+          <label>Date</label>
+          <input type="date" id="signature_date"/>
+        </div>
+      </div>
+
+      <button class="btn-submit" id="submit-btn" onclick="submitForm()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
+        Confirm &amp; Submit Order
+      </button>
+
+      <div class="nav-row" style="border-top:none;padding-top:0;margin-top:.75rem">
+        <button class="btn-back" onclick="goBack(5)">← Back</button>
+        <div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       SUCCESS PANEL
+  ═════════════════════════════════ -->
+  <div class="panel" id="panel-success">
+    <div class="panel-card">
+      <div class="success-panel">
+        <div class="success-icon">
+          <svg viewBox="0 0 36 36" fill="none" stroke="#1a9e75" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="18" r="15"/><polyline points="11 18 15.5 22.5 25 13"/>
+          </svg>
+        </div>
+        <h2>Order Submitted!</h2>
+        <p>Thank you — your order has been received. Our team will review your documents and contact you within 1 business hour.</p>
+        <div class="order-ref" id="order-ref-display">Processing…</div>
+        <p>Check your email for a confirmation. For urgent inquiries call <strong>(703) 971-7226</strong> or WhatsApp <strong>202-552-9489</strong>.</p>
+        <div class="next-steps">
+          <div class="next-step-card">
+            <div class="next-step-num">01</div>
+            <div class="next-step-title">We Review Your Documents</div>
+            <div class="next-step-body">Our specialists verify your documents and confirm the exact service required — usually within 1 hour.</div>
+          </div>
+          <div class="next-step-card">
+            <div class="next-step-num">02</div>
+            <div class="next-step-title">We Process &amp; Hand-Deliver</div>
+            <div class="next-step-body">We hand-deliver daily to the US Dept. of State. No mailing required for most FBI background checks.</div>
+          </div>
+          <div class="next-step-card">
+            <div class="next-step-num">03</div>
+            <div class="next-step-title">You Receive Your Apostille</div>
+            <div class="next-step-body">Your certified document is delivered as a digital scan and/or physical copy via FedEx or DHL.</div>
+          </div>
+        </div>
+        <button onclick="resetForm()" style="margin-top:2rem;background:var(--navy);color:white;border:none;border-radius:var(--radius);padding:11px 26px;font-size:13.5px;font-family:var(--font-body);font-weight:600;cursor:pointer;">
+          ↺ Submit Another Order
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.form-outer -->
+
+<div class="form-footer">
+  © US Authentication Services &nbsp;|&nbsp; 6800 Backlick Road, Suite 300, Springfield, VA 22150<br/>
+  (703) 971-7226 &nbsp;|&nbsp; apostille@fbi-apostille.com &nbsp;|&nbsp; fbi-apostille.com
+</div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────
+const N8N_WEBHOOK_URL = 'https://n8n.leadaheadindia.com/webhook-test/upload_form';
+
+// ── PLAN CONFIG ─────────────────────────────────────
+const PLANS = {
+  economy:  { label: 'Economy',  price: 69,  turn: '5+ weeks'          },
+  standard: { label: 'Standard', price: 89,  turn: '15 business days'  },
+  express:  { label: 'Express',  price: 109, turn: '8–9 business days' },
+};
+
+// ── STATE ───────────────────────────────────────────
+let currentStep = 1;
+
+// docSlots: source of truth for document upload state
+let docSlots = [{ file: null, pages: 0, translate: false, scan: false }];
+
+const formState = {
+  first_name:'', last_name:'', email:'', phone_code:'', phone:'',
+  selected_plan:'', plan_label:'', plan_price:0,
+  doc_count: 1,
+  destination_country: '',
+  docs: [],
+  doc_subtotal: 0,
+  return_name:'', return_company:'', return_address:'', return_city:'', return_state:'',
+  return_postal:'', return_country:'', return_phone:'', return_mailing:'', fedex_signature:'',
+  signature:'', signature_date:'',
+  order_total: 0, submitted_at:''
+};
+
+// ── STEPPER ─────────────────────────────────────────
+function setStep(n) {
+  for (let i = 1; i <= 5; i++) {
+    const el = document.getElementById('step-' + i);
+    if (!el) continue;
+    el.classList.remove('active', 'completed');
+    const circle = el.querySelector('.step-circle');
+    if (i < n) {
+      el.classList.add('completed');
+      circle.innerHTML = `<svg viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 7 5.5 10.5 12 4"/></svg>`;
+    } else if (i === n) {
+      el.classList.add('active');
+      circle.textContent = i;
+    } else {
+      circle.textContent = i;
+    }
+  }
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  const target = n > 5 ? 'panel-success' : 'panel-' + n;
+  document.getElementById(target).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── VALIDATION ──────────────────────────────────────
+function vField(id, check) {
+  const el = document.getElementById(id);
+  if (!el) return true;
+  const ok = check(el.value.trim());
+  el.classList.toggle('error', !ok);
+  const err = el.nextElementSibling;
+  if (err && err.classList.contains('err-msg')) err.classList.toggle('show', !ok);
+  return ok;
+}
+const req     = v => v.length > 0;
+const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+const isPhone = v => /^[\d\s\-().]{5,}$/.test(v);
+
+function clearErr(input) {
+  input.classList.remove('error');
+  const err = input.nextElementSibling;
+  if (err && err.classList.contains('err-msg')) err.classList.remove('show');
+}
+
+function clearPhoneErr() {
+  document.getElementById('phone-wrap').classList.remove('error');
+  document.getElementById('phone-err').classList.remove('show');
+  document.getElementById('phone').classList.remove('error');
+}
+
+function vPhone() {
+  const val = document.getElementById('phone').value.trim();
+  const ok = isPhone(val);
+  document.getElementById('phone-wrap').classList.toggle('error', !ok);
+  document.getElementById('phone-err').classList.toggle('show', !ok);
+  return ok;
+}
+
+// ── DOC SLOT MANAGEMENT ─────────────────────────────
+function changeDocCount(delta) {
+  const newCount = Math.max(1, Math.min(10, docSlots.length + delta));
+  while (docSlots.length < newCount) {
+    docSlots.push({ file: null, pages: 0, translate: false, scan: false });
+  }
+  while (docSlots.length > newCount) {
+    docSlots.pop();
+  }
+  document.getElementById('doc-count-display').textContent = newCount;
+  renderDocCards();
+  updatePlanSubtotal();
+}
+
+function scanAllowed() {
+  return formState.selected_plan === 'economy' || formState.selected_plan === 'standard';
+}
+
+function renderDocCards() {
+  const container = document.getElementById('doc-cards-container');
+  if (!container) return;
+  const showScan = scanAllowed();
+
+  container.innerHTML = docSlots.map((slot, i) => {
+    const addOnCost = calcDocCost(slot);
+    const hasCost   = addOnCost > 0;
+
+    const translationLabel = slot.translate && slot.pages > 0
+      ? `$${(60 * (slot.pages + 1)).toFixed(2)} (${slot.pages} pages + 1)`
+      : '$60 × (pages + 1)';
+
+    return `
+    <div class="doc-card ${slot.file ? 'has-file' : ''}" id="doc-card-${i}">
+      <div class="doc-card-header">
+        <div class="doc-card-num">
+          <div class="slot-badge">${i + 1}</div>
+          <div class="doc-card-label">Document ${i + 1}</div>
+        </div>
+        <div class="doc-price-badge ${hasCost ? '' : 'tbd'}">${hasCost ? '$' + addOnCost.toFixed(2) : 'No add-ons'}</div>
+      </div>
+      <div class="doc-card-body">
+        <div class="upload-zone">
+          <div class="upload-box ${slot.file ? 'has-file' : ''}" id="upload-box-${i}">
+            <input type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" onchange="handleFileUpload(${i}, this.files[0])"/>
+            <div class="upload-icon">
+              ${slot.file
+                ? '<svg viewBox="0 0 24 24" fill="none" stroke="#1a9e75" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'
+                : '<svg viewBox="0 0 24 24" fill="none" stroke="#6b7694" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>'
+              }
+            </div>
+            <div class="upload-text">
+              <div class="up-primary">${slot.file ? slot.file.name : 'Click to upload document'}</div>
+              <div class="up-secondary">${slot.file ? `${slot.pages} page${slot.pages !== 1 ? 's' : ''} detected` : 'PDF, DOC, JPG — page count auto-detected'}</div>
+            </div>
+            ${slot.file ? `<div class="check-icon"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 4.5 8.5 10 3"/></svg></div>` : ''}
+          </div>
+        </div>
+        <div class="doc-options">
+          <div class="doc-checks">
+            <label class="doc-check">
+              <input type="checkbox" ${slot.translate ? 'checked' : ''} onchange="toggleDocOption(${i}, 'translate', this.checked)"/>
+              <div class="check-info">
+                <div class="check-title">Translation</div>
+                <div class="check-price-line">$60 × (pages + 1) per document</div>
+                ${slot.translate ? `<div class="check-price-computed">${translationLabel}</div>` : ''}
+              </div>
+            </label>
+            ${showScan ? `
+            <label class="doc-check">
+              <input type="checkbox" ${slot.scan ? 'checked' : ''} onchange="toggleDocOption(${i}, 'scan', this.checked)"/>
+              <div class="check-info">
+                <div class="check-title">Scan</div>
+                <div class="check-price-line">$10 per document</div>
+                ${slot.scan ? `<div class="check-price-computed">$10.00</div>` : ''}
+              </div>
+            </label>` : ''}
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  updateDocSubtotal();
+}
+
+function handleFileUpload(index, file) {
+  if (!file) return;
+  docSlots[index].file = file;
+
+  if (file.type === 'application/pdf') {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const content = e.target.result;
+      // Count /Type /Page occurrences (standard PDF structural marker)
+      const matches = content.match(/\/Type\s*\/Page\b/g);
+      docSlots[index].pages = matches ? matches.length : 1;
+      renderDocCards();
+    };
+    reader.readAsBinaryString(file);
+  } else {
+    // Non-PDF (images, Word docs): treat as 1 page
+    docSlots[index].pages = 1;
+    renderDocCards();
+  }
+}
+
+function toggleDocOption(index, option, checked) {
+  docSlots[index][option] = checked;
+  renderDocCards();
+}
+
+function calcDocCost(slot) {
+  let cost = 0;
+  if (slot.translate) cost += 60 * (slot.pages + 1);
+  if (slot.scan) cost += 10;
+  return cost;
+}
+
+function calcDocSubtotal() {
+  return docSlots.reduce((sum, slot) => sum + calcDocCost(slot), 0);
+}
+
+function updateDocSubtotal() {
+  const total = calcDocSubtotal();
+  const el = document.getElementById('doc-subtotal-display');
+  if (el) el.textContent = '$' + total.toFixed(2);
+  calcOrderTotal();
+}
+
+// ── COLLECT ─────────────────────────────────────────
+function g(id) { return (document.getElementById(id) || {}).value || ''; }
+
+function collectStep1() {
+  formState.first_name  = g('first_name').trim();
+  formState.last_name   = g('last_name').trim();
+  formState.email       = g('email').trim();
+  formState.phone_code  = g('phone_code');
+  formState.phone       = g('phone').trim();
+}
+
+function collectStep2() {
+  const radio = document.querySelector('input[name="selected_plan"]:checked');
+  if (radio) {
+    const p = PLANS[radio.value];
+    formState.selected_plan = radio.value;
+    formState.plan_label    = p.label + ' — ' + p.turn;
+    formState.plan_price    = p.price;
+  }
+}
+
+function collectStep3() {
+  formState.doc_count           = docSlots.length;
+  formState.destination_country = g('destination_country');
+  formState.docs = docSlots.map((s, i) => ({
+    index:           i + 1,
+    filename:        s.file ? s.file.name : '',
+    pages:           s.pages,
+    translate:       s.translate,
+    scan:            s.scan,
+    translation_cost: s.translate ? 60 * (s.pages + 1) : 0,
+    scan_cost:        s.scan ? 10 : 0,
+  }));
+  formState.doc_subtotal = calcDocSubtotal();
+}
+
+function collectStep4() {
+  formState.return_name     = g('return_name').trim();
+  formState.return_company  = g('return_company').trim();
+  formState.return_address  = g('return_address').trim();
+  formState.return_city     = g('return_city').trim();
+  formState.return_state    = g('return_state').trim();
+  formState.return_postal   = g('return_postal').trim();
+  formState.return_country  = g('return_country').trim();
+  formState.return_phone    = g('return_phone').trim();
+  const mail = document.querySelector('input[name="return_mailing"]:checked');
+  formState.return_mailing  = mail ? mail.value : '';
+  formState.fedex_signature = g('fedex_signature').trim();
+  formState.order_total     = calcOrderTotal();
+}
+
+function collectStep5() {
+  formState.signature      = g('signature').trim();
+  formState.signature_date = g('signature_date');
+  formState.submitted_at   = new Date().toISOString();
+}
+
+// ── NAVIGATION ──────────────────────────────────────
+function goNext(step) {
+  if (step === 1) {
+    const ok = [
+      vField('first_name', req),
+      vField('last_name', req),
+      vField('email', isEmail),
+      vPhone(),
+    ].every(Boolean);
+    if (!ok) return;
+    collectStep1();
+  }
+  if (step === 2) {
+    const radio = document.querySelector('input[name="selected_plan"]:checked');
+    const planErr = document.getElementById('plan-err');
+    if (!radio) { planErr.classList.add('show'); return; }
+    planErr.classList.remove('show');
+    collectStep2();
+    calcOrderTotal();
+  }
+  if (step === 3) {
+    const destOk = vField('destination_country', req);
+    if (!destOk) return;
+    collectStep3();
+  }
+  if (step === 4) {
+    const ok = [
+      vField('return_name', req),
+      vField('return_address', req),
+      vField('return_city', req),
+      vField('return_postal', req),
+      vField('return_country', req),
+    ].every(Boolean);
+    if (!ok) return;
+    collectStep4();
+    buildReviewPanel();
+  }
+  currentStep = step + 1;
+  setStep(currentStep);
+}
+
+function goBack(step) {
+  currentStep = step - 1;
+  setStep(currentStep);
+}
+
+// ── PLAN SELECTION ───────────────────────────────────
+function selectPlan(key, price, label) {
+  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('plan-' + key + '-card').classList.add('selected');
+  const radio = document.querySelector(`input[name="selected_plan"][value="${key}"]`);
+  if (radio) radio.checked = true;
+  formState.selected_plan = key;
+  formState.plan_price    = price;
+  formState.plan_label    = label;
+  document.getElementById('plan-err').classList.remove('show');
+
+  // Express plan doesn't include scan — clear any checked scan options
+  if (key === 'express') {
+    docSlots.forEach(s => { s.scan = false; });
+  }
+
+  updatePlanSubtotal();
+
+  // Re-render doc cards if already on step 3 to update scan visibility
+  if (currentStep === 3) renderDocCards();
+}
+
+function updatePlanSubtotal() {
+  const el = document.getElementById('plan-subtotal-display');
+  if (!el) return;
+  if (!formState.plan_price) { el.textContent = '—'; return; }
+  const count = docSlots.length;
+  const subtotal = formState.plan_price * count;
+  el.textContent = count > 1
+    ? `$${subtotal.toFixed(2)} (${count} × $${formState.plan_price})`
+    : `$${subtotal.toFixed(2)}`;
+  calcOrderTotal();
+}
+
+// ── PRICING ─────────────────────────────────────────
+function getPlanSubtotal() {
+  return formState.plan_price * Math.max(1, docSlots.length);
+}
+
+function calcOrderTotal() {
+  const planSub  = getPlanSubtotal();
+  const docSub   = calcDocSubtotal();
+  const mail     = document.querySelector('input[name="return_mailing"]:checked');
+  const shipping = mail
+    ? (mail.value === 'fedex_domestic' ? 35 : mail.value === 'fedex_international' ? 85 : 0)
+    : 0;
+  const grand = planSub + docSub + shipping;
+
+  const el = document.getElementById('order-total-display');
+  if (el) el.textContent = '$' + grand.toFixed(2);
+
+  const osPlan  = document.getElementById('os-plan');
+  const osDocs  = document.getElementById('os-docs');
+  const osShip  = document.getElementById('os-shipping');
+  const osTotal = document.getElementById('os-total');
+  if (osPlan)  osPlan.textContent  = '$' + planSub.toFixed(2);
+  if (osDocs)  osDocs.textContent  = '$' + docSub.toFixed(2);
+  if (osShip)  osShip.textContent  = shipping > 0 ? '$' + shipping.toFixed(2) : '—';
+  if (osTotal) osTotal.textContent = '$' + grand.toFixed(2);
+
+  return grand;
+}
+
+// ── BUILD REVIEW PANEL ───────────────────────────────
+function buildReviewPanel() {
+  const total = calcOrderTotal();
+  const rt = document.getElementById('review-total');
+  if (rt) rt.textContent = '$' + total.toFixed(2);
+
+  const mailingLabels = {
+    fedex_domestic:      'FedEx Domestic ($35)',
+    fedex_international: 'FedEx International ($85)',
+    scan_only:           'Digital Scan Only'
+  };
+
+  const planSub = getPlanSubtotal();
+  const docSub  = calcDocSubtotal();
+
+  const docRows = docSlots.map((s, i) => {
+    const addOns = [];
+    if (s.translate) addOns.push(`Translation $${(60*(s.pages+1)).toFixed(2)}`);
+    if (s.scan)      addOns.push('Scan $10');
+    const desc = s.file
+      ? `${s.file.name}${s.pages > 0 ? ` (${s.pages}p)` : ''}${addOns.length ? ' · ' + addOns.join(', ') : ''}`
+      : '(no file uploaded)';
+    return `<div class="review-row"><span class="label">Doc ${i+1}</span><span class="value" style="font-size:11.5px">${desc}</span></div>`;
+  }).join('');
+
+  const grid = document.getElementById('review-grid');
+  grid.innerHTML = `
+    <div class="review-block">
+      <div class="review-block-title">Contact <span class="edit-link" onclick="setStep(1)">Edit</span></div>
+      <div class="review-row"><span class="label">Name</span><span class="value">${formState.first_name} ${formState.last_name}</span></div>
+      <div class="review-row"><span class="label">Email</span><span class="value">${formState.email}</span></div>
+      <div class="review-row"><span class="label">Phone</span><span class="value">${formState.phone_code} ${formState.phone}</span></div>
+    </div>
+    <div class="review-block">
+      <div class="review-block-title">Plan <span class="edit-link" onclick="setStep(2)">Edit</span></div>
+      <div class="review-row"><span class="label">Plan</span><span class="value" style="font-weight:700;color:var(--navy)">${formState.plan_label}</span></div>
+      <div class="review-row"><span class="label">Docs</span><span class="value">${docSlots.length} document${docSlots.length !== 1 ? 's' : ''}</span></div>
+      <div class="review-row"><span class="label">Plan subtotal</span><span class="value">$${planSub.toFixed(2)}</span></div>
+    </div>
+    <div class="review-block">
+      <div class="review-block-title">Documents <span class="edit-link" onclick="setStep(3)">Edit</span></div>
+      ${docRows}
+      <div class="review-row"><span class="label">Destination</span><span class="value">${formState.destination_country}</span></div>
+      <div class="review-row"><span class="label">Add-ons total</span><span class="value" style="font-weight:700;color:var(--green)">$${docSub.toFixed(2)}</span></div>
+    </div>
+    <div class="review-block">
+      <div class="review-block-title">Return Mailing <span class="edit-link" onclick="setStep(4)">Edit</span></div>
+      <div class="review-row"><span class="label">Name</span><span class="value">${formState.return_name}</span></div>
+      <div class="review-row"><span class="label">Address</span><span class="value">${formState.return_address}, ${formState.return_city} ${formState.return_state} ${formState.return_postal}, ${formState.return_country}</span></div>
+      <div class="review-row"><span class="label">Shipping</span><span class="value">${mailingLabels[formState.return_mailing] || '—'}</span></div>
+    </div>`;
+}
+
+// ── SUBMIT ───────────────────────────────────────────
+async function submitForm() {
+  const sig = document.getElementById('signature').value.trim();
+  const sigErr = document.getElementById('sig-err');
+  if (!sig) { sigErr.style.display = 'block'; return; }
+  sigErr.style.display = 'none';
+  collectStep5();
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.innerHTML = `<div class="spinner"></div> Submitting your order…`;
+
+  const fd = new FormData();
+  fd.append('first_name',  formState.first_name);
+  fd.append('last_name',   formState.last_name);
+  fd.append('email',       formState.email);
+  fd.append('phone_code',  formState.phone_code);
+  fd.append('phone',       formState.phone_code + ' ' + formState.phone);
+
+  fd.append('selected_plan', formState.selected_plan);
+  fd.append('plan_label',    formState.plan_label);
+  fd.append('plan_price',    '$' + formState.plan_price);
+  fd.append('doc_count',     formState.doc_count);
+  fd.append('plan_subtotal', '$' + getPlanSubtotal().toFixed(2));
+
+  fd.append('destination_country', formState.destination_country);
+  fd.append('doc_subtotal',        '$' + formState.doc_subtotal.toFixed(2));
+
+  docSlots.forEach((slot, i) => {
+    if (slot.file) fd.append(`doc_${i+1}_file`, slot.file, slot.file.name);
+    fd.append(`doc_${i+1}_pages`,            slot.pages);
+    fd.append(`doc_${i+1}_translate`,        slot.translate);
+    fd.append(`doc_${i+1}_scan`,             slot.scan);
+    fd.append(`doc_${i+1}_translation_cost`, slot.translate ? '$' + (60*(slot.pages+1)).toFixed(2) : '$0');
+    fd.append(`doc_${i+1}_scan_cost`,        slot.scan ? '$10' : '$0');
+  });
+
+  fd.append('return_name',      formState.return_name);
+  fd.append('return_company',   formState.return_company);
+  fd.append('return_address',   formState.return_address);
+  fd.append('return_city',      formState.return_city);
+  fd.append('return_state',     formState.return_state);
+  fd.append('return_postal',    formState.return_postal);
+  fd.append('return_country',   formState.return_country);
+  fd.append('return_phone',     formState.return_phone);
+  fd.append('return_mailing',   formState.return_mailing);
+  fd.append('fedex_signature',  formState.fedex_signature);
+  fd.append('order_total',      '$' + calcOrderTotal().toFixed(2));
+  fd.append('signature',        formState.signature);
+  fd.append('signature_date',   formState.signature_date);
+  fd.append('submitted_at',     formState.submitted_at);
+
+  const ref = 'ORD-' + Date.now().toString(36).toUpperCase();
+
+  try {
+    await fetch(N8N_WEBHOOK_URL, { method: 'POST', body: fd });
+    document.getElementById('order-ref-display').textContent = 'Reference: ' + ref;
+    setStep(6);
+  } catch (err) {
+    document.getElementById('order-ref-display').textContent = ref + ' — Submitted';
+    setStep(6);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg> Confirm &amp; Submit Order`;
+  }
+}
+
+// ── RESET ────────────────────────────────────────────
+function resetForm() {
+  Object.keys(formState).forEach(k => {
+    if (typeof formState[k] === 'boolean') formState[k] = false;
+    else if (typeof formState[k] === 'number') formState[k] = 0;
+    else if (Array.isArray(formState[k])) formState[k] = [];
+    else formState[k] = '';
+  });
+  docSlots = [{ file: null, pages: 0, translate: false, scan: false }];
+  document.getElementById('doc-count-display').textContent = '1';
+  document.getElementById('plan-subtotal-display').textContent = '—';
+  document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="date"], textarea')
+    .forEach(el => { el.value = ''; el.classList.remove('error'); });
+  document.querySelectorAll('select').forEach(el => { el.selectedIndex = 0; el.classList.remove('error'); });
+  const phoneWrap = document.getElementById('phone-wrap');
+  if (phoneWrap) phoneWrap.classList.remove('error');
+  const phoneErr = document.getElementById('phone-err');
+  if (phoneErr) phoneErr.classList.remove('show');
+  document.querySelectorAll('input[type="radio"], input[type="checkbox"]')
+    .forEach(el => el.checked = false);
+  document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('plan-err').classList.remove('show');
+  currentStep = 1;
+  document.getElementById('signature_date').value = new Date().toISOString().split('T')[0];
+  renderDocCards();
+  setStep(1);
+}
+
+// ── INIT ─────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('signature_date').value = new Date().toISOString().split('T')[0];
+  renderDocCards();
+});
+</script>
+</body>
+</html>

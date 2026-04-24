@@ -1,0 +1,179 @@
+US AUTHENTICATION SERVICES — HOMEPAGE CONTENT SUMMARY
+=======================================================
+Website: https://usauth.basenincorp.com
+=======================================================
+
+
+1. HEADER / NAVIGATION
+-----------------------
+- Logo: US Authentication Services
+- Phone: +1234567891
+- Email: info@usauthentication.com
+- Primary CTA button: "Place your order"
+
+Navigation links:
+  - Home
+  - Services (mega menu)
+      > Apostille Services:
+          - Apostille of FBI background checks
+          - Apostille of Educational documents
+          - Apostille of Vital documents
+          - Apostille of Personal documents
+          - Apostille Federal documents
+          - Apostille of Power of Attorney
+          - Apostille of Social Security Income
+          - Other documents/services
+      > Authentication Services:
+          - Kuwait
+          - UAE
+          - Vietnam
+          - Thailand
+          - Ethiopia
+          - Qatar
+          - Other documents/services
+      > Corporate Services:
+          - Apostille of Corporate Documents
+          - Embassy Legalization of Corporate Documents
+          - Retrieval of State Certified documents
+      > Other Services:
+          - Order an FBI background check
+          - Document Retrieval
+          - Visa Services
+          - Translation Services
+  - How to order?
+  - FAQ
+  - About Us
+  - Contact Us
+
+
+2. HERO SECTION
+---------------
+- Hero banner image (slider)
+- Buttons: "Get a free quote" | "Place your order"
+
+
+3. OUR SERVICES SECTION
+------------------------
+Heading: "Our Services"
+Subtext: "Praesent malesuada libero id ex elementum, sit amet ultricies lacus fermentum."
+(Note: placeholder Lorem Ipsum text — not real content)
+
+Four service categories displayed as tabs/panels:
+  1. Apostille Services
+  2. Authentication Services
+  3. Corporate Services
+  4. Other Services
+
+Each category lists the same sub-services as the navigation menu above.
+
+
+4. WHY USE OUR SERVICES?
+-------------------------
+Heading: "Why Use Our Services?"
+(Note: All five supporting paragraphs are Lorem Ipsum placeholder text — no real content present)
+
+
+5. HOW IT'S DONE
+-----------------
+Heading: "How It's Done"
+Subheading: "Document Apostille, Authentication & Embassy Legalization Services"
+- Displays a process/workflow diagram image
+
+
+6. CORPORATE DOCUMENTS SECTION
+--------------------------------
+Heading: "Corporate Documents"
+(Note: All supporting paragraphs are Lorem Ipsum placeholder text)
+- Lists multiple bullet points, all placeholder text
+
+
+7. INDIVIDUAL DOCUMENTS SECTION
+---------------------------------
+Heading: "Individual Documents"
+Subheading: "We look forward to working on your documents!"
+
+Three document type highlights:
+  1. Federal Apostille Certification
+  2. DC Apostille Certification
+  3. Document Authentication
+(Each accompanied by a document image)
+
+
+8. CERTIFICATION ILLUSTRATIONS
+--------------------------------
+Three illustrated explainers:
+
+  a) "Illustration of Federal Apostille Certification"
+     — Federal apostille certification is a process that verifies the authenticity
+       of a document for international use, ensuring it meets the requirements of
+       the Hague Apostille Convention for legal recognition abroad.
+
+  b) "Illustration of Authentication Apostille Certification"
+     — Same description as above (appears to be duplicate/placeholder content)
+
+  c) "Illustration of Documents Apostille Certification"
+     — Same description as above (appears to be duplicate/placeholder content)
+
+
+9. QUICK LINKS SECTION
+-----------------------
+Listed twice (duplicate columns):
+  - Apostille for documents
+  - Authentication for documents
+  - Apostille for FBI background checks
+  - Client testimonials
+
+
+10. TESTIMONIALS
+-----------------
+Heading: "Testimonials"
+- Five testimonial images/screenshots displayed (no text quotes visible — image-based only)
+
+
+11. STATS / SOCIAL PROOF BAR
+-----------------------------
+  - 3,000 Documents processed
+  - 15 Years of experience
+  - 3,000 Customers served
+  - Google rating: 4.7 Stars
+  - (Secondary platform): 4.3 Excellent Ratings
+
+
+12. FOOTER
+-----------
+Logo: US Authentication Services (with banner image)
+
+Browse links:
+  - Services
+  - How to order?
+  - FAQ
+  - Blogs
+  - About us
+  - Contact us
+
+Contact Information:
+  Office 1:
+    1629 K Street, NW, Suite 300
+    Washington DC, 20006
+    Phone: (202)-552-1030
+
+  Office 2:
+    US Authentication Services
+    7015 Old Keene Mill Road, Suite 203
+    Springfield, VA 22150
+
+  Email: info@usauthentication.com
+
+
+=======================================================
+NOTES
+=======================================================
+- Large portions of the homepage use Lorem Ipsum placeholder text,
+  meaning real descriptive content has not yet been written for the
+  "Why Use Our Services?", "Corporate Documents", and "Individual
+  Documents" sections.
+- The three certification illustration descriptions are identical —
+  likely unfinished/duplicate placeholder content.
+- The Quick Links section is duplicated side by side.
+- Testimonials are image-based with no readable text quotes.
+=======================================================

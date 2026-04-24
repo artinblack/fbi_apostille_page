@@ -1,0 +1,673 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --navy: #0A1628;
+    --navy-mid: #1C2E4A;
+    --navy-light: #2E4A6E;
+    --gold: #C9963A;
+    --gold-light: #E8B85C;
+    --gold-pale: #F5E8CC;
+    --cream: #FAF8F4;
+    --white: #FFFFFF;
+    --text-dark: #0A1628;
+    --text-mid: #3D5070;
+    --text-muted: #7A8BA0;
+    --border: rgba(10,22,40,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body, .wrap {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-dark);
+    background: transparent;
+  }
+
+  .wrap { padding: 0 0 3rem; }
+
+  /* ── COVER ── */
+  .cover {
+    background: var(--navy);
+    padding: 3.5rem 2.5rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 320px; height: 320px;
+    border: 1px solid rgba(201,150,58,0.2);
+    border-radius: 50%;
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 180px; height: 180px;
+    border: 1px solid rgba(201,150,58,0.15);
+    border-radius: 50%;
+  }
+  .cover-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+  .cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+  }
+  .cover-title span { color: var(--gold-light); }
+  .cover-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    margin-top: 1rem;
+    letter-spacing: 0.02em;
+  }
+  .cover-rule {
+    width: 48px; height: 2px;
+    background: var(--gold);
+    margin: 1.5rem 0 0;
+  }
+
+  /* ── SECTION HEADER ── */
+  .section {
+    padding: 2.5rem 2.5rem 0;
+  }
+  .section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.4rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 0.3rem;
+  }
+  .section-rule {
+    width: 36px; height: 1.5px;
+    background: var(--gold);
+    margin-top: 1rem;
+    margin-bottom: 1.8rem;
+  }
+
+  /* ── LOGO ── */
+  .logo-area {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .logo-box {
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-box.dark { background: var(--navy); }
+  .logo-box.light { background: var(--cream); }
+  .logo-mark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-icon {
+    width: 36px; height: 36px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-icon-light { background: var(--navy); }
+  .logo-icon-dark { background: var(--gold); }
+  .logo-text-light {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.1;
+  }
+  .logo-text-dark {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.1;
+  }
+  .logo-tagline-light { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); font-weight: 500; }
+  .logo-tagline-dark { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.45); font-weight: 500; }
+  .logo-caption {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    text-align: center;
+  }
+  .logo-caption.dc { color: rgba(255,255,255,0.4); }
+
+  /* ── COLORS ── */
+  .color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px,1fr));
+    gap: 12px;
+  }
+  .color-swatch {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 0.5px solid var(--border);
+  }
+  .swatch-fill {
+    height: 72px;
+  }
+  .swatch-info {
+    padding: 10px 12px;
+    background: var(--white);
+    border-top: 0.5px solid var(--border);
+  }
+  .swatch-name { font-size: 12px; font-weight: 500; color: var(--text-dark); }
+  .swatch-hex { font-size: 11px; color: var(--text-muted); font-family: 'DM Mono', monospace; letter-spacing: 0.05em; margin-top: 2px; }
+  .swatch-role { font-size: 10px; color: var(--text-muted); margin-top: 3px; letter-spacing: 0.03em; }
+
+  /* ── TYPOGRAPHY ── */
+  .type-section { display: flex; flex-direction: column; gap: 1.5rem; }
+  .type-block {
+    padding: 1.5rem;
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    background: var(--cream);
+  }
+  .type-meta { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.6rem; }
+  .type-sample-display {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.2;
+  }
+  .type-sample-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text-mid);
+    line-height: 1.7;
+  }
+  .type-detail { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 0.8rem; }
+  .type-item { font-size: 11px; color: var(--text-muted); }
+  .type-item strong { color: var(--text-dark); font-weight: 500; }
+
+  /* ── VOICE ── */
+  .voice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .voice-card {
+    padding: 1.2rem 1.4rem;
+    border-radius: 10px;
+    border: 0.5px solid var(--border);
+  }
+  .voice-card.do { background: #F0FAF5; border-color: rgba(15,110,86,0.2); }
+  .voice-card.dont { background: #FFF0F0; border-color: rgba(163,45,45,0.2); }
+  .voice-badge {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 0.7rem;
+  }
+  .do .voice-badge { color: #0F6E56; }
+  .dont .voice-badge { color: #A32D2D; }
+  .voice-example {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .do .voice-example { color: #0F6E56; }
+  .dont .voice-example { color: #A32D2D; }
+
+  /* ── TRAITS ── */
+  .trait-list { display: flex; flex-direction: column; gap: 10px; margin-top: 0; }
+  .trait-row {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 1rem 1.2rem;
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    background: var(--cream);
+  }
+  .trait-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--gold); flex-shrink: 0; margin-top: 5px;
+  }
+  .trait-name { font-size: 13px; font-weight: 500; color: var(--navy); margin-bottom: 2px; }
+  .trait-desc { font-size: 12px; color: var(--text-muted); line-height: 1.55; }
+
+  /* ── ICONOGRAPHY ── */
+  .icon-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .icon-chip {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 14px;
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
+    background: var(--cream);
+    font-size: 12px;
+    color: var(--text-mid);
+  }
+  .icon-chip svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  /* ── IMAGERY ── */
+  .imagery-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+  .imagery-card {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 0.5px solid var(--border);
+  }
+  .imagery-vis {
+    height: 90px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+  }
+  .imagery-label {
+    padding: 8px 12px;
+    background: var(--white);
+    border-top: 0.5px solid var(--border);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-dark);
+  }
+  .imagery-sub {
+    padding: 0 12px 8px;
+    background: var(--white);
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+
+  /* ── DIVIDER ── */
+  .divider { border: none; border-top: 0.5px solid var(--border); margin: 2.5rem 2.5rem 0; }
+
+  /* ── USAGE RULES ── */
+  .rules-list { display: flex; flex-direction: column; gap: 8px; }
+  .rule-row { display: flex; gap: 10px; align-items: flex-start; }
+  .rule-icon { font-size: 13px; flex-shrink: 0; margin-top: 1px; }
+  .rule-text { font-size: 13px; color: var(--text-mid); line-height: 1.55; }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--navy);
+    padding: 2rem 2.5rem;
+    margin-top: 3rem;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 700; color: var(--white);
+  }
+  .footer-brand span { color: var(--gold-light); }
+  .footer-note { font-size: 11px; color: rgba(255,255,255,0.35); }
+</style>
+
+<div class="wrap">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-label">Brand Identity System</div>
+    <div class="cover-title">US <span>Authentication</span><br>Services</div>
+    <div class="cover-sub">Document Apostille · Authentication · Embassy Legalization</div>
+    <div class="cover-rule"></div>
+  </div>
+
+  <!-- 1. LOGO -->
+  <div class="section">
+    <div class="section-label">01 — Identity</div>
+    <div class="section-title">Logo Usage</div>
+    <div class="section-rule"></div>
+    <div class="logo-area">
+      <div class="logo-box light">
+        <div class="logo-mark">
+          <div class="logo-icon logo-icon-light">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="#C9963A"/>
+            </svg>
+          </div>
+          <div>
+            <div class="logo-text-light">US Authentication</div>
+            <div class="logo-tagline-light">Services</div>
+          </div>
+        </div>
+        <div class="logo-caption">Primary — Light background</div>
+      </div>
+      <div class="logo-box dark">
+        <div class="logo-mark">
+          <div class="logo-icon logo-icon-dark">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z" fill="#0A1628"/>
+            </svg>
+          </div>
+          <div>
+            <div class="logo-text-dark">US Authentication</div>
+            <div class="logo-tagline-dark">Services</div>
+          </div>
+        </div>
+        <div class="logo-caption dc">Reversed — Dark background</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 1.5rem;">
+      <div class="rules-list">
+        <div class="rule-row"><div class="rule-icon" style="color:#0F6E56;">✓</div><div class="rule-text">Maintain minimum clear space equal to the height of the "S" in "Services" on all sides</div></div>
+        <div class="rule-row"><div class="rule-icon" style="color:#0F6E56;">✓</div><div class="rule-text">Use the gold-on-navy reversed version on dark or photographic backgrounds</div></div>
+        <div class="rule-row"><div class="rule-icon" style="color:#A32D2D;">✗</div><div class="rule-text">Do not stretch, distort, recolor, or add drop shadows to the logo</div></div>
+        <div class="rule-row"><div class="rule-icon" style="color:#A32D2D;">✗</div><div class="rule-text">Do not place the logo on busy patterns or low-contrast backgrounds</div></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- 2. COLORS -->
+  <div class="section">
+    <div class="section-label">02 — Color</div>
+    <div class="section-title">Brand Palette</div>
+    <div class="section-rule"></div>
+    <div class="color-grid">
+      <div class="color-swatch">
+        <div class="swatch-fill" style="background:#0A1628;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Authority Navy</div>
+          <div class="swatch-hex">#0A1628</div>
+          <div class="swatch-role">Primary brand</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-fill" style="background:#1C2E4A;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Deep Navy</div>
+          <div class="swatch-hex">#1C2E4A</div>
+          <div class="swatch-role">Sections & panels</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-fill" style="background:#C9963A;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Official Gold</div>
+          <div class="swatch-hex">#C9963A</div>
+          <div class="swatch-role">Primary accent</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-fill" style="background:#E8B85C;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Warm Gold</div>
+          <div class="swatch-hex">#E8B85C</div>
+          <div class="swatch-role">Highlights & hover</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-fill" style="background:#FAF8F4;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Parchment</div>
+          <div class="swatch-hex">#FAF8F4</div>
+          <div class="swatch-role">Page background</div>
+        </div>
+      </div>
+      <div class="color-swatch">
+        <div class="swatch-fill" style="background:#3D5070;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Slate</div>
+          <div class="swatch-hex">#3D5070</div>
+          <div class="swatch-role">Body text</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 1.5rem; padding: 1.2rem 1.4rem; background: var(--cream); border-radius: 10px; border: 0.5px solid var(--border);">
+      <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.7rem;">Color Hierarchy</div>
+      <div style="font-size: 13px; color: var(--text-mid); line-height: 1.7;">
+        <strong style="color: var(--navy);">Navy</strong> anchors authority and trust. 
+        <strong style="color: var(--navy);">Gold</strong> communicates prestige, certification, and excellence. 
+        <strong style="color: var(--navy);">Parchment</strong> grounds the layout with a refined, document-like warmth. Never use bright or saturated secondary colors — this palette must always feel official and credible.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- 3. TYPOGRAPHY -->
+  <div class="section">
+    <div class="section-label">03 — Typography</div>
+    <div class="section-title">Type System</div>
+    <div class="section-rule"></div>
+    <div class="type-section">
+      <div class="type-block">
+        <div class="type-meta">Display · Playfair Display</div>
+        <div class="type-sample-display">Certified. Trusted.<br>Every Document.</div>
+        <div class="type-detail">
+          <div class="type-item"><strong>Weights:</strong> 600, 700</div>
+          <div class="type-item"><strong>Use:</strong> Headlines, hero text, section titles</div>
+          <div class="type-item"><strong>Tracking:</strong> −0.01em</div>
+        </div>
+      </div>
+      <div class="type-block">
+        <div class="type-meta">Body · DM Sans</div>
+        <div class="type-sample-body">We provide fast, reliable apostille and authentication services for individuals and businesses navigating international document requirements. Our team has handled over 3,000 documents with precision and care.</div>
+        <div class="type-detail">
+          <div class="type-item"><strong>Weights:</strong> 300, 400, 500</div>
+          <div class="type-item"><strong>Use:</strong> Body copy, UI labels, navigation</div>
+          <div class="type-item"><strong>Line height:</strong> 1.7</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 1.2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 10px;">
+      <div style="padding: 1rem; background: var(--cream); border-radius: 8px; border: 0.5px solid var(--border);">
+        <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); font-weight: 600; margin-bottom: 6px;">H1 — Hero</div>
+        <div style="font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--navy); line-height: 1.1;">Apostille</div>
+        <div style="font-size: 10px; color: var(--text-muted); margin-top: 6px;">Playfair 700 · 36px</div>
+      </div>
+      <div style="padding: 1rem; background: var(--cream); border-radius: 8px; border: 0.5px solid var(--border);">
+        <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); font-weight: 600; margin-bottom: 6px;">H2 — Section</div>
+        <div style="font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 600; color: var(--navy);">Our Services</div>
+        <div style="font-size: 10px; color: var(--text-muted); margin-top: 6px;">Playfair 600 · 22px</div>
+      </div>
+      <div style="padding: 1rem; background: var(--cream); border-radius: 8px; border: 0.5px solid var(--border);">
+        <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); font-weight: 600; margin-bottom: 6px;">Label</div>
+        <div style="font-family: 'DM Sans', sans-serif; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold);">Document type</div>
+        <div style="font-size: 10px; color: var(--text-muted); margin-top: 6px;">DM Sans 600 · 11px</div>
+      </div>
+      <div style="padding: 1rem; background: var(--cream); border-radius: 8px; border: 0.5px solid var(--border);">
+        <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); font-weight: 600; margin-bottom: 6px;">CTA Button</div>
+        <div style="display: inline-block; background: var(--gold); color: var(--navy); padding: 7px 16px; border-radius: 6px; font-weight: 600; font-size: 13px;">Place your order</div>
+        <div style="font-size: 10px; color: var(--text-muted); margin-top: 8px;">DM Sans 600 · 13px</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- 4. VOICE & TONE -->
+  <div class="section">
+    <div class="section-label">04 — Voice & Tone</div>
+    <div class="section-title">Brand Voice</div>
+    <div class="section-rule"></div>
+
+    <div class="trait-list" style="margin-bottom: 1.5rem;">
+      <div class="trait-row">
+        <div class="trait-dot"></div>
+        <div>
+          <div class="trait-name">Authoritative, not intimidating</div>
+          <div class="trait-desc">Communicate expertise and credibility with plain language. Clients are navigating complex legal processes — reassure them with clarity, not jargon.</div>
+        </div>
+      </div>
+      <div class="trait-row">
+        <div class="trait-dot"></div>
+        <div>
+          <div class="trait-name">Reliable, not robotic</div>
+          <div class="trait-desc">Write with warmth. Document authentication is often stressful — the brand should feel like a trusted partner, not a government form.</div>
+        </div>
+      </div>
+      <div class="trait-row">
+        <div class="trait-dot"></div>
+        <div>
+          <div class="trait-name">Precise, not bureaucratic</div>
+          <div class="trait-desc">Every word should earn its place. Avoid filler phrases and corporate speak. Be specific about timelines, steps, and outcomes.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="voice-grid">
+      <div class="voice-card do">
+        <div class="voice-badge">✓ Do say</div>
+        <div class="voice-example">"Your FBI background check apostille will be ready in 3–5 business days."</div>
+      </div>
+      <div class="voice-card dont">
+        <div class="voice-badge">✗ Don't say</div>
+        <div class="voice-example">"We leverage synergistic solutions to facilitate expedient documentation processing."</div>
+      </div>
+      <div class="voice-card do">
+        <div class="voice-badge">✓ Do say</div>
+        <div class="voice-example">"Not sure which service you need? We'll help you figure it out."</div>
+      </div>
+      <div class="voice-card dont">
+        <div class="voice-badge">✗ Don't say</div>
+        <div class="voice-example">"Pursuant to international authentication requirements, documentation compliance is mandatory."</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- 5. IMAGERY -->
+  <div class="section">
+    <div class="section-label">05 — Imagery</div>
+    <div class="section-title">Photography & Visuals</div>
+    <div class="section-rule"></div>
+    <div class="imagery-grid">
+      <div class="imagery-card">
+        <div class="imagery-vis" style="background: #E8EDF5;">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <rect x="6" y="4" width="20" height="24" rx="3" fill="#1C2E4A"/>
+            <rect x="10" y="9" width="12" height="2" rx="1" fill="#C9963A"/>
+            <rect x="10" y="13" width="8" height="1.5" rx="0.75" fill="rgba(255,255,255,0.3)"/>
+            <rect x="10" y="17" width="10" height="1.5" rx="0.75" fill="rgba(255,255,255,0.3)"/>
+            <path d="M22 22l3 4" stroke="#C9963A" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="imagery-label">Official documents</div>
+        <div class="imagery-sub">Clean, well-lit document photography</div>
+      </div>
+      <div class="imagery-card">
+        <div class="imagery-vis" style="background: #F0EDE8;">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <circle cx="16" cy="12" r="6" fill="#1C2E4A"/>
+            <path d="M6 26c0-5.523 4.477-10 10-10s10 4.477 10 10" stroke="#1C2E4A" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="16" cy="12" r="3" fill="#C9963A"/>
+          </svg>
+        </div>
+        <div class="imagery-label">Professional people</div>
+        <div class="imagery-sub">Diverse clients, formal attire, natural settings</div>
+      </div>
+      <div class="imagery-card">
+        <div class="imagery-vis" style="background: #E8EFF4;">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <path d="M4 16 C4 8,16 4,28 16 C16 28,4 24,4 16Z" fill="#1C2E4A"/>
+            <circle cx="16" cy="16" r="4" fill="#C9963A"/>
+            <path d="M16 6 v3M16 23 v3M6 16 h3M23 16 h3" stroke="#C9963A" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="imagery-label">Global context</div>
+        <div class="imagery-sub">Maps, landmarks, international destinations</div>
+      </div>
+    </div>
+    <div style="margin-top: 1.2rem;" class="rules-list">
+      <div class="rule-row"><div class="rule-icon" style="color:#0F6E56;">✓</div><div class="rule-text">Use photography with a cool-neutral or warm-parchment color grade to align with brand palette</div></div>
+      <div class="rule-row"><div class="rule-icon" style="color:#0F6E56;">✓</div><div class="rule-text">Prefer images that convey precision, professionalism, and calm confidence</div></div>
+      <div class="rule-row"><div class="rule-icon" style="color:#A32D2D;">✗</div><div class="rule-text">Avoid stock photo clichés: excessive handshakes, thumbs up, dramatic lighting</div></div>
+      <div class="rule-row"><div class="rule-icon" style="color:#A32D2D;">✗</div><div class="rule-text">Never use images with competing bright colors or cartoon-style illustration</div></div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- 6. DIGITAL GUIDELINES -->
+  <div class="section">
+    <div class="section-label">06 — Digital</div>
+    <div class="section-title">Web & UI Guidelines</div>
+    <div class="section-rule"></div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+      <div style="padding: 1.2rem; background: var(--cream); border-radius: 10px; border: 0.5px solid var(--border);">
+        <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem;">Buttons</div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="background: var(--gold); color: var(--navy); padding: 9px 18px; border-radius: 6px; font-weight: 600; font-size: 13px; text-align: center;">Primary — Gold fill</div>
+          <div style="background: transparent; color: var(--navy); padding: 8px 18px; border-radius: 6px; font-weight: 500; font-size: 13px; border: 1.5px solid var(--navy); text-align: center;">Secondary — Outlined</div>
+          <div style="background: var(--navy); color: var(--white); padding: 9px 18px; border-radius: 6px; font-weight: 600; font-size: 13px; text-align: center;">Tertiary — Navy fill</div>
+        </div>
+      </div>
+      <div style="padding: 1.2rem; background: var(--cream); border-radius: 10px; border: 0.5px solid var(--border);">
+        <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem;">Status badges</div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="background:#E1F5EE; color:#0F6E56; padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 600;">Completed</span>
+            <span style="font-size: 11px; color: var(--text-muted);">Document delivered</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="background:#FAEEDA; color:#854F0B; padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 600;">In progress</span>
+            <span style="font-size: 11px; color: var(--text-muted);">Processing</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="background:#FCEBEB; color:#A32D2D; padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 600;">Action needed</span>
+            <span style="font-size: 11px; color: var(--text-muted);">Missing info</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="background:#E6F1FB; color:#185FA5; padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 600;">Received</span>
+            <span style="font-size: 11px; color: var(--text-muted);">Order placed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 1.2rem; padding: 1.2rem; background: var(--cream); border-radius: 10px; border: 0.5px solid var(--border);">
+      <div style="font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem;">Spacing system</div>
+      <div style="display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap;">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+          <div style="width: 8px; height: 8px; background: var(--navy); border-radius: 2px;"></div>
+          <div style="font-size: 10px; color: var(--text-muted);">4px</div>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+          <div style="width: 12px; height: 12px; background: var(--navy); border-radius: 2px;"></div>
+          <div style="font-size: 10px; color: var(--text-muted);">8px</div>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+          <div style="width: 16px; height: 16px; background: var(--navy); border-radius: 2px;"></div>
+          <div style="font-size: 10px; color: var(--text-muted);">12px</div>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+          <div style="width: 24px; height: 24px; background: var(--navy); border-radius: 2px;"></div>
+          <div style="font-size: 10px; color: var(--text-muted);">16px</div>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+          <div style="width: 32px; height: 32px; background: var(--navy-light); border-radius: 2px;"></div>
+          <div style="font-size: 10px; color: var(--text-muted);">24px</div>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+          <div style="width: 48px; height: 48px; background: var(--navy-mid); border-radius: 2px;"></div>
+          <div style="font-size: 10px; color: var(--text-muted);">32px</div>
+        </div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+          <div style="width: 64px; height: 64px; background: #E8EDF5; border-radius: 2px; border: 0.5px solid var(--border);"></div>
+          <div style="font-size: 10px; color: var(--text-muted);">48px+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-brand">US <span>Authentication</span> Services</div>
+    <div class="footer-note">Brand Guidelines · usauthentication.com · Washington DC</div>
+  </div>
+
+</div>
