@@ -18,11 +18,6 @@ out/
 # Screenshots & Temporary Files
 temporary screenshots/
 design_ideas/
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.webp
 notes.txt
 
 # Puppeteer Cache
