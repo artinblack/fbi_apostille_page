@@ -47,3 +47,6 @@ pnpm-debug.log*
 # Local development
 .local
 .env.development.local
+
+# Admin panel (separate deployment, not part of main site)
+fbi_admin_page/
