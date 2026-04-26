@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin — FBI Apostille</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy:       #042c53;
+  --navy-dark:  #021d38;
+  --navy-light: #eaf0f7;
+  --orange:     #f97316;
+  --green:      #1a9e75;
+  --green-light:#e1f5ee;
+  --red:        #d94040;
+  --red-light:  rgba(217,64,64,.08);
+  --border:     #d5dce8;
+  --text:       #1a2236;
+  --text-muted: #6b7694;
+  --bg:         #f4f7fb;
+  --white:      #ffffff;
+  --radius:     10px;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'DM Sans', sans-serif;
+  --zelle:        #6D1ED4;
+  --zelle-light:  rgba(109,30,212,.07);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ── AUTH ── */
+.auth-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--navy); padding: 1rem; }
+.auth-card { background: white; border-radius: 16px; padding: 2.5rem 2rem; width: 100%; max-width: 380px; box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+.auth-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 1.8rem; }
+.auth-logo img { height: 44px; width: auto; object-fit: contain; }
+.auth-logo-label { font-size: 13px; font-weight: 700; color: var(--navy); line-height: 1.3; }
+.auth-logo-sub { font-size: 10.5px; color: var(--text-muted); font-weight: 400; }
+.auth-title { font-family: var(--font-display); font-size: 1.4rem; color: var(--navy); margin-bottom: .3rem; }
+.auth-sub { font-size: 12.5px; color: var(--text-muted); margin-bottom: 1.6rem; line-height: 1.6; }
+.auth-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+.auth-field label { font-size: 10.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; }
+.auth-field input { border: 1.5px solid var(--border); border-radius: var(--radius); padding: 10px 14px; font-size: .9rem; font-family: var(--font-body); color: var(--text); transition: border-color .2s; }
+.auth-field input:focus { outline: none; border-color: var(--navy); box-shadow: 0 0 0 3px rgba(4,44,83,.08); }
+.auth-field input.error { border-color: var(--red); }
+.auth-err { font-size: 12px; color: var(--red); margin-bottom: 10px; min-height: 16px; }
+.btn-auth { width: 100%; background: var(--navy); border: none; color: white; border-radius: var(--radius); padding: 12px; font-size: 14px; font-family: var(--font-body); font-weight: 700; cursor: pointer; transition: background .2s; margin-top: 4px; }
+.btn-auth:hover { background: var(--navy-dark); }
+.auth-note { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 1rem; line-height: 1.65; }
+.auth-note code { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; font-size: 10.5px; }
+
+/* ── TOP BAR ── */
+.admin-topbar { background: var(--navy); color: white; padding: 0 2rem; height: 60px; display: flex; align-items: center; gap: 14px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,.18); }
+.topbar-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.topbar-logo img { height: 34px; }
+.topbar-divider { width: 1px; height: 28px; background: rgba(255,255,255,.15); }
+.topbar-title { font-family: var(--font-display); font-size: 1rem; color: white; font-weight: 500; }
+.topbar-badge { font-size: 10px; font-weight: 700; background: var(--orange); color: white; padding: 2px 9px; border-radius: 20px; text-transform: uppercase; letter-spacing: .06em; }
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.btn-refresh { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15); color: white; border-radius: 8px; padding: 6px 14px; font-size: 12px; font-weight: 600; font-family: var(--font-body); cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background .15s; }
+.btn-refresh:hover { background: rgba(255,255,255,.2); }
+.btn-refresh svg { transition: transform .45s ease; }
+.btn-refresh.spinning svg { transform: rotate(360deg); }
+.btn-logout { background: transparent; border: 1px solid rgba(255,255,255,.2); color: rgba(255,255,255,.7); border-radius: 8px; padding: 6px 14px; font-size: 12px; font-family: var(--font-body); cursor: pointer; transition: all .15s; }
+.btn-logout:hover { border-color: rgba(255,255,255,.55); color: white; }
+
+/* ── BODY ── */
+.admin-body { max-width: 1120px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+/* ── BANNERS ── */
+.demo-banner { background: rgba(249,115,22,.09); border: 1px solid rgba(249,115,22,.28); border-radius: 10px; padding: 10px 16px; display: none; align-items: flex-start; gap: 10px; margin-bottom: 1.5rem; font-size: 12.5px; color: #c05a0a; line-height: 1.65; }
+.demo-banner code { background: rgba(249,115,22,.12); border-radius: 4px; padding: 1px 5px; font-size: 11px; }
+.config-box { background: var(--navy-light); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.3rem; font-size: 12.5px; color: var(--text-muted); line-height: 1.8; margin-bottom: 1.5rem; display: none; }
+.config-box code { background: white; border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; font-size: 11.5px; color: var(--navy); font-family: monospace; }
+
+/* ── STATS ── */
+.stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 1.75rem; }
+.stat-card { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.3rem; }
+.stat-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 6px; }
+.stat-value { font-family: var(--font-display); font-size: 2rem; color: var(--navy); font-weight: 600; line-height: 1; }
+.stat-value.orange { color: var(--orange); }
+.stat-value.green  { color: var(--green); }
+.stat-sub { font-size: 11px; color: var(--text-muted); margin-top: 5px; }
+
+/* ── FILTER TABS ── */
+.filter-row { display: flex; align-items: center; gap: 8px; margin-bottom: 1.2rem; flex-wrap: wrap; }
+.filter-tab { padding: 6px 16px; font-size: 12.5px; font-weight: 600; border: 1.5px solid var(--border); border-radius: 20px; background: white; color: var(--text-muted); cursor: pointer; font-family: var(--font-body); transition: all .15s; white-space: nowrap; }
+.filter-tab:hover { border-color: var(--navy); color: var(--navy); }
+.filter-tab.active { background: var(--navy); border-color: var(--navy); color: white; }
+.tab-count { display: inline-block; padding: 0 6px; font-size: 10.5px; border-radius: 20px; margin-left: 3px; background: rgba(255,255,255,.2); }
+.filter-tab:not(.active) .tab-count { background: var(--bg); color: var(--text-muted); }
+
+/* ── ORDER CARDS ── */
+#orders-container { display: flex; flex-direction: column; gap: 14px; }
+.empty-state { text-align: center; padding: 4rem 1rem; color: var(--text-muted); }
+.empty-icon { width: 54px; height: 54px; background: var(--navy-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
+.empty-title { font-family: var(--font-display); font-size: 1.15rem; color: var(--navy); margin-bottom: .4rem; }
+.empty-sub { font-size: 13px; line-height: 1.6; }
+
+.order-card { background: white; border: 1.5px solid var(--border); border-radius: 12px; overflow: hidden; transition: box-shadow .2s; }
+.order-card:hover { box-shadow: 0 4px 20px rgba(4,44,83,.08); }
+.order-card.status-paid { border-color: rgba(26,158,117,.3); }
+.order-card.status-cancelled { border-color: rgba(217,64,64,.18); opacity: .65; }
+
+.order-card-header { display: flex; align-items: center; gap: 10px; padding: 11px 18px; background: var(--bg); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+.order-ref { font-size: 12px; font-weight: 700; color: var(--navy); font-family: monospace; letter-spacing: .04em; }
+.order-date { font-size: 11.5px; color: var(--text-muted); }
+.method-badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; display: flex; align-items: center; gap: 4px; }
+.method-badge.zelle  { background: var(--zelle-light); color: var(--zelle); }
+.method-badge.paypal { background: rgba(0,112,240,.08); color: #0070f0; }
+.status-badge { font-size: 10.5px; font-weight: 700; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: .05em; margin-left: auto; }
+.status-badge.pending   { background: rgba(249,115,22,.12); color: var(--orange); }
+.status-badge.paid      { background: var(--green-light); color: var(--green); }
+.status-badge.cancelled { background: var(--red-light); color: var(--red); }
+
+.order-card-body { display: grid; grid-template-columns: 1fr 1fr 180px; }
+.order-col { padding: 14px 18px; }
+.order-col + .order-col { border-left: 1px solid var(--border); }
+.col-label { font-size: 9.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 9px; }
+.detail-row { display: flex; gap: 8px; margin-bottom: 5px; font-size: 12.5px; }
+.detail-key { color: var(--text-muted); flex-shrink: 0; min-width: 56px; }
+.detail-val { color: var(--text); font-weight: 500; word-break: break-word; }
+.order-amount { font-family: var(--font-display); font-size: 1.55rem; color: var(--navy); font-weight: 600; margin-bottom: 3px; line-height: 1; }
+.order-plan  { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+
+.order-actions { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; justify-content: center; }
+.btn-mark-paid { background: var(--green); border: none; color: white; border-radius: 8px; padding: 9px 14px; font-size: 12.5px; font-family: var(--font-body); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background .2s; }
+.btn-mark-paid:hover { background: #148f69; }
+.btn-mark-paid:disabled { background: #ccc; cursor: not-allowed; }
+.btn-cancel-order { background: transparent; border: 1px solid rgba(217,64,64,.3); color: var(--red); border-radius: 8px; padding: 7px 14px; font-size: 12px; font-family: var(--font-body); font-weight: 600; cursor: pointer; transition: background .15s; }
+.btn-cancel-order:hover { background: var(--red-light); }
+.action-note { font-size: 11px; text-align: center; color: var(--text-muted); line-height: 1.55; }
+.action-note.green { color: var(--green); font-weight: 600; }
+
+/* ── MODAL ── */
+.modal-overlay { position: fixed; inset: 0; background: rgba(4,44,83,.45); display: flex; align-items: center; justify-content: center; z-index: 500; padding: 1rem; backdrop-filter: blur(3px); }
+.modal { background: white; border-radius: 14px; padding: 2rem; width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,.2); }
+.modal-icon { width: 48px; height: 48px; background: var(--green-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; }
+.modal-title { font-family: var(--font-display); font-size: 1.2rem; color: var(--navy); margin-bottom: .4rem; }
+.modal-body { font-size: 13.5px; color: var(--text-muted); line-height: 1.7; margin-bottom: 1.4rem; }
+.modal-amount { font-size: 1.45rem; font-weight: 800; color: var(--navy); font-family: var(--font-display); display: block; margin: 4px 0; }
+.modal-actions { display: flex; gap: 10px; }
+.btn-modal-cancel  { flex: 1; background: transparent; border: 1.5px solid var(--border); color: var(--text-muted); border-radius: var(--radius); padding: 10px; font-size: 13px; font-family: var(--font-body); font-weight: 600; cursor: pointer; transition: border-color .2s, color .2s; }
+.btn-modal-cancel:hover { border-color: var(--navy); color: var(--navy); }
+.btn-modal-confirm { flex: 2; background: var(--green); border: none; color: white; border-radius: var(--radius); padding: 10px; font-size: 13px; font-family: var(--font-body); font-weight: 700; cursor: pointer; transition: background .2s; }
+.btn-modal-confirm:hover { background: #148f69; }
+.btn-modal-confirm:disabled { background: #ccc; cursor: not-allowed; }
+
+/* ── TOAST ── */
+.toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--navy); color: white; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 8px 24px rgba(4,44,83,.25); transform: translateY(80px); opacity: 0; transition: transform .3s, opacity .3s; z-index: 600; pointer-events: none; }
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.success { background: var(--green); }
+.toast.error   { background: var(--red); }
+
+/* ── LOADING SKELETON ── */
+.skeleton { background: linear-gradient(90deg, var(--bg) 25%, #e8edf4 50%, var(--bg) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 6px; }
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+@media(max-width:700px) {
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .order-card-body { grid-template-columns: 1fr; }
+  .order-col + .order-col { border-left: none; border-top: 1px solid var(--border); }
+  .order-actions { border-left: none; border-top: 1px solid var(--border); flex-direction: row; flex-wrap: wrap; }
+  .admin-topbar { padding: 0 1rem; }
+  .admin-body { padding: 1.2rem 1rem 3rem; }
+  .topbar-title, .topbar-badge { display: none; }
+}
+@media(max-width:480px) {
+  .stats-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════
+     SCREEN: FIRST-TIME PASSWORD SETUP
+════════════════════════════════════ -->
+<div id="screen-setup" class="auth-screen" style="display:none">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <img src="brand_assets/logo.jpeg" alt="FBI Apostille"/>
+      <div>
+        <div class="auth-logo-label">FBI APOSTILLE</div>
+        <div class="auth-logo-sub">Admin Panel — First Setup</div>
+      </div>
+    </div>
+    <div class="auth-title">Create Admin Password</div>
+    <div class="auth-sub">Set a password to protect this admin panel. It's stored as a secure hash in your browser — only you can access it.</div>
+    <div class="auth-field">
+      <label>New Password <span style="color:var(--red)">*</span></label>
+      <input type="password" id="setup-pass" placeholder="Minimum 8 characters" oninput="clearAuthErr()"/>
+    </div>
+    <div class="auth-field">
+      <label>Confirm Password <span style="color:var(--red)">*</span></label>
+      <input type="password" id="setup-confirm" placeholder="Re-enter password" oninput="clearAuthErr()" onkeydown="if(event.key==='Enter')handleSetup()"/>
+    </div>
+    <div class="auth-err" id="setup-err"></div>
+    <button class="btn-auth" onclick="handleSetup()">Set Password &amp; Enter Admin</button>
+    <div class="auth-note">Password is hashed with SHA-256 and stored locally. To reset, clear <code>fbi_admin_pwd_hash</code> from localStorage.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SCREEN: LOGIN
+════════════════════════════════════ -->
+<div id="screen-login" class="auth-screen" style="display:none">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <img src="brand_assets/logo.jpeg" alt="FBI Apostille"/>
+      <div>
+        <div class="auth-logo-label">FBI APOSTILLE</div>
+        <div class="auth-logo-sub">Admin Panel</div>
+      </div>
+    </div>
+    <div class="auth-title">Admin Login</div>
+    <div class="auth-sub">Sign in to verify Zelle payments and manage orders.</div>
+    <div class="auth-field">
+      <label>Password</label>
+      <input type="password" id="login-pass" placeholder="Enter admin password" oninput="clearAuthErr()" onkeydown="if(event.key==='Enter')handleLogin()"/>
+    </div>
+    <div class="auth-err" id="login-err"></div>
+    <button class="btn-auth" onclick="handleLogin()">Sign In</button>
+    <div class="auth-note">Forgot password? Clear <code>fbi_admin_pwd_hash</code> from localStorage and reload to create a new one.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     SCREEN: DASHBOARD
+════════════════════════════════════ -->
+<div id="screen-dashboard" style="display:none">
+
+  <div class="admin-topbar">
+    <a class="topbar-logo" href="index.html" title="Back to site">
+      <img src="brand_assets/logo.jpeg" alt="FBI Apostille"/>
+    </a>
+    <div class="topbar-divider"></div>
+    <div class="topbar-title">Admin Panel</div>
+    <div class="topbar-badge">Zelle Verification</div>
+    <div class="topbar-right">
+      <button class="btn-refresh" id="refresh-btn" onclick="loadOrders()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Refresh
+      </button>
+      <button class="btn-logout" onclick="logout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="admin-body">
+
+    <!-- Demo mode banner -->
+    <div class="demo-banner" id="demo-banner">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div>
+        <strong>Demo mode</strong> — showing sample orders.
+        To connect real orders, set <code>FETCH_ORDERS_URL</code> at the top of <code>admin.html</code> to your n8n GET webhook URL that returns submitted orders as a JSON array.
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Pending Zelle</div>
+        <div class="stat-value orange" id="stat-pending">—</div>
+        <div class="stat-sub">awaiting your verification</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Amount Pending</div>
+        <div class="stat-value" id="stat-pending-amt">—</div>
+        <div class="stat-sub">unconfirmed Zelle revenue</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Confirmed Today</div>
+        <div class="stat-value green" id="stat-paid-today">—</div>
+        <div class="stat-sub">Zelle payments verified</div>
+      </div>
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="filter-row">
+      <button class="filter-tab active" onclick="setFilter('all',this)">All <span class="tab-count" id="cnt-all">0</span></button>
+      <button class="filter-tab" onclick="setFilter('pending',this)">Pending Zelle <span class="tab-count" id="cnt-pending">0</span></button>
+      <button class="filter-tab" onclick="setFilter('paid',this)">Paid <span class="tab-count" id="cnt-paid">0</span></button>
+      <button class="filter-tab" onclick="setFilter('cancelled',this)">Cancelled <span class="tab-count" id="cnt-cancelled">0</span></button>
+    </div>
+
+    <!-- Orders -->
+    <div id="orders-container"></div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     CONFIRM MODAL
+════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-overlay" style="display:none" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1a9e75" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="modal-title">Confirm Zelle Payment</div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-modal-confirm" id="modal-confirm-btn" onclick="confirmPayment()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>
+        Mark as Paid
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─────────────────────────────────────────
+// CONFIG
+// Set your n8n webhook URLs here after
+// building the workflows in n8n.
+// ─────────────────────────────────────────
+const FETCH_ORDERS_URL    = 'https://n8n.leadaheadindia.com/webhook/fetch_orders';  // GET — returns JSON array of orders
+const CONFIRM_PAYMENT_URL = 'https://n8n.leadaheadindia.com/webhook/confirm_payment';  // POST — { ref, action:'mark_paid', confirmed_at }
+const CANCEL_ORDER_URL    = '';  // POST — { ref, action:'cancel', cancelled_at }
+
+// ─────────────────────────────────────────
+// AUTH
+// ─────────────────────────────────────────
+const HASH_KEY    = 'fbi_admin_pwd_hash';
+const SESSION_KEY = 'fbi_admin_session';
+
+async function sha256(msg) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function isSetup()    { return !!localStorage.getItem(HASH_KEY); }
+function isLoggedIn() { return sessionStorage.getItem(SESSION_KEY) === '1'; }
+
+async function handleSetup() {
+  const p = document.getElementById('setup-pass').value;
+  const c = document.getElementById('setup-confirm').value;
+  const e = document.getElementById('setup-err');
+  if (p.length < 8) { e.textContent = 'Password must be at least 8 characters'; return; }
+  if (p !== c)      { e.textContent = 'Passwords do not match'; return; }
+  localStorage.setItem(HASH_KEY, await sha256(p));
+  sessionStorage.setItem(SESSION_KEY, '1');
+  showDashboard();
+}
+
+async function handleLogin() {
+  const p = document.getElementById('login-pass').value.trim();
+  const e = document.getElementById('login-err');
+  if (!p) { e.textContent = 'Please enter your password'; return; }
+  const hash = await sha256(p);
+  if (hash === localStorage.getItem(HASH_KEY)) {
+    sessionStorage.setItem(SESSION_KEY, '1');
+    showDashboard();
+  } else {
+    e.textContent = 'Incorrect password — try again';
+    document.getElementById('login-pass').classList.add('error');
+  }
+}
+
+function logout() {
+  sessionStorage.removeItem(SESSION_KEY);
+  location.reload();
+}
+
+function clearAuthErr() {
+  ['setup-err','login-err'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = '';
+  });
+  ['setup-pass','setup-confirm','login-pass'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('error');
+  });
+}
+
+// ─────────────────────────────────────────
+// DEMO DATA
+// ─────────────────────────────────────────
+const now = Date.now();
+const DEMO_ORDERS = [
+  { order_ref:'ORD-DEMO1', first_name:'Sarah', last_name:'Mitchell', email:'sarah.m@example.com', phone:'+1 703-555-0191', plan_label:'Standard — 15 business days', order_total:'$267.00', doc_count:'2', payment_method:'zelle', destination_country:'Germany', submitted_at:new Date(now - 7_200_000).toISOString(), status:'pending' },
+  { order_ref:'ORD-DEMO2', first_name:'James', last_name:'Rodriguez', email:'j.rodriguez@example.com', phone:'+1 202-555-0144', plan_label:'Express — 8–9 business days', order_total:'$394.00', doc_count:'3', payment_method:'zelle', destination_country:'United Arab Emirates', submitted_at:new Date(now - 18_000_000).toISOString(), status:'pending' },
+  { order_ref:'ORD-DEMO3', first_name:'Aisha', last_name:'Patel', email:'aisha.patel@example.com', phone:'+44 7911 123456', plan_label:'Economy — 5+ weeks', order_total:'$69.00', doc_count:'1', payment_method:'zelle', destination_country:'India', submitted_at:new Date(now - 86_400_000).toISOString(), status:'paid', confirmed_at:new Date(now - 72_000_000).toISOString() },
+  { order_ref:'ORD-DEMO4', first_name:'Chen', last_name:'Wei', email:'c.wei@example.com', phone:'+1 415-555-0167', plan_label:'Standard — 15 business days', order_total:'$178.00', doc_count:'2', payment_method:'paypal', paypal_transaction_id:'7BX12345ABC', destination_country:'China', submitted_at:new Date(now - 3_600_000).toISOString(), status:'paid', confirmed_at:new Date(now - 3_000_000).toISOString() },
+  { order_ref:'ORD-DEMO5', first_name:'Emily', last_name:'Thornton', email:'e.thornton@example.com', phone:'+1 646-555-0122', plan_label:'Express — 8–9 business days', order_total:'$109.00', doc_count:'1', payment_method:'zelle', destination_country:'France', submitted_at:new Date(now - 900_000).toISOString(), status:'pending' },
+];
+
+// ─────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────
+let allOrders      = [];
+let currentFilter  = 'all';
+let pendingRef     = null;
+let usingDemoData  = false;
+let toastTimer;
+
+// ─────────────────────────────────────────
+// LOAD ORDERS
+// ─────────────────────────────────────────
+async function loadOrders() {
+  const btn = document.getElementById('refresh-btn');
+  btn.classList.add('spinning');
+
+  if (!FETCH_ORDERS_URL) {
+    usingDemoData = true;
+    document.getElementById('demo-banner').style.display = 'flex';
+    const overrides = JSON.parse(localStorage.getItem('fbi_order_overrides') || '{}');
+    allOrders = DEMO_ORDERS.map(o => ({
+      ...o,
+      status:       overrides[o.order_ref]?.status       || o.status,
+      confirmed_at: overrides[o.order_ref]?.confirmed_at || o.confirmed_at,
+    }));
+  } else {
+    usingDemoData = false;
+    document.getElementById('demo-banner').style.display = 'none';
+    try {
+      const res  = await fetch(FETCH_ORDERS_URL);
+      const data = await res.json();
+      allOrders = Array.isArray(data) ? data : (data.orders || data.data || []);
+    } catch(err) {
+      showToast('Could not reach n8n — check FETCH_ORDERS_URL', 'error');
+      btn.classList.remove('spinning');
+      return;
+    }
+  }
+
+  setTimeout(() => btn.classList.remove('spinning'), 420);
+  renderAll();
+}
+
+// ─────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────
+function renderAll() {
+  updateStats();
+  updateCounts();
+  renderOrders();
+}
+
+function updateStats() {
+  const zelleP = allOrders.filter(o => o.payment_method === 'zelle' && o.status === 'pending');
+  const pendAmt = zelleP.reduce((s, o) => s + parseFloat((o.order_total || '0').replace(/[^0-9.]/g, '')), 0);
+  const today   = new Date().toDateString();
+  const paidToday = allOrders.filter(o => o.status === 'paid' && new Date(o.confirmed_at || o.submitted_at).toDateString() === today);
+
+  document.getElementById('stat-pending').textContent     = zelleP.length;
+  document.getElementById('stat-pending-amt').textContent = '$' + pendAmt.toFixed(2);
+  document.getElementById('stat-paid-today').textContent  = paidToday.length;
+}
+
+function updateCounts() {
+  document.getElementById('cnt-all').textContent       = allOrders.length;
+  document.getElementById('cnt-pending').textContent   = allOrders.filter(o => o.payment_method === 'zelle' && o.status === 'pending').length;
+  document.getElementById('cnt-paid').textContent      = allOrders.filter(o => o.status === 'paid').length;
+  document.getElementById('cnt-cancelled').textContent = allOrders.filter(o => o.status === 'cancelled').length;
+}
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderOrders();
+}
+
+function filteredOrders() {
+  if (currentFilter === 'pending')   return allOrders.filter(o => o.payment_method === 'zelle' && o.status === 'pending');
+  if (currentFilter === 'paid')      return allOrders.filter(o => o.status === 'paid');
+  if (currentFilter === 'cancelled') return allOrders.filter(o => o.status === 'cancelled');
+  return allOrders;
+}
+
+function renderOrders() {
+  const container = document.getElementById('orders-container');
+  const list = filteredOrders();
+
+  if (!list.length) {
+    const labels = { all:'orders', pending:'pending Zelle orders', paid:'paid orders', cancelled:'cancelled orders' };
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6b7694" stroke-width="1.8" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="empty-title">No ${labels[currentFilter]} yet</div>
+        <div class="empty-sub">Orders will appear here once submitted.</div>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = list.map(renderCard).join('');
+}
+
+function fmt(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+
+function renderCard(o) {
+  const ref       = o.order_ref || o.ref || '—';
+  const status    = o.status || 'pending';
+  const isZelle   = o.payment_method === 'zelle';
+  const isPaid    = status === 'paid';
+  const isCancelled = status === 'cancelled';
+
+  const methodBadge = isZelle
+    ? `<span class="method-badge zelle">Z elle</span>`
+    : `<span class="method-badge paypal">P PayPal</span>`;
+
+  const statusLabels = { pending:'Pending', paid:'Paid ✓', cancelled:'Cancelled' };
+
+  let actions;
+  if (isPaid) {
+    actions = `<div class="action-note green">✓ Payment confirmed<br><span style="font-weight:400;color:var(--text-muted);font-size:10px">${fmt(o.confirmed_at)}</span></div>`;
+  } else if (isCancelled) {
+    actions = `<div class="action-note">Order cancelled</div>`;
+  } else if (isZelle) {
+    actions = `
+      <button class="btn-mark-paid" onclick="openModal('${ref}')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        Mark as Paid
+      </button>
+      <button class="btn-cancel-order" onclick="cancelOrder('${ref}')">Cancel Order</button>`;
+  } else {
+    actions = `<div class="action-note" style="color:var(--green);font-weight:600">PayPal auto-verified</div>`;
+  }
+
+  const txRow = o.paypal_transaction_id
+    ? `<div class="detail-row"><span class="detail-key">Tx ID</span><span class="detail-val" style="font-size:10.5px;font-family:monospace">${o.paypal_transaction_id}</span></div>`
+    : '';
+
+  return `
+  <div class="order-card status-${status}" id="card-${ref}">
+    <div class="order-card-header">
+      <span class="order-ref">#${ref}</span>
+      ${methodBadge}
+      <span class="order-date">${fmt(o.submitted_at)}</span>
+      <span class="status-badge ${status}">${statusLabels[status] || status}</span>
+    </div>
+    <div class="order-card-body">
+      <div class="order-col">
+        <div class="col-label">Customer</div>
+        <div class="detail-row"><span class="detail-key">Name</span><span class="detail-val">${o.first_name||''} ${o.last_name||''}</span></div>
+        <div class="detail-row"><span class="detail-key">Email</span><span class="detail-val" style="word-break:break-all">${o.email||'—'}</span></div>
+        <div class="detail-row"><span class="detail-key">Phone</span><span class="detail-val">${o.phone||'—'}</span></div>
+        <div class="detail-row"><span class="detail-key">Country</span><span class="detail-val">${o.destination_country||'—'}</span></div>
+      </div>
+      <div class="order-col">
+        <div class="col-label">Order</div>
+        <div class="order-amount">${o.order_total||'—'}</div>
+        <div class="order-plan">${o.plan_label||'—'}</div>
+        <div class="detail-row"><span class="detail-key">Docs</span><span class="detail-val">${o.doc_count||'1'} document${parseInt(o.doc_count||1)!==1?'s':''}</span></div>
+        ${txRow}
+      </div>
+      <div class="order-col order-actions">
+        ${actions}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ─────────────────────────────────────────
+// MARK AS PAID
+// ─────────────────────────────────────────
+function openModal(ref) {
+  const o = allOrders.find(o => (o.order_ref || o.ref) === ref);
+  if (!o) return;
+  pendingRef = ref;
+
+  document.getElementById('modal-body').innerHTML = `
+    Confirm you have received a Zelle payment of
+    <span class="modal-amount">${o.order_total}</span>
+    from <strong>${o.first_name} ${o.last_name}</strong> (${o.email}).
+    <br><br>The order will be marked as paid and your n8n workflow will be triggered to process it.`;
+
+  document.getElementById('modal-overlay').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').style.display = 'none';
+}
+
+async function confirmPayment() {
+  const ref = pendingRef;
+  if (!ref) return;
+
+  const confirmBtn = document.getElementById('modal-confirm-btn');
+  confirmBtn.disabled = true;
+  confirmBtn.textContent = 'Processing…';
+
+  const confirmedAt = new Date().toISOString();
+
+  if (CONFIRM_PAYMENT_URL) {
+    try {
+      await fetch(CONFIRM_PAYMENT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ref, action: 'mark_paid', confirmed_at: confirmedAt }),
+      });
+    } catch(err) {
+      showToast('n8n unreachable — status saved locally only', 'error');
+    }
+  }
+
+  // Update local state
+  const order = allOrders.find(o => (o.order_ref || o.ref) === ref);
+  if (order) { order.status = 'paid'; order.confirmed_at = confirmedAt; }
+  if (usingDemoData) saveOverride(ref, 'paid', confirmedAt);
+
+  closeModal();
+  confirmBtn.disabled = false;
+  confirmBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Mark as Paid`;
+  renderAll();
+  showToast('Payment confirmed — order marked as paid ✓', 'success');
+}
+
+async function cancelOrder(ref) {
+  if (!confirm(`Cancel order ${ref}? This cannot be undone.`)) return;
+  const cancelledAt = new Date().toISOString();
+
+  if (CANCEL_ORDER_URL) {
+    try {
+      await fetch(CANCEL_ORDER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ref, action: 'cancel', cancelled_at: cancelledAt }),
+      });
+    } catch(err) {
+      showToast('n8n unreachable — status saved locally only', 'error');
+    }
+  }
+
+  const order = allOrders.find(o => (o.order_ref || o.ref) === ref);
+  if (order) order.status = 'cancelled';
+  if (usingDemoData) saveOverride(ref, 'cancelled');
+
+  renderAll();
+  showToast('Order cancelled', 'error');
+}
+
+function saveOverride(ref, status, confirmed_at = null) {
+  const ov = JSON.parse(localStorage.getItem('fbi_order_overrides') || '{}');
+  ov[ref] = { status, confirmed_at };
+  localStorage.setItem('fbi_order_overrides', JSON.stringify(ov));
+}
+
+// ─────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type ? ' ' + type : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ─────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────
+function showDashboard() {
+  document.getElementById('screen-setup').style.display    = 'none';
+  document.getElementById('screen-login').style.display    = 'none';
+  document.getElementById('screen-dashboard').style.display = 'block';
+  loadOrders();
+}
+
+(function init() {
+  if (isLoggedIn()) {
+    showDashboard();
+  } else if (!isSetup()) {
+    document.getElementById('screen-setup').style.display = 'flex';
+  } else {
+    document.getElementById('screen-login').style.display = 'flex';
+  }
+})();
+</script>
+</body>
+</html>

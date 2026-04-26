@@ -202,9 +202,9 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 .mailing-sidebar .card-title { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; text-align: center; margin-bottom: 12px; }
 .mail-opt { display: flex; align-items: center; gap: 9px; font-size: 13px; color: var(--text); cursor: pointer; margin-bottom: 8px; padding: 8px 10px; border-radius: 8px; transition: background .15s; }
 .mail-opt:hover { background: var(--navy-light); }
-.mail-opt input[type="radio"] { accent-color: var(--navy); }
-.sig-sub { display: flex; align-items: center; gap: 8px; margin-left: 24px; margin-bottom: 8px; font-size: 12px; color: var(--text-muted); }
-.sig-sub input { width: 48px; border: 1px solid var(--border); border-radius: 6px; padding: 4px 6px; font-size: 12px; font-family: var(--font-body); }
+.mail-opt input[type="radio"], .mail-opt input[type="checkbox"] { accent-color: var(--navy); flex-shrink: 0; }
+.sig-required-row { background: var(--navy-light); border-radius: 8px; padding: 8px 10px 4px; border: 1px solid rgba(4,44,83,.12); margin: 2px 0 6px 0; }
+.sig-required-row .sig-question { font-size: 10.5px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px; }
 .hr-div { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
 .grand-total-bar { background: var(--navy); color: white; border-radius: 8px; padding: 10px 14px; font-size: 13px; font-weight: 700; display: flex; justify-content: space-between; margin-top: 10px; }
 
@@ -228,10 +228,57 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 
 /* ── SIGNATURE ── */
 .auth-block { background: var(--navy-light); border-left: 3px solid var(--navy); border-radius: 0 var(--radius) var(--radius) 0; padding: 1rem 1.2rem; font-size: 12.5px; color: var(--text-muted); line-height: 1.75; margin-bottom: 1.4rem; font-style: italic; }
-.sign-row { display: grid; grid-template-columns: 1fr 200px; gap: 16px; align-items: end; }
-.sign-line label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; display: block; margin-bottom: 5px; }
+.sign-row { display: grid; grid-template-columns: 1fr 200px; gap: 16px; align-items: start; }
+.sign-line label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; display: block; margin-bottom: 8px; }
 .sign-line input { border: none; border-bottom: 2px solid var(--navy); border-radius: 0; padding: 7px 2px; font-size: 1.05rem; font-family: var(--font-display); width: 100%; background: transparent; color: var(--text); }
 .sign-line input:focus { outline: none; }
+.sign-mode-tabs { display: inline-flex; border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 10px; }
+.sign-tab { padding: 5px 16px; font-size: 12px; font-weight: 600; border: none; background: white; color: var(--text-muted); cursor: pointer; font-family: var(--font-body); transition: background .15s, color .15s; }
+.sign-tab.active { background: var(--navy); color: white; }
+.sign-tab:hover:not(.active) { background: var(--navy-light); color: var(--navy); }
+.sig-canvas-wrap { position: relative; }
+#signature-canvas { display: block; width: 100%; height: 120px; border: 1.5px dashed var(--border); border-radius: var(--radius); background: white; cursor: crosshair; touch-action: none; transition: border-color .2s; }
+#signature-canvas.has-drawing { border-style: solid; border-color: var(--navy); }
+.sig-clear-btn { position: absolute; top: 7px; right: 9px; background: white; border: 1px solid var(--border); color: var(--text-muted); border-radius: 6px; padding: 3px 10px; font-size: 11px; font-family: var(--font-body); cursor: pointer; transition: border-color .15s, color .15s; }
+.sig-clear-btn:hover { border-color: var(--red); color: var(--red); }
+.sig-canvas-hint { font-size: 10.5px; color: var(--text-muted); margin-top: 5px; }
+
+/* ── PAYPAL SECTION ── */
+.paypal-payment-section { margin-top: 1.5rem; border: 1.5px solid var(--border); border-radius: 12px; padding: 1.4rem 1.6rem; background: white; }
+.paypal-section-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.1rem; }
+.paypal-section-title { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+.paypal-section-sub { font-size: 11.5px; color: var(--text-muted); }
+.paypal-section-badge { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--green); font-weight: 600; white-space: nowrap; flex-shrink: 0; padding: 4px 10px; background: var(--green-light); border-radius: 20px; margin-top: 2px; }
+.paypal-error { background: rgba(217,64,64,.07); border: 1px solid rgba(217,64,64,.25); border-radius: 8px; padding: 10px 14px; font-size: 12.5px; color: var(--red); margin-top: 10px; display: none; }
+.paypal-loading { display: none; align-items: center; justify-content: center; gap: 10px; padding: 14px; font-size: 13px; color: var(--text-muted); }
+
+/* ── ZELLE SECTION ── */
+.zelle-or-divider { display: flex; align-items: center; gap: 12px; margin: 1.2rem 0; color: var(--text-muted); font-size: 11.5px; }
+.zelle-or-divider::before,.zelle-or-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.zelle-payment-section { border: 1.5px solid rgba(109,30,212,.25); border-radius: 12px; padding: 1.4rem 1.6rem; background: white; }
+.zelle-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.1rem; }
+.zelle-wordmark { display: flex; align-items: center; gap: 6px; }
+.zelle-icon { width: 30px; height: 30px; background: linear-gradient(135deg,#6D1ED4,#4C0BFF); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 15px; font-weight: 900; font-family: var(--font-display); flex-shrink: 0; }
+.zelle-wordname { font-size: 19px; font-weight: 800; color: #6D1ED4; letter-spacing: -.03em; }
+.zelle-bank-badge { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #6D1ED4; font-weight: 600; padding: 4px 10px; background: rgba(109,30,212,.07); border-radius: 20px; white-space: nowrap; }
+.zelle-steps { display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; background: rgba(109,30,212,.04); border-radius: 8px; margin-bottom: 1rem; }
+.zelle-step { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--text); line-height: 1.45; }
+.zelle-step-num { min-width: 20px; height: 20px; background: #6D1ED4; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.zelle-detail-box { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; gap: 16px; }
+.zelle-detail-left { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
+.zelle-detail-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; }
+.zelle-detail-email { font-size: 13px; font-weight: 600; color: var(--navy); word-break: break-all; }
+.zelle-copy-btn { border: 1px solid rgba(109,30,212,.3); background: rgba(109,30,212,.06); color: #6D1ED4; border-radius: 6px; padding: 4px 11px; font-size: 11px; font-weight: 700; font-family: var(--font-body); cursor: pointer; transition: background .15s; align-self: flex-start; margin-top: 5px; }
+.zelle-copy-btn:hover { background: rgba(109,30,212,.13); }
+.zelle-qr-wrap { display: flex; flex-direction: column; align-items: center; gap: 5px; flex-shrink: 0; }
+.zelle-qr-label { font-size: 9.5px; font-weight: 700; color: #6D1ED4; text-transform: uppercase; letter-spacing: .07em; }
+.zelle-qr-img { width: 96px; height: 96px; object-fit: contain; border-radius: 8px; border: 1.5px solid rgba(109,30,212,.2); background: white; padding: 4px; }
+.btn-zelle-submit { width: 100%; background: #6D1ED4; border: none; color: white; border-radius: var(--radius); padding: 12px 20px; font-size: 13.5px; font-family: var(--font-body); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background .2s, transform .1s; box-shadow: 0 4px 16px rgba(109,30,212,.28); }
+.btn-zelle-submit:hover { background: #5a18b0; }
+.btn-zelle-submit:active { transform: scale(.98); }
+.btn-zelle-submit:disabled { background: #bbb; box-shadow: none; cursor: not-allowed; transform: none; }
+.zelle-loading { display: none; align-items: center; justify-content: center; gap: 8px; padding: 10px; font-size: 13px; color: var(--text-muted); margin-top: 6px; }
+.zelle-error { background: rgba(217,64,64,.07); border: 1px solid rgba(217,64,64,.25); border-radius: 8px; padding: 10px 14px; font-size: 12.5px; color: var(--red); margin-top: 10px; }
 
 /* ── NAV BUTTONS ── */
 .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
@@ -353,6 +400,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
   .next-steps { grid-template-columns: 1fr; }
 }
 </style>
+<script src="https://www.paypal.com/sdk/js?client-id=BAAo5Lc75iDKRNiCPyxZWTsirzLZmnJo_8bZCHE3ouflqVyalMFqXdB2h3ptpcB2Z-A3ltvXMxmnBPH9bM&currency=USD&intent=capture"></script>
 </head>
 <body>
 
@@ -904,7 +952,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
           <div class="field-row cols-2">
             <div class="field">
               <label>Full Name <span class="req">*</span></label>
-              <input type="text" id="return_name" placeholder="Jane Doe"/>
+              <input type="text" id="return_name" placeholder="Jane Doe" oninput="clearErr(this)"/>
               <span class="err-msg">Required</span>
             </div>
             <div class="field">
@@ -915,14 +963,14 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
           <div class="field-row">
             <div class="field">
               <label>Street Address <span class="req">*</span></label>
-              <input type="text" id="return_address" placeholder="123 Main St, Apt 4B"/>
+              <input type="text" id="return_address" placeholder="123 Main St, Apt 4B" oninput="clearErr(this)"/>
               <span class="err-msg">Required</span>
             </div>
           </div>
           <div class="field-row cols-3">
             <div class="field">
               <label>City <span class="req">*</span></label>
-              <input type="text" id="return_city" placeholder="Springfield"/>
+              <input type="text" id="return_city" placeholder="Springfield" oninput="clearErr(this)"/>
               <span class="err-msg">Required</span>
             </div>
             <div class="field">
@@ -931,19 +979,217 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
             </div>
             <div class="field">
               <label>Postal Code <span class="req">*</span></label>
-              <input type="text" id="return_postal" placeholder="22150"/>
+              <input type="text" id="return_postal" placeholder="22150" oninput="clearErr(this)"/>
               <span class="err-msg">Required</span>
             </div>
           </div>
           <div class="field-row cols-2">
             <div class="field">
               <label>Country <span class="req">*</span></label>
-              <input type="text" id="return_country" placeholder="USA"/>
+              <input type="text" id="return_country" placeholder="USA" oninput="clearErr(this)"/>
               <span class="err-msg">Required</span>
             </div>
             <div class="field">
-              <label>Contact Phone</label>
-              <input type="tel" id="return_phone" placeholder="+1 (703) 000-0000"/>
+              <label>Contact Phone <span class="req">*</span></label>
+              <div class="phone-input-wrap" id="return-phone-wrap">
+                <select id="return_phone_code" class="phone-code-sel" onchange="clearMailPhoneErr()">
+                  <option value="+1">🇺🇸 +1</option>
+                  <option value="+44">🇬🇧 +44</option>
+                  <option value="+91">🇮🇳 +91</option>
+                  <option value="+971">🇦🇪 +971</option>
+                  <option value="+93">🇦🇫 +93</option>
+                  <option value="+355">🇦🇱 +355</option>
+                  <option value="+213">🇩🇿 +213</option>
+                  <option value="+376">🇦🇩 +376</option>
+                  <option value="+244">🇦🇴 +244</option>
+                  <option value="+54">🇦🇷 +54</option>
+                  <option value="+374">🇦🇲 +374</option>
+                  <option value="+61">🇦🇺 +61</option>
+                  <option value="+43">🇦🇹 +43</option>
+                  <option value="+994">🇦🇿 +994</option>
+                  <option value="+1-242">🇧🇸 +1-242</option>
+                  <option value="+973">🇧🇭 +973</option>
+                  <option value="+880">🇧🇩 +880</option>
+                  <option value="+375">🇧🇾 +375</option>
+                  <option value="+32">🇧🇪 +32</option>
+                  <option value="+501">🇧🇿 +501</option>
+                  <option value="+229">🇧🇯 +229</option>
+                  <option value="+975">🇧🇹 +975</option>
+                  <option value="+591">🇧🇴 +591</option>
+                  <option value="+387">🇧🇦 +387</option>
+                  <option value="+267">🇧🇼 +267</option>
+                  <option value="+55">🇧🇷 +55</option>
+                  <option value="+673">🇧🇳 +673</option>
+                  <option value="+359">🇧🇬 +359</option>
+                  <option value="+226">🇧🇫 +226</option>
+                  <option value="+257">🇧🇮 +257</option>
+                  <option value="+238">🇨🇻 +238</option>
+                  <option value="+855">🇰🇭 +855</option>
+                  <option value="+237">🇨🇲 +237</option>
+                  <option value="+1">🇨🇦 +1</option>
+                  <option value="+236">🇨🇫 +236</option>
+                  <option value="+235">🇹🇩 +235</option>
+                  <option value="+56">🇨🇱 +56</option>
+                  <option value="+86">🇨🇳 +86</option>
+                  <option value="+57">🇨🇴 +57</option>
+                  <option value="+269">🇰🇲 +269</option>
+                  <option value="+243">🇨🇩 +243</option>
+                  <option value="+242">🇨🇬 +242</option>
+                  <option value="+506">🇨🇷 +506</option>
+                  <option value="+225">🇨🇮 +225</option>
+                  <option value="+385">🇭🇷 +385</option>
+                  <option value="+53">🇨🇺 +53</option>
+                  <option value="+357">🇨🇾 +357</option>
+                  <option value="+420">🇨🇿 +420</option>
+                  <option value="+45">🇩🇰 +45</option>
+                  <option value="+253">🇩🇯 +253</option>
+                  <option value="+1-767">🇩🇲 +1-767</option>
+                  <option value="+1-809">🇩🇴 +1-809</option>
+                  <option value="+593">🇪🇨 +593</option>
+                  <option value="+20">🇪🇬 +20</option>
+                  <option value="+503">🇸🇻 +503</option>
+                  <option value="+240">🇬🇶 +240</option>
+                  <option value="+291">🇪🇷 +291</option>
+                  <option value="+372">🇪🇪 +372</option>
+                  <option value="+268">🇸🇿 +268</option>
+                  <option value="+251">🇪🇹 +251</option>
+                  <option value="+679">🇫🇯 +679</option>
+                  <option value="+358">🇫🇮 +358</option>
+                  <option value="+33">🇫🇷 +33</option>
+                  <option value="+241">🇬🇦 +241</option>
+                  <option value="+220">🇬🇲 +220</option>
+                  <option value="+995">🇬🇪 +995</option>
+                  <option value="+49">🇩🇪 +49</option>
+                  <option value="+233">🇬🇭 +233</option>
+                  <option value="+30">🇬🇷 +30</option>
+                  <option value="+1-473">🇬🇩 +1-473</option>
+                  <option value="+502">🇬🇹 +502</option>
+                  <option value="+224">🇬🇳 +224</option>
+                  <option value="+245">🇬🇼 +245</option>
+                  <option value="+592">🇬🇾 +592</option>
+                  <option value="+509">🇭🇹 +509</option>
+                  <option value="+504">🇭🇳 +504</option>
+                  <option value="+36">🇭🇺 +36</option>
+                  <option value="+354">🇮🇸 +354</option>
+                  <option value="+62">🇮🇩 +62</option>
+                  <option value="+98">🇮🇷 +98</option>
+                  <option value="+964">🇮🇶 +964</option>
+                  <option value="+353">🇮🇪 +353</option>
+                  <option value="+972">🇮🇱 +972</option>
+                  <option value="+39">🇮🇹 +39</option>
+                  <option value="+1-876">🇯🇲 +1-876</option>
+                  <option value="+81">🇯🇵 +81</option>
+                  <option value="+962">🇯🇴 +962</option>
+                  <option value="+7">🇰🇿 +7</option>
+                  <option value="+254">🇰🇪 +254</option>
+                  <option value="+686">🇰🇮 +686</option>
+                  <option value="+383">🇽🇰 +383</option>
+                  <option value="+965">🇰🇼 +965</option>
+                  <option value="+996">🇰🇬 +996</option>
+                  <option value="+856">🇱🇦 +856</option>
+                  <option value="+371">🇱🇻 +371</option>
+                  <option value="+961">🇱🇧 +961</option>
+                  <option value="+266">🇱🇸 +266</option>
+                  <option value="+231">🇱🇷 +231</option>
+                  <option value="+218">🇱🇾 +218</option>
+                  <option value="+423">🇱🇮 +423</option>
+                  <option value="+370">🇱🇹 +370</option>
+                  <option value="+352">🇱🇺 +352</option>
+                  <option value="+261">🇲🇬 +261</option>
+                  <option value="+265">🇲🇼 +265</option>
+                  <option value="+60">🇲🇾 +60</option>
+                  <option value="+960">🇲🇻 +960</option>
+                  <option value="+223">🇲🇱 +223</option>
+                  <option value="+356">🇲🇹 +356</option>
+                  <option value="+692">🇲🇭 +692</option>
+                  <option value="+222">🇲🇷 +222</option>
+                  <option value="+230">🇲🇺 +230</option>
+                  <option value="+52">🇲🇽 +52</option>
+                  <option value="+691">🇫🇲 +691</option>
+                  <option value="+373">🇲🇩 +373</option>
+                  <option value="+377">🇲🇨 +377</option>
+                  <option value="+976">🇲🇳 +976</option>
+                  <option value="+382">🇲🇪 +382</option>
+                  <option value="+212">🇲🇦 +212</option>
+                  <option value="+258">🇲🇿 +258</option>
+                  <option value="+264">🇳🇦 +264</option>
+                  <option value="+674">🇳🇷 +674</option>
+                  <option value="+977">🇳🇵 +977</option>
+                  <option value="+31">🇳🇱 +31</option>
+                  <option value="+64">🇳🇿 +64</option>
+                  <option value="+505">🇳🇮 +505</option>
+                  <option value="+227">🇳🇪 +227</option>
+                  <option value="+234">🇳🇬 +234</option>
+                  <option value="+389">🇲🇰 +389</option>
+                  <option value="+47">🇳🇴 +47</option>
+                  <option value="+968">🇴🇲 +968</option>
+                  <option value="+92">🇵🇰 +92</option>
+                  <option value="+680">🇵🇼 +680</option>
+                  <option value="+970">🇵🇸 +970</option>
+                  <option value="+507">🇵🇦 +507</option>
+                  <option value="+675">🇵🇬 +675</option>
+                  <option value="+595">🇵🇾 +595</option>
+                  <option value="+51">🇵🇪 +51</option>
+                  <option value="+63">🇵🇭 +63</option>
+                  <option value="+48">🇵🇱 +48</option>
+                  <option value="+351">🇵🇹 +351</option>
+                  <option value="+974">🇶🇦 +974</option>
+                  <option value="+40">🇷🇴 +40</option>
+                  <option value="+7">🇷🇺 +7</option>
+                  <option value="+250">🇷🇼 +250</option>
+                  <option value="+1-869">🇰🇳 +1-869</option>
+                  <option value="+1-758">🇱🇨 +1-758</option>
+                  <option value="+1-784">🇻🇨 +1-784</option>
+                  <option value="+685">🇼🇸 +685</option>
+                  <option value="+378">🇸🇲 +378</option>
+                  <option value="+239">🇸🇹 +239</option>
+                  <option value="+966">🇸🇦 +966</option>
+                  <option value="+221">🇸🇳 +221</option>
+                  <option value="+381">🇷🇸 +381</option>
+                  <option value="+248">🇸🇨 +248</option>
+                  <option value="+232">🇸🇱 +232</option>
+                  <option value="+65">🇸🇬 +65</option>
+                  <option value="+421">🇸🇰 +421</option>
+                  <option value="+386">🇸🇮 +386</option>
+                  <option value="+677">🇸🇧 +677</option>
+                  <option value="+252">🇸🇴 +252</option>
+                  <option value="+27">🇿🇦 +27</option>
+                  <option value="+82">🇰🇷 +82</option>
+                  <option value="+211">🇸🇸 +211</option>
+                  <option value="+34">🇪🇸 +34</option>
+                  <option value="+94">🇱🇰 +94</option>
+                  <option value="+249">🇸🇩 +249</option>
+                  <option value="+597">🇸🇷 +597</option>
+                  <option value="+46">🇸🇪 +46</option>
+                  <option value="+41">🇨🇭 +41</option>
+                  <option value="+963">🇸🇾 +963</option>
+                  <option value="+886">🇹🇼 +886</option>
+                  <option value="+992">🇹🇯 +992</option>
+                  <option value="+255">🇹🇿 +255</option>
+                  <option value="+66">🇹🇭 +66</option>
+                  <option value="+670">🇹🇱 +670</option>
+                  <option value="+228">🇹🇬 +228</option>
+                  <option value="+676">🇹🇴 +676</option>
+                  <option value="+1-868">🇹🇹 +1-868</option>
+                  <option value="+216">🇹🇳 +216</option>
+                  <option value="+90">🇹🇷 +90</option>
+                  <option value="+993">🇹🇲 +993</option>
+                  <option value="+688">🇹🇻 +688</option>
+                  <option value="+256">🇺🇬 +256</option>
+                  <option value="+380">🇺🇦 +380</option>
+                  <option value="+598">🇺🇾 +598</option>
+                  <option value="+998">🇺🇿 +998</option>
+                  <option value="+678">🇻🇺 +678</option>
+                  <option value="+379">🇻🇦 +379</option>
+                  <option value="+58">🇻🇪 +58</option>
+                  <option value="+84">🇻🇳 +84</option>
+                  <option value="+967">🇾🇪 +967</option>
+                  <option value="+260">🇿🇲 +260</option>
+                  <option value="+263">🇿🇼 +263</option>
+                </select>
+                <input type="tel" id="return_phone" placeholder="703 000 0000" oninput="clearMailPhoneErr()"/>
+              </div>
+              <span class="err-msg" id="return-phone-err">Please enter a valid phone number</span>
             </div>
           </div>
         </div>
@@ -951,20 +1197,23 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
         <div class="mailing-sidebar">
           <div class="card-title">Select Return Shipping</div>
           <label class="mail-opt">
-            <input type="radio" name="return_mailing" value="fedex_domestic" onchange="calcOrderTotal()"/>
+            <input type="checkbox" id="chk_fedex_domestic" value="fedex_domestic" onchange="selectShipping(this)"/>
             FedEx Domestic — $35
           </label>
-          <div class="sig-sub">
-            Signature required?
-            <input type="text" id="fedex_signature" placeholder="Y/N" maxlength="1"/>
+          <div id="sig-required-row" class="sig-required-row" style="display:none">
+            <div class="sig-question">Signature Required?</div>
+            <label class="mail-opt">
+              <input type="radio" name="fedex_sig_required" value="yes"/>
+              Yes
+            </label>
+            <label class="mail-opt">
+              <input type="radio" name="fedex_sig_required" value="no"/>
+              No
+            </label>
           </div>
           <label class="mail-opt">
-            <input type="radio" name="return_mailing" value="fedex_international" onchange="calcOrderTotal()"/>
+            <input type="checkbox" id="chk_fedex_international" value="fedex_international" onchange="selectShipping(this)"/>
             FedEx International — $85
-          </label>
-          <label class="mail-opt">
-            <input type="radio" name="return_mailing" value="scan_only" onchange="calcOrderTotal()"/>
-            Digital Scan Only — $0
           </label>
           <div class="hr-div"></div>
           <div class="grand-total-bar">
@@ -1020,8 +1269,21 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 
       <div class="sign-row">
         <div class="sign-line">
-          <label>Sign or Print Full Name <span class="req" style="color:var(--red)">*</span></label>
-          <input type="text" id="signature" placeholder="Your full legal name"/>
+          <label>Signature <span class="req" style="color:var(--red)">*</span></label>
+          <div class="sign-mode-tabs">
+            <button type="button" class="sign-tab active" id="tab-type" onclick="switchSignMode('type')">✏ Type</button>
+            <button type="button" class="sign-tab" id="tab-draw" onclick="switchSignMode('draw')">✍ Draw</button>
+          </div>
+          <div id="sign-type-wrap">
+            <input type="text" id="signature" placeholder="Your full legal name"/>
+          </div>
+          <div id="sign-draw-wrap" style="display:none">
+            <div class="sig-canvas-wrap">
+              <canvas id="signature-canvas"></canvas>
+              <button type="button" class="sig-clear-btn" onclick="clearSignaturePad()">Clear</button>
+            </div>
+            <div class="sig-canvas-hint">Draw your signature using mouse or touch</div>
+          </div>
           <span class="err-msg" id="sig-err" style="display:none;color:var(--red);font-size:11px">Signature is required to submit</span>
         </div>
         <div class="field">
@@ -1030,10 +1292,78 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
         </div>
       </div>
 
-      <button class="btn-submit" id="submit-btn" onclick="submitForm()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
-        Confirm &amp; Submit Order
-      </button>
+      <!-- PayPal payment section -->
+      <div class="paypal-payment-section">
+        <div class="paypal-section-header">
+          <div>
+            <div class="paypal-section-title">Complete Payment</div>
+            <div class="paypal-section-sub">Pay securely — your order is submitted automatically after payment</div>
+          </div>
+          <div class="paypal-section-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="11" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            SSL Secured
+          </div>
+        </div>
+        <div id="paypal-button-container"></div>
+        <div id="paypal-loading" class="paypal-loading">
+          <div class="spinner" style="border-color:rgba(4,44,83,.15);border-top-color:var(--navy);width:16px;height:16px;border-width:2px"></div>
+          Processing payment…
+        </div>
+        <div id="paypal-error" class="paypal-error"></div>
+      </div>
+
+      <!-- Zelle payment section -->
+      <div class="zelle-or-divider">or pay with</div>
+
+      <div class="zelle-payment-section">
+        <div class="zelle-section-header">
+          <div class="zelle-wordmark">
+            <div class="zelle-icon">Z</div>
+            <span class="zelle-wordname">elle</span>
+          </div>
+          <div class="zelle-bank-badge">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="11" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Bank Transfer
+          </div>
+        </div>
+
+        <div class="zelle-steps">
+          <div class="zelle-step">
+            <span class="zelle-step-num">1</span>
+            Open your banking app and go to Zelle
+          </div>
+          <div class="zelle-step">
+            <span class="zelle-step-num">2</span>
+            Send <strong id="zelle-amount">$0.00</strong> to the email below — include your name in the memo
+          </div>
+          <div class="zelle-step">
+            <span class="zelle-step-num">3</span>
+            Return here and click "I've Sent the Zelle Payment" to submit your order
+          </div>
+        </div>
+
+        <div class="zelle-detail-box">
+          <div class="zelle-detail-left">
+            <div class="zelle-detail-label">Send payment to</div>
+            <div class="zelle-detail-email" id="zelle-email-text">vikas.usauthentication@gmail.com</div>
+            <button class="zelle-copy-btn" onclick="copyZelleEmail(this)">Copy Email</button>
+          </div>
+          <div class="zelle-qr-wrap">
+            <div class="zelle-qr-label">Scan to Pay</div>
+            <img src="brand_assets/zelle_qr.png" alt="Zelle QR Code" class="zelle-qr-img"/>
+          </div>
+        </div>
+
+        <button class="btn-zelle-submit" id="zelle-submit-btn" onclick="submitViaZelle()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          I've Sent the Zelle Payment — Submit Order
+        </button>
+        <div id="zelle-loading" class="zelle-loading">
+          <div class="spinner" style="border-color:rgba(109,30,212,.15);border-top-color:#6D1ED4;width:16px;height:16px;border-width:2px"></div>
+          Submitting your order…
+        </div>
+        <div id="zelle-error" class="zelle-error" style="display:none"></div>
+      </div>
 
       <div class="nav-row" style="border-top:none;padding-top:0;margin-top:.75rem">
         <button class="btn-back" onclick="goBack(5)">← Back</button>
@@ -1092,6 +1422,11 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 // ── CONFIG ──────────────────────────────────────────
 const N8N_WEBHOOK_URL = 'https://n8n.leadaheadindia.com/webhook-test/upload_form';
 
+// ── SIGNATURE PAD STATE ─────────────────────────────
+let signPadDrawing    = false;
+let signPadHasContent = false;
+let signPadInited     = false;
+
 // ── PLAN CONFIG ─────────────────────────────────────
 const PLANS = {
   economy:  { label: 'Economy',  price: 69,  turn: '5+ weeks'          },
@@ -1113,8 +1448,9 @@ const formState = {
   docs: [],
   doc_subtotal: 0,
   return_name:'', return_company:'', return_address:'', return_city:'', return_state:'',
-  return_postal:'', return_country:'', return_phone:'', return_mailing:'', fedex_signature:'',
+  return_postal:'', return_country:'', return_phone:'', return_phone_code:'', return_mailing:'', fedex_signature:'',
   signature:'', signature_date:'',
+  paypal_order_id:'', paypal_transaction_id:'', paypal_payer_name:'', paypal_payer_email:'', payment_method:'',
   order_total: 0, submitted_at:''
 };
 
@@ -1167,12 +1503,43 @@ function clearPhoneErr() {
   document.getElementById('phone').classList.remove('error');
 }
 
+function clearMailPhoneErr() {
+  const wrap = document.getElementById('return-phone-wrap');
+  const err  = document.getElementById('return-phone-err');
+  if (wrap) wrap.classList.remove('error');
+  if (err)  err.classList.remove('show');
+}
+
 function vPhone() {
   const val = document.getElementById('phone').value.trim();
   const ok = isPhone(val);
   document.getElementById('phone-wrap').classList.toggle('error', !ok);
   document.getElementById('phone-err').classList.toggle('show', !ok);
   return ok;
+}
+
+function vMailPhone() {
+  const val  = document.getElementById('return_phone') ? document.getElementById('return_phone').value.trim() : '';
+  const ok   = isPhone(val);
+  const wrap = document.getElementById('return-phone-wrap');
+  const err  = document.getElementById('return-phone-err');
+  if (wrap) wrap.classList.toggle('error', !ok);
+  if (err)  err.classList.toggle('show', !ok);
+  return ok;
+}
+
+function selectShipping(checkbox) {
+  document.querySelectorAll('#chk_fedex_domestic, #chk_fedex_international').forEach(el => {
+    if (el !== checkbox) el.checked = false;
+  });
+  const sigRow   = document.getElementById('sig-required-row');
+  const domCb    = document.getElementById('chk_fedex_domestic');
+  const isDomestic = domCb && domCb.checked;
+  if (sigRow) sigRow.style.display = isDomestic ? 'block' : 'none';
+  if (!isDomestic) {
+    document.querySelectorAll('input[name="fedex_sig_required"]').forEach(r => r.checked = false);
+  }
+  calcOrderTotal();
 }
 
 // ── DOC SLOT MANAGEMENT ─────────────────────────────
@@ -1341,22 +1708,112 @@ function collectStep3() {
 }
 
 function collectStep4() {
-  formState.return_name     = g('return_name').trim();
-  formState.return_company  = g('return_company').trim();
-  formState.return_address  = g('return_address').trim();
-  formState.return_city     = g('return_city').trim();
-  formState.return_state    = g('return_state').trim();
-  formState.return_postal   = g('return_postal').trim();
-  formState.return_country  = g('return_country').trim();
-  formState.return_phone    = g('return_phone').trim();
-  const mail = document.querySelector('input[name="return_mailing"]:checked');
-  formState.return_mailing  = mail ? mail.value : '';
-  formState.fedex_signature = g('fedex_signature').trim();
+  formState.return_name       = g('return_name').trim();
+  formState.return_company    = g('return_company').trim();
+  formState.return_address    = g('return_address').trim();
+  formState.return_city       = g('return_city').trim();
+  formState.return_state      = g('return_state').trim();
+  formState.return_postal     = g('return_postal').trim();
+  formState.return_country    = g('return_country').trim();
+  formState.return_phone      = g('return_phone').trim();
+  formState.return_phone_code = g('return_phone_code');
+  const domCb  = document.getElementById('chk_fedex_domestic');
+  const intlCb = document.getElementById('chk_fedex_international');
+  formState.return_mailing  = (domCb && domCb.checked) ? 'fedex_domestic' :
+                              (intlCb && intlCb.checked) ? 'fedex_international' : '';
+  const sigRadio = document.querySelector('input[name="fedex_sig_required"]:checked');
+  formState.fedex_signature = sigRadio ? sigRadio.value : '';
   formState.order_total     = calcOrderTotal();
 }
 
+function switchSignMode(mode) {
+  const typeWrap = document.getElementById('sign-type-wrap');
+  const drawWrap = document.getElementById('sign-draw-wrap');
+  const tabType  = document.getElementById('tab-type');
+  const tabDraw  = document.getElementById('tab-draw');
+  if (mode === 'draw') {
+    typeWrap.style.display = 'none';
+    drawWrap.style.display = 'block';
+    tabType.classList.remove('active');
+    tabDraw.classList.add('active');
+    initSignaturePad();
+  } else {
+    typeWrap.style.display = 'block';
+    drawWrap.style.display = 'none';
+    tabType.classList.add('active');
+    tabDraw.classList.remove('active');
+  }
+}
+
+function initSignaturePad() {
+  const canvas = document.getElementById('signature-canvas');
+  if (!canvas || signPadInited) return;
+  signPadInited = true;
+
+  const rect = canvas.getBoundingClientRect();
+  canvas.width  = rect.width  || canvas.offsetWidth  || 400;
+  canvas.height = rect.height || canvas.offsetHeight || 120;
+
+  const ctx = canvas.getContext('2d');
+  ctx.strokeStyle = '#1a2236';
+  ctx.lineWidth   = 2.2;
+  ctx.lineCap     = 'round';
+  ctx.lineJoin    = 'round';
+
+  function pos(e) {
+    const r = canvas.getBoundingClientRect();
+    const src = e.touches ? e.touches[0] : e;
+    return { x: src.clientX - r.left, y: src.clientY - r.top };
+  }
+
+  canvas.addEventListener('mousedown', e => {
+    signPadDrawing = true;
+    const p = pos(e);
+    ctx.beginPath(); ctx.moveTo(p.x, p.y);
+  });
+  canvas.addEventListener('mousemove', e => {
+    if (!signPadDrawing) return;
+    const p = pos(e);
+    ctx.lineTo(p.x, p.y); ctx.stroke();
+    signPadHasContent = true;
+    canvas.classList.add('has-drawing');
+  });
+  canvas.addEventListener('mouseup',    () => { signPadDrawing = false; });
+  canvas.addEventListener('mouseleave', () => { signPadDrawing = false; });
+  canvas.addEventListener('touchstart', e => {
+    e.preventDefault();
+    signPadDrawing = true;
+    const p = pos(e);
+    ctx.beginPath(); ctx.moveTo(p.x, p.y);
+  }, { passive: false });
+  canvas.addEventListener('touchmove', e => {
+    e.preventDefault();
+    if (!signPadDrawing) return;
+    const p = pos(e);
+    ctx.lineTo(p.x, p.y); ctx.stroke();
+    signPadHasContent = true;
+    canvas.classList.add('has-drawing');
+  }, { passive: false });
+  canvas.addEventListener('touchend', () => { signPadDrawing = false; });
+}
+
+function clearSignaturePad() {
+  const canvas = document.getElementById('signature-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  signPadHasContent = false;
+  canvas.classList.remove('has-drawing');
+}
+
 function collectStep5() {
-  formState.signature      = g('signature').trim();
+  const drawMode = document.getElementById('tab-draw') && document.getElementById('tab-draw').classList.contains('active');
+  if (drawMode) {
+    const canvas = document.getElementById('signature-canvas');
+    formState.signature = (canvas && signPadHasContent) ? canvas.toDataURL('image/png') : '';
+  } else {
+    formState.signature = g('signature').trim();
+  }
   formState.signature_date = g('signature_date');
   formState.submitted_at   = new Date().toISOString();
 }
@@ -1387,12 +1844,14 @@ function goNext(step) {
     collectStep3();
   }
   if (step === 4) {
+    const mailPhoneOk = vMailPhone();
     const ok = [
       vField('return_name', req),
       vField('return_address', req),
       vField('return_city', req),
       vField('return_postal', req),
       vField('return_country', req),
+      mailPhoneOk,
     ].every(Boolean);
     if (!ok) return;
     collectStep4();
@@ -1449,14 +1908,15 @@ function getPlanSubtotal() {
 function calcOrderTotal() {
   const planSub  = getPlanSubtotal();
   const docSub   = calcDocSubtotal();
-  const mail     = document.querySelector('input[name="return_mailing"]:checked');
-  const shipping = mail
-    ? (mail.value === 'fedex_domestic' ? 35 : mail.value === 'fedex_international' ? 85 : 0)
-    : 0;
+  const domCb    = document.getElementById('chk_fedex_domestic');
+  const intlCb   = document.getElementById('chk_fedex_international');
+  const shipping = (domCb && domCb.checked) ? 35 : (intlCb && intlCb.checked) ? 85 : 0;
   const grand = planSub + docSub + shipping;
 
   const el = document.getElementById('order-total-display');
   if (el) el.textContent = '$' + grand.toFixed(2);
+  const zelleEl = document.getElementById('zelle-amount');
+  if (zelleEl) zelleEl.textContent = '$' + grand.toFixed(2);
 
   const osPlan  = document.getElementById('os-plan');
   const osDocs  = document.getElementById('os-docs');
@@ -1479,7 +1939,6 @@ function buildReviewPanel() {
   const mailingLabels = {
     fedex_domestic:      'FedEx Domestic ($35)',
     fedex_international: 'FedEx International ($85)',
-    scan_only:           'Digital Scan Only'
   };
 
   const planSub = getPlanSubtotal();
@@ -1520,20 +1979,120 @@ function buildReviewPanel() {
       <div class="review-row"><span class="label">Name</span><span class="value">${formState.return_name}</span></div>
       <div class="review-row"><span class="label">Address</span><span class="value">${formState.return_address}, ${formState.return_city} ${formState.return_state} ${formState.return_postal}, ${formState.return_country}</span></div>
       <div class="review-row"><span class="label">Shipping</span><span class="value">${mailingLabels[formState.return_mailing] || '—'}</span></div>
+      ${formState.return_mailing === 'fedex_domestic' && formState.fedex_signature ? `<div class="review-row"><span class="label">Signature req.</span><span class="value">${formState.fedex_signature === 'yes' ? 'Yes' : 'No'}</span></div>` : ''}
     </div>`;
+
+  renderPaypalButtons();
+}
+
+// ── ZELLE ────────────────────────────────────────────
+function submitViaZelle() {
+  const drawMode = document.getElementById('tab-draw') && document.getElementById('tab-draw').classList.contains('active');
+  const sig = drawMode ? (signPadHasContent ? 'drawn' : '') : (document.getElementById('signature') ? document.getElementById('signature').value.trim() : '');
+  const sigErr = document.getElementById('sig-err');
+  if (!sig) {
+    sigErr.style.display = 'block';
+    sigErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  sigErr.style.display = 'none';
+  submitForm({ method: 'zelle' });
+}
+
+function copyZelleEmail(btn) {
+  const email = 'vikas.usauthentication@gmail.com';
+  const orig  = btn.textContent;
+  navigator.clipboard.writeText(email).then(function() {
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = orig; }, 2000);
+  }).catch(function() {
+    const el = document.getElementById('zelle-email-text');
+    const range = document.createRange();
+    range.selectNodeContents(el);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    document.execCommand('copy');
+    window.getSelection().removeAllRanges();
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = orig; }, 2000);
+  });
+}
+
+// ── PAYPAL ───────────────────────────────────────────
+function renderPaypalButtons() {
+  if (typeof paypal === 'undefined') { setTimeout(renderPaypalButtons, 600); return; }
+  const container = document.getElementById('paypal-button-container');
+  if (!container) return;
+  container.innerHTML = '';
+
+  paypal.Buttons({
+    style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'checkout', height: 44 },
+    createOrder: function(data, actions) {
+      const drawMode = document.getElementById('tab-draw') && document.getElementById('tab-draw').classList.contains('active');
+      const sig = drawMode ? (signPadHasContent ? 'drawn' : '') : (document.getElementById('signature') ? document.getElementById('signature').value.trim() : '');
+      const sigErr = document.getElementById('sig-err');
+      if (!sig) {
+        sigErr.style.display = 'block';
+        sigErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return Promise.reject(new Error('Signature required'));
+      }
+      sigErr.style.display = 'none';
+      const total = calcOrderTotal();
+      return actions.order.create({
+        purchase_units: [{
+          description: 'FBI Apostille — ' + (formState.plan_label || 'US Authentication Services'),
+          amount: { currency_code: 'USD', value: total.toFixed(2) }
+        }]
+      });
+    },
+    onApprove: function(data, actions) {
+      const loadEl = document.getElementById('paypal-loading');
+      if (loadEl) loadEl.style.display = 'flex';
+      return actions.order.capture().then(function(details) {
+        if (loadEl) loadEl.style.display = 'none';
+        const capture = details.purchase_units[0].payments.captures[0];
+        submitForm({
+          orderID:       data.orderID,
+          transactionID: capture.id,
+          payerName:     (details.payer.name.given_name || '') + ' ' + (details.payer.name.surname || ''),
+          payerEmail:    details.payer.email_address || '',
+        });
+      }).catch(function() {
+        if (loadEl) loadEl.style.display = 'none';
+        const errEl = document.getElementById('paypal-error');
+        if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'Payment capture failed — please try again.'; }
+      });
+    },
+    onError: function() {
+      const errEl = document.getElementById('paypal-error');
+      if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'PayPal encountered an error. Please try again or use "Submit & Request Invoice" below.'; }
+    },
+    onCancel: function() {}
+  }).render('#paypal-button-container').catch(function(e) { console.warn('PayPal render:', e); });
 }
 
 // ── SUBMIT ───────────────────────────────────────────
-async function submitForm() {
-  const sig = document.getElementById('signature').value.trim();
+async function submitForm(paymentDetails = null) {
+  const drawMode = document.getElementById('tab-draw') && document.getElementById('tab-draw').classList.contains('active');
+  const sig = drawMode ? (signPadHasContent ? 'drawn' : '') : document.getElementById('signature').value.trim();
   const sigErr = document.getElementById('sig-err');
   if (!sig) { sigErr.style.display = 'block'; return; }
   sigErr.style.display = 'none';
   collectStep5();
 
-  const btn = document.getElementById('submit-btn');
-  btn.disabled = true;
-  btn.innerHTML = `<div class="spinner"></div> Submitting your order…`;
+  if (paymentDetails) {
+    formState.payment_method        = paymentDetails.method || (paymentDetails.orderID ? 'paypal' : 'unknown');
+    formState.paypal_order_id       = paymentDetails.orderID       || '';
+    formState.paypal_transaction_id = paymentDetails.transactionID || '';
+    formState.paypal_payer_name     = paymentDetails.payerName     || '';
+    formState.paypal_payer_email    = paymentDetails.payerEmail    || '';
+  }
+
+  const isZelle  = paymentDetails && paymentDetails.method === 'zelle';
+  const loadEl   = document.getElementById(isZelle ? 'zelle-loading' : 'paypal-loading');
+  const zelleBtn = document.getElementById('zelle-submit-btn');
+  if (isZelle && zelleBtn) zelleBtn.disabled = true;
+  if (loadEl) loadEl.style.display = 'flex';
 
   const fd = new FormData();
   fd.append('first_name',  formState.first_name);
@@ -1567,15 +2126,22 @@ async function submitForm() {
   fd.append('return_state',     formState.return_state);
   fd.append('return_postal',    formState.return_postal);
   fd.append('return_country',   formState.return_country);
-  fd.append('return_phone',     formState.return_phone);
+  fd.append('return_phone',     (formState.return_phone_code ? formState.return_phone_code + ' ' : '') + formState.return_phone);
   fd.append('return_mailing',   formState.return_mailing);
   fd.append('fedex_signature',  formState.fedex_signature);
-  fd.append('order_total',      '$' + calcOrderTotal().toFixed(2));
-  fd.append('signature',        formState.signature);
-  fd.append('signature_date',   formState.signature_date);
-  fd.append('submitted_at',     formState.submitted_at);
+  fd.append('order_total',           '$' + calcOrderTotal().toFixed(2));
+  fd.append('payment_method',        formState.payment_method);
+  fd.append('paypal_order_id',       formState.paypal_order_id       || '');
+  fd.append('paypal_transaction_id', formState.paypal_transaction_id || '');
+  fd.append('paypal_payer',          formState.paypal_payer_name     || '');
+  fd.append('paypal_payer_email',    formState.paypal_payer_email    || '');
+  if (isZelle) fd.append('zelle_payment_to', 'vikas.usauthentication@gmail.com');
+  fd.append('signature',             formState.signature);
+  fd.append('signature_date',        formState.signature_date);
+  fd.append('submitted_at',          formState.submitted_at);
 
   const ref = 'ORD-' + Date.now().toString(36).toUpperCase();
+  fd.append('order_ref', ref);
 
   try {
     await fetch(N8N_WEBHOOK_URL, { method: 'POST', body: fd });
@@ -1585,8 +2151,8 @@ async function submitForm() {
     document.getElementById('order-ref-display').textContent = ref + ' — Submitted';
     setStep(6);
   } finally {
-    btn.disabled = false;
-    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg> Confirm &amp; Submit Order`;
+    if (loadEl) loadEl.style.display = 'none';
+    if (zelleBtn) zelleBtn.disabled = false;
   }
 }
 
@@ -1610,8 +2176,17 @@ function resetForm() {
   if (phoneErr) phoneErr.classList.remove('show');
   document.querySelectorAll('input[type="radio"], input[type="checkbox"]')
     .forEach(el => el.checked = false);
+  const returnPhoneWrap = document.getElementById('return-phone-wrap');
+  if (returnPhoneWrap) returnPhoneWrap.classList.remove('error');
+  const returnPhoneErr = document.getElementById('return-phone-err');
+  if (returnPhoneErr) returnPhoneErr.classList.remove('show');
+  const sigRow = document.getElementById('sig-required-row');
+  if (sigRow) sigRow.style.display = 'none';
   document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
   document.getElementById('plan-err').classList.remove('show');
+  clearSignaturePad();
+  signPadInited = false;
+  switchSignMode('type');
   currentStep = 1;
   document.getElementById('signature_date').value = new Date().toISOString().split('T')[0];
   renderDocCards();
