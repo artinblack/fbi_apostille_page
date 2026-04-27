@@ -2127,7 +2127,7 @@ async function submitForm(paymentDetails = null) {
     if (slot.file) fd.append(`doc_${i+1}_file`, slot.file, slot.file.name);
     fd.append(`doc_${i+1}_pages`,            slot.pages);
     fd.append(`doc_${i+1}_translate`,          slot.translate);
-    fd.append(`doc_${i+1}_translate_language`, slot.translate ? (slot.translate_language || '') : '');
+    fd.append(`doc_${i+1}_translation_language`, slot.translate ? (slot.translate_language || '') : '');
     fd.append(`doc_${i+1}_scan`,             slot.scan);
     fd.append(`doc_${i+1}_translation_cost`, slot.translate ? '$' + (60*(slot.pages+1)).toFixed(2) : '$0');
     fd.append(`doc_${i+1}_scan_cost`,        slot.scan ? '$10' : '$0');
