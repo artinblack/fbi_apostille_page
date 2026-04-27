@@ -1310,6 +1310,9 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
           Processing payment…
         </div>
         <div id="paypal-error" class="paypal-error"></div>
+        <div style="margin-top:10px;padding:10px 14px;background:rgba(0,112,240,.05);border:1px solid rgba(0,112,240,.18);border-radius:8px;font-size:11.5px;color:#555e7a;line-height:1.65;">
+          PayPal payments are subject to a 4% processing fee, which has already been added to the amount shown. If you'd prefer to pay without any fees, Zelle is available as a no-fee payment option.
+        </div>
       </div>
 
       <!-- Zelle payment section -->
@@ -1345,7 +1348,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
         <div class="zelle-detail-box">
           <div class="zelle-detail-left">
             <div class="zelle-detail-label">Send payment to</div>
-            <div class="zelle-detail-email" id="zelle-email-text">vikas.usauthentication@gmail.com</div>
+            <div class="zelle-detail-email" id="zelle-email-text">info@usauthentication.com</div>
             <button class="zelle-copy-btn" onclick="copyZelleEmail(this)">Copy Email</button>
           </div>
           <div class="zelle-qr-wrap">
@@ -1438,7 +1441,7 @@ const PLANS = {
 let currentStep = 1;
 
 // docSlots: source of truth for document upload state
-let docSlots = [{ file: null, pages: 0, translate: false, scan: false }];
+let docSlots = [{ file: null, pages: 0, translate: false, scan: false, translate_language: '' }];
 
 const formState = {
   first_name:'', last_name:'', email:'', phone_code:'', phone:'',
@@ -1546,7 +1549,7 @@ function selectShipping(checkbox) {
 function changeDocCount(delta) {
   const newCount = Math.max(1, Math.min(10, docSlots.length + delta));
   while (docSlots.length < newCount) {
-    docSlots.push({ file: null, pages: 0, translate: false, scan: false });
+    docSlots.push({ file: null, pages: 0, translate: false, scan: false, translate_language: '' });
   }
   while (docSlots.length > newCount) {
     docSlots.pop();
@@ -1609,6 +1612,11 @@ function renderDocCards() {
                 ${slot.translate ? `<div class="check-price-computed">${translationLabel}</div>` : ''}
               </div>
             </label>
+            ${slot.translate ? `
+            <div style="padding:8px 10px;background:var(--navy-light);border-radius:8px;border:1px solid rgba(4,44,83,.12);">
+              <label style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:5px;">Translation Language</label>
+              <input type="text" placeholder="e.g. Spanish, French, Arabic…" value="${slot.translate_language || ''}" oninput="setTranslateLanguage(${i}, this.value)" style="border:1.5px solid var(--border);border-radius:8px;padding:7px 10px;font-size:.85rem;font-family:var(--font-body);color:var(--text);width:100%;background:white;outline:none;" onfocus="this.style.borderColor='var(--navy)'" onblur="this.style.borderColor='var(--border)'"/>
+            </div>` : ''}
             ${showScan ? `
             <label class="doc-check">
               <input type="checkbox" ${slot.scan ? 'checked' : ''} onchange="toggleDocOption(${i}, 'scan', this.checked)"/>
@@ -1650,7 +1658,12 @@ function handleFileUpload(index, file) {
 
 function toggleDocOption(index, option, checked) {
   docSlots[index][option] = checked;
+  if (option === 'translate' && !checked) docSlots[index].translate_language = '';
   renderDocCards();
+}
+
+function setTranslateLanguage(index, value) {
+  docSlots[index].translate_language = value;
 }
 
 function calcDocCost(slot) {
@@ -2000,7 +2013,7 @@ function submitViaZelle() {
 }
 
 function copyZelleEmail(btn) {
-  const email = 'vikas.usauthentication@gmail.com';
+  const email = 'info@usauthentication.com';
   const orig  = btn.textContent;
   navigator.clipboard.writeText(email).then(function() {
     btn.textContent = 'Copied!';
@@ -2041,7 +2054,7 @@ function renderPaypalButtons() {
       return actions.order.create({
         purchase_units: [{
           description: 'FBI Apostille — ' + (formState.plan_label || 'US Authentication Services'),
-          amount: { currency_code: 'USD', value: total.toFixed(2) }
+          amount: { currency_code: 'USD', value: (total * 1.04).toFixed(2) }
         }]
       });
     },
@@ -2113,7 +2126,8 @@ async function submitForm(paymentDetails = null) {
   docSlots.forEach((slot, i) => {
     if (slot.file) fd.append(`doc_${i+1}_file`, slot.file, slot.file.name);
     fd.append(`doc_${i+1}_pages`,            slot.pages);
-    fd.append(`doc_${i+1}_translate`,        slot.translate);
+    fd.append(`doc_${i+1}_translate`,          slot.translate);
+    fd.append(`doc_${i+1}_translate_language`, slot.translate ? (slot.translate_language || '') : '');
     fd.append(`doc_${i+1}_scan`,             slot.scan);
     fd.append(`doc_${i+1}_translation_cost`, slot.translate ? '$' + (60*(slot.pages+1)).toFixed(2) : '$0');
     fd.append(`doc_${i+1}_scan_cost`,        slot.scan ? '$10' : '$0');
@@ -2129,13 +2143,15 @@ async function submitForm(paymentDetails = null) {
   fd.append('return_phone',     (formState.return_phone_code ? formState.return_phone_code + ' ' : '') + formState.return_phone);
   fd.append('return_mailing',   formState.return_mailing);
   fd.append('fedex_signature',  formState.fedex_signature);
-  fd.append('order_total',           '$' + calcOrderTotal().toFixed(2));
+  const baseTotal = calcOrderTotal();
+  const finalTotal = (formState.payment_method === 'paypal') ? baseTotal * 1.04 : baseTotal;
+  fd.append('order_total',           '$' + finalTotal.toFixed(2));
   fd.append('payment_method',        formState.payment_method);
   fd.append('paypal_order_id',       formState.paypal_order_id       || '');
   fd.append('paypal_transaction_id', formState.paypal_transaction_id || '');
   fd.append('paypal_payer',          formState.paypal_payer_name     || '');
   fd.append('paypal_payer_email',    formState.paypal_payer_email    || '');
-  if (isZelle) fd.append('zelle_payment_to', 'vikas.usauthentication@gmail.com');
+  if (isZelle) fd.append('zelle_payment_to', 'info@usauthentication.com');
   fd.append('signature',             formState.signature);
   fd.append('signature_date',        formState.signature_date);
   fd.append('submitted_at',          formState.submitted_at);
@@ -2164,7 +2180,7 @@ function resetForm() {
     else if (Array.isArray(formState[k])) formState[k] = [];
     else formState[k] = '';
   });
-  docSlots = [{ file: null, pages: 0, translate: false, scan: false }];
+  docSlots = [{ file: null, pages: 0, translate: false, scan: false, translate_language: '' }];
   document.getElementById('doc-count-display').textContent = '1';
   document.getElementById('plan-subtotal-display').textContent = '—';
   document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="date"], textarea')
