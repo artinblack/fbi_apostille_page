@@ -1221,8 +1221,15 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
           </label>
           <div id="own-label-upload-row" style="display:none;padding:8px 10px 8px;background:var(--navy-light);border-radius:8px;border:1px solid rgba(4,44,83,.12);margin:2px 0 6px 0;">
             <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Upload Shipping Label</div>
-            <input type="file" id="own_shipping_label_file" accept=".pdf,.jpg,.jpeg,.png" style="font-size:11.5px;font-family:var(--font-body);width:100%;cursor:pointer;" onchange="updateOwnLabelDisplay(this)"/>
-            <div id="own-label-file-name" style="font-size:11px;color:var(--green);margin-top:4px;font-weight:600;"></div>
+            <label for="own_shipping_label_file" id="own-label-drop-zone" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1.5px dashed var(--border);border-radius:8px;padding:12px 10px;background:white;cursor:pointer;transition:border-color .2s,background .2s;" onmouseenter="this.style.borderColor='var(--navy)';this.style.background='var(--navy-light)'" onmouseleave="this.style.borderColor='var(--border)';this.style.background='white'">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/>
+              </svg>
+              <span style="font-size:11.5px;font-weight:600;color:var(--navy);">Click to upload</span>
+              <span style="font-size:10px;color:var(--text-muted);">PDF, JPG or PNG</span>
+            </label>
+            <input type="file" id="own_shipping_label_file" accept=".pdf,.jpg,.jpeg,.png" style="display:none;" onchange="updateOwnLabelDisplay(this)"/>
+            <div id="own-label-file-name" style="font-size:11px;color:var(--green);margin-top:4px;font-weight:600;text-align:center;"></div>
           </div>
           <div class="hr-div"></div>
           <div class="grand-total-bar">
@@ -2114,8 +2121,15 @@ function copyZelleEmail(btn) {
 
 // ── OWN SHIPPING LABEL ───────────────────────────────
 function updateOwnLabelDisplay(input) {
-  const nameEl = document.getElementById('own-label-file-name');
-  if (nameEl) nameEl.textContent = input.files[0] ? '✓ ' + input.files[0].name : '';
+  const nameEl  = document.getElementById('own-label-file-name');
+  const dropZone = document.getElementById('own-label-drop-zone');
+  if (input.files[0]) {
+    if (nameEl) nameEl.textContent = '✓ ' + input.files[0].name;
+    if (dropZone) { dropZone.style.borderColor = 'var(--green)'; dropZone.style.borderStyle = 'solid'; dropZone.style.background = 'var(--green-light)'; }
+  } else {
+    if (nameEl) nameEl.textContent = '';
+    if (dropZone) { dropZone.style.borderColor = 'var(--border)'; dropZone.style.borderStyle = 'dashed'; dropZone.style.background = 'white'; }
+  }
 }
 
 // ── PAYPAL PARTIAL PAYMENT ───────────────────────────
