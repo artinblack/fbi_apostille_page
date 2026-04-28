@@ -1226,22 +1226,18 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
       </div>
 
       <!-- Own shipping label section -->
-      <div style="border:1.5px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;background:white;margin-bottom:1.2rem;">
-        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem;gap:12px;">
-          <div>
-            <div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:3px;">I Have My Own Shipping Label</div>
-            <div style="font-size:11.5px;color:var(--text-muted);">Upload your prepaid label — we'll attach it to your documents before dispatch</div>
-          </div>
-        </div>
-        <label for="own_shipping_label_file" id="own-label-drop-zone" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;border:1.5px dashed var(--border);border-radius:10px;padding:22px 16px;background:var(--bg);cursor:pointer;transition:border-color .2s,background .2s;" onmouseenter="this.style.borderColor='var(--navy)';this.style.background='var(--navy-light)'" onmouseleave="if(!document.getElementById('own_shipping_label_file').files[0]){this.style.borderColor='var(--border)';this.style.background='var(--bg)'}">
-          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <div style="border:1.5px solid var(--border);border-radius:10px;padding:10px 14px;background:white;margin-bottom:1.2rem;display:flex;align-items:center;gap:12px;">
+        <label for="own_shipping_label_file" id="own-label-drop-zone" style="display:flex;align-items:center;gap:10px;border:1.5px dashed var(--border);border-radius:8px;padding:9px 14px;background:var(--bg);cursor:pointer;transition:border-color .2s,background .2s;flex:1;min-width:0;" onmouseenter="this.style.borderColor='var(--navy)';this.style.background='var(--navy-light)'" onmouseleave="if(!document.getElementById('own_shipping_label_file').files[0]){this.style.borderColor='var(--border)';this.style.background='var(--bg)'}">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/>
           </svg>
-          <span style="font-size:13px;font-weight:700;color:var(--navy);">Click to upload shipping label</span>
-          <span style="font-size:11px;color:var(--text-muted);">PDF, JPG or PNG accepted</span>
+          <div>
+            <div style="font-size:12.5px;font-weight:700;color:var(--navy);">I Have My Own Shipping Label</div>
+            <div id="own-label-file-name" style="font-size:11px;color:var(--green);font-weight:600;display:none;margin-top:1px;"></div>
+            <div id="own-label-hint" style="font-size:11px;color:var(--text-muted);margin-top:1px;">Click to upload — PDF, JPG or PNG</div>
+          </div>
         </label>
         <input type="file" id="own_shipping_label_file" accept=".pdf,.jpg,.jpeg,.png" style="display:none;" onchange="updateOwnLabelDisplay(this)"/>
-        <div id="own-label-file-name" style="font-size:12px;color:var(--green);margin-top:8px;font-weight:600;text-align:center;display:none;"></div>
       </div>
 
       <div class="order-summary">
@@ -2120,16 +2116,18 @@ function copyZelleEmail(btn) {
 function updateOwnLabelDisplay(input) {
   const nameEl   = document.getElementById('own-label-file-name');
   const dropZone = document.getElementById('own-label-drop-zone');
+  const hintEl = document.getElementById('own-label-hint');
   if (input.files[0]) {
     if (nameEl) { nameEl.textContent = '✓ ' + input.files[0].name; nameEl.style.display = 'block'; }
+    if (hintEl) hintEl.style.display = 'none';
     if (dropZone) { dropZone.style.borderColor = 'var(--green)'; dropZone.style.borderStyle = 'solid'; dropZone.style.background = 'var(--green-light)'; }
-    // Uncheck FedEx options when own label is uploaded
     document.querySelectorAll('#chk_fedex_domestic, #chk_fedex_international').forEach(el => el.checked = false);
     const sigRow = document.getElementById('sig-required-row');
     if (sigRow) sigRow.style.display = 'none';
     document.querySelectorAll('input[name="fedex_sig_required"]').forEach(r => r.checked = false);
   } else {
     if (nameEl) { nameEl.textContent = ''; nameEl.style.display = 'none'; }
+    if (hintEl) hintEl.style.display = 'block';
     if (dropZone) { dropZone.style.borderColor = 'var(--border)'; dropZone.style.borderStyle = 'dashed'; dropZone.style.background = 'var(--bg)'; }
   }
 }
