@@ -951,9 +951,8 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
         <div>
           <div class="field-row cols-2">
             <div class="field">
-              <label>Full Name <span class="req">*</span></label>
-              <input type="text" id="return_name" placeholder="Jane Doe" oninput="clearErr(this)"/>
-              <span class="err-msg">Required</span>
+              <label>Full Name</label>
+              <input type="text" id="return_name" placeholder="Jane Doe"/>
             </div>
             <div class="field">
               <label>Company (optional)</label>
@@ -962,35 +961,31 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
           </div>
           <div class="field-row">
             <div class="field">
-              <label>Street Address <span class="req">*</span></label>
-              <input type="text" id="return_address" placeholder="123 Main St, Apt 4B" oninput="clearErr(this)"/>
-              <span class="err-msg">Required</span>
+              <label>Street Address</label>
+              <input type="text" id="return_address" placeholder="123 Main St, Apt 4B"/>
             </div>
           </div>
           <div class="field-row cols-3">
             <div class="field">
-              <label>City <span class="req">*</span></label>
-              <input type="text" id="return_city" placeholder="Springfield" oninput="clearErr(this)"/>
-              <span class="err-msg">Required</span>
+              <label>City</label>
+              <input type="text" id="return_city" placeholder="Springfield"/>
             </div>
             <div class="field">
               <label>State / Province</label>
               <input type="text" id="return_state" placeholder="VA"/>
             </div>
             <div class="field">
-              <label>Postal Code <span class="req">*</span></label>
-              <input type="text" id="return_postal" placeholder="22150" oninput="clearErr(this)"/>
-              <span class="err-msg">Required</span>
+              <label>Postal Code</label>
+              <input type="text" id="return_postal" placeholder="22150"/>
             </div>
           </div>
           <div class="field-row cols-2">
             <div class="field">
-              <label>Country <span class="req">*</span></label>
-              <input type="text" id="return_country" placeholder="USA" oninput="clearErr(this)"/>
-              <span class="err-msg">Required</span>
+              <label>Country</label>
+              <input type="text" id="return_country" placeholder="USA"/>
             </div>
             <div class="field">
-              <label>Contact Phone <span class="req">*</span></label>
+              <label>Contact Phone</label>
               <div class="phone-input-wrap" id="return-phone-wrap">
                 <select id="return_phone_code" class="phone-code-sel" onchange="clearMailPhoneErr()">
                   <option value="+1">🇺🇸 +1</option>
@@ -1215,28 +1210,42 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
             <input type="checkbox" id="chk_fedex_international" value="fedex_international" onchange="selectShipping(this)"/>
             FedEx International — $85
           </label>
-          <label class="mail-opt">
-            <input type="checkbox" id="chk_own_label" value="own_label" onchange="selectShipping(this)"/>
-            I Have My Own Shipping Label
-          </label>
-          <div id="own-label-upload-row" style="display:none;padding:8px 10px 8px;background:var(--navy-light);border-radius:8px;border:1px solid rgba(4,44,83,.12);margin:2px 0 6px 0;">
-            <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Upload Shipping Label</div>
-            <label for="own_shipping_label_file" id="own-label-drop-zone" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:1.5px dashed var(--border);border-radius:8px;padding:12px 10px;background:white;cursor:pointer;transition:border-color .2s,background .2s;" onmouseenter="this.style.borderColor='var(--navy)';this.style.background='var(--navy-light)'" onmouseleave="this.style.borderColor='var(--border)';this.style.background='white'">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/>
-              </svg>
-              <span style="font-size:11.5px;font-weight:600;color:var(--navy);">Click to upload</span>
-              <span style="font-size:10px;color:var(--text-muted);">PDF, JPG or PNG</span>
-            </label>
-            <input type="file" id="own_shipping_label_file" accept=".pdf,.jpg,.jpeg,.png" style="display:none;" onchange="updateOwnLabelDisplay(this)"/>
-            <div id="own-label-file-name" style="font-size:11px;color:var(--green);margin-top:4px;font-weight:600;text-align:center;"></div>
-          </div>
           <div class="hr-div"></div>
           <div class="grand-total-bar">
             <span>Order Total</span>
             <span id="order-total-display">$0.00</span>
           </div>
         </div>
+      </div>
+
+      <!-- Own shipping label divider -->
+      <div style="display:flex;align-items:center;gap:12px;margin:1.4rem 0 1rem;color:var(--text-muted);font-size:11.5px;">
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+        or use your own shipping label
+        <div style="flex:1;height:1px;background:var(--border);"></div>
+      </div>
+
+      <!-- Own shipping label section -->
+      <div style="border:1.5px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem;background:white;margin-bottom:1.2rem;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem;gap:12px;">
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:3px;">I Have My Own Shipping Label</div>
+            <div style="font-size:11.5px;color:var(--text-muted);">Upload your prepaid label — we'll attach it to your documents before dispatch</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--green);font-weight:600;padding:4px 10px;background:var(--green-light);border-radius:20px;white-space:nowrap;flex-shrink:0;">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            No shipping fee
+          </div>
+        </div>
+        <label for="own_shipping_label_file" id="own-label-drop-zone" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;border:1.5px dashed var(--border);border-radius:10px;padding:22px 16px;background:var(--bg);cursor:pointer;transition:border-color .2s,background .2s;" onmouseenter="this.style.borderColor='var(--navy)';this.style.background='var(--navy-light)'" onmouseleave="if(!document.getElementById('own_shipping_label_file').files[0]){this.style.borderColor='var(--border)';this.style.background='var(--bg)'}">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/>
+          </svg>
+          <span style="font-size:13px;font-weight:700;color:var(--navy);">Click to upload shipping label</span>
+          <span style="font-size:11px;color:var(--text-muted);">PDF, JPG or PNG accepted</span>
+        </label>
+        <input type="file" id="own_shipping_label_file" accept=".pdf,.jpg,.jpeg,.png" style="display:none;" onchange="updateOwnLabelDisplay(this)"/>
+        <div id="own-label-file-name" style="font-size:12px;color:var(--green);margin-top:8px;font-weight:600;text-align:center;display:none;"></div>
       </div>
 
       <div class="order-summary">
@@ -1604,19 +1613,20 @@ function vMailPhone() {
 }
 
 function selectShipping(checkbox) {
-  document.querySelectorAll('#chk_fedex_domestic, #chk_fedex_international, #chk_own_label').forEach(el => {
+  document.querySelectorAll('#chk_fedex_domestic, #chk_fedex_international').forEach(el => {
     if (el !== checkbox) el.checked = false;
   });
-  const sigRow      = document.getElementById('sig-required-row');
-  const ownLabelRow = document.getElementById('own-label-upload-row');
-  const domCb       = document.getElementById('chk_fedex_domestic');
-  const ownCb       = document.getElementById('chk_own_label');
-  const isDomestic  = domCb && domCb.checked;
-  const isOwn       = ownCb && ownCb.checked;
-  if (sigRow)      sigRow.style.display      = isDomestic ? 'block' : 'none';
-  if (ownLabelRow) ownLabelRow.style.display = isOwn ? 'block' : 'none';
+  const sigRow     = document.getElementById('sig-required-row');
+  const domCb      = document.getElementById('chk_fedex_domestic');
+  const isDomestic = domCb && domCb.checked;
+  if (sigRow) sigRow.style.display = isDomestic ? 'block' : 'none';
   if (!isDomestic) {
     document.querySelectorAll('input[name="fedex_sig_required"]').forEach(r => r.checked = false);
+  }
+  // Clear own label when FedEx is chosen
+  if (checkbox.checked) {
+    const ownLabelEl = document.getElementById('own_shipping_label_file');
+    if (ownLabelEl) { ownLabelEl.value = ''; updateOwnLabelDisplay(ownLabelEl); }
   }
   calcOrderTotal();
 }
@@ -1806,12 +1816,13 @@ function collectStep4() {
   formState.return_country    = g('return_country').trim();
   formState.return_phone      = g('return_phone').trim();
   formState.return_phone_code = g('return_phone_code');
-  const domCb  = document.getElementById('chk_fedex_domestic');
-  const intlCb = document.getElementById('chk_fedex_international');
-  const ownCb  = document.getElementById('chk_own_label');
-  formState.return_mailing  = (domCb && domCb.checked) ? 'fedex_domestic' :
-                              (intlCb && intlCb.checked) ? 'fedex_international' :
-                              (ownCb && ownCb.checked) ? 'own_label' : '';
+  const domCb      = document.getElementById('chk_fedex_domestic');
+  const intlCb     = document.getElementById('chk_fedex_international');
+  const ownLabelEl = document.getElementById('own_shipping_label_file');
+  const hasOwnLabel = ownLabelEl && ownLabelEl.files[0];
+  formState.return_mailing  = hasOwnLabel ? 'own_label' :
+                              (domCb && domCb.checked) ? 'fedex_domestic' :
+                              (intlCb && intlCb.checked) ? 'fedex_international' : '';
   const sigRadio = document.querySelector('input[name="fedex_sig_required"]:checked');
   formState.fedex_signature = sigRadio ? sigRadio.value : '';
   formState.order_total     = calcOrderTotal();
@@ -1935,16 +1946,6 @@ function goNext(step) {
     collectStep3();
   }
   if (step === 4) {
-    const mailPhoneOk = vMailPhone();
-    const ok = [
-      vField('return_name', req),
-      vField('return_address', req),
-      vField('return_city', req),
-      vField('return_postal', req),
-      vField('return_country', req),
-      mailPhoneOk,
-    ].every(Boolean);
-    if (!ok) return;
     collectStep4();
     buildReviewPanel();
   }
@@ -2121,14 +2122,19 @@ function copyZelleEmail(btn) {
 
 // ── OWN SHIPPING LABEL ───────────────────────────────
 function updateOwnLabelDisplay(input) {
-  const nameEl  = document.getElementById('own-label-file-name');
+  const nameEl   = document.getElementById('own-label-file-name');
   const dropZone = document.getElementById('own-label-drop-zone');
   if (input.files[0]) {
-    if (nameEl) nameEl.textContent = '✓ ' + input.files[0].name;
+    if (nameEl) { nameEl.textContent = '✓ ' + input.files[0].name; nameEl.style.display = 'block'; }
     if (dropZone) { dropZone.style.borderColor = 'var(--green)'; dropZone.style.borderStyle = 'solid'; dropZone.style.background = 'var(--green-light)'; }
+    // Uncheck FedEx options when own label is uploaded
+    document.querySelectorAll('#chk_fedex_domestic, #chk_fedex_international').forEach(el => el.checked = false);
+    const sigRow = document.getElementById('sig-required-row');
+    if (sigRow) sigRow.style.display = 'none';
+    document.querySelectorAll('input[name="fedex_sig_required"]').forEach(r => r.checked = false);
   } else {
-    if (nameEl) nameEl.textContent = '';
-    if (dropZone) { dropZone.style.borderColor = 'var(--border)'; dropZone.style.borderStyle = 'dashed'; dropZone.style.background = 'white'; }
+    if (nameEl) { nameEl.textContent = ''; nameEl.style.display = 'none'; }
+    if (dropZone) { dropZone.style.borderColor = 'var(--border)'; dropZone.style.borderStyle = 'dashed'; dropZone.style.background = 'var(--bg)'; }
   }
 }
 
