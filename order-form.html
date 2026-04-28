@@ -1215,6 +1215,15 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
             <input type="checkbox" id="chk_fedex_international" value="fedex_international" onchange="selectShipping(this)"/>
             FedEx International — $85
           </label>
+          <label class="mail-opt">
+            <input type="checkbox" id="chk_own_label" value="own_label" onchange="selectShipping(this)"/>
+            I Have My Own Shipping Label
+          </label>
+          <div id="own-label-upload-row" style="display:none;padding:8px 10px 8px;background:var(--navy-light);border-radius:8px;border:1px solid rgba(4,44,83,.12);margin:2px 0 6px 0;">
+            <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Upload Shipping Label</div>
+            <input type="file" id="own_shipping_label_file" accept=".pdf,.jpg,.jpeg,.png" style="font-size:11.5px;font-family:var(--font-body);width:100%;cursor:pointer;" onchange="updateOwnLabelDisplay(this)"/>
+            <div id="own-label-file-name" style="font-size:11px;color:var(--green);margin-top:4px;font-weight:600;"></div>
+          </div>
           <div class="hr-div"></div>
           <div class="grand-total-bar">
             <span>Order Total</span>
@@ -1313,6 +1322,34 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
         <div style="margin-top:10px;padding:12px 16px;background:rgba(0,112,240,.07);border:1.5px solid rgba(0,112,240,.28);border-radius:8px;font-size:13.5px;font-weight:700;color:#1a3a6e;line-height:1.65;">
           PayPal payments are subject to a 4% processing fee, which has already been added to the amount shown. If you'd prefer to pay without any fees, Zelle is available as a no-fee payment option.
         </div>
+        <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:14px;">
+          <label style="display:flex;align-items:center;gap:9px;cursor:pointer;font-size:13px;font-weight:600;color:var(--navy);">
+            <input type="checkbox" id="paypal-partial-toggle" onchange="togglePaypalPartial()" style="accent-color:var(--navy);width:15px;height:15px;flex-shrink:0;"/>
+            Pay a custom amount now — settle remaining balance later
+          </label>
+          <div id="paypal-partial-section" style="display:none;margin-top:12px;background:var(--navy-light);border-radius:8px;padding:14px 16px;border:1px solid rgba(4,44,83,.15);">
+            <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Custom Payment Amount</div>
+            <div style="display:flex;align-items:center;border:1.5px solid var(--border);border-radius:8px;background:white;overflow:hidden;margin-bottom:12px;">
+              <span style="padding:9px 10px 9px 12px;font-size:.95rem;font-weight:700;color:var(--navy);border-right:1px solid var(--border);flex-shrink:0;">$</span>
+              <input type="number" id="paypal-custom-amount" min="1" step="0.01" placeholder="0.00" oninput="updatePaypalPartialDisplay()" style="border:none;outline:none;padding:9px 12px;font-size:.9rem;font-family:var(--font-body);color:var(--text);flex:1;background:white;min-width:0;"/>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;background:white;border-radius:6px;padding:10px 12px;border:1px solid var(--border);">
+              <div style="display:flex;justify-content:space-between;font-size:12.5px;">
+                <span style="color:var(--text-muted);">Order Total (base)</span>
+                <span id="paypal-partial-total" style="font-weight:600;color:var(--text);">$0.00</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:12.5px;">
+                <span style="color:var(--text-muted);">Paying Now <span style="font-size:10.5px;">(incl. 4% fee)</span></span>
+                <span id="paypal-partial-now" style="font-weight:700;color:var(--navy);">$0.00</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;border-top:1px dashed var(--border);padding-top:6px;margin-top:2px;">
+                <span style="color:var(--text-muted);">Remaining Balance Due</span>
+                <span id="paypal-partial-remaining" style="font-weight:700;color:var(--orange);">$0.00</span>
+              </div>
+            </div>
+            <div style="margin-top:8px;font-size:11px;color:var(--text-muted);line-height:1.55;">A 4% processing fee applies to your custom amount. Our team will follow up for the remaining balance.</div>
+          </div>
+        </div>
       </div>
 
       <!-- Zelle payment section -->
@@ -1357,6 +1394,34 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
           </div>
         </div>
 
+        <div style="margin-bottom:14px;border:1.5px solid rgba(109,30,212,.2);border-radius:10px;padding:12px 14px;background:rgba(109,30,212,.025);">
+          <label style="display:flex;align-items:center;gap:9px;cursor:pointer;font-size:13px;font-weight:600;color:#6D1ED4;">
+            <input type="checkbox" id="zelle-partial-toggle" onchange="toggleZellePartial()" style="accent-color:#6D1ED4;width:15px;height:15px;flex-shrink:0;"/>
+            Pay a custom amount now — settle remaining balance later
+          </label>
+          <div id="zelle-partial-section" style="display:none;margin-top:12px;">
+            <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Custom Payment Amount</div>
+            <div style="display:flex;align-items:center;border:1.5px solid rgba(109,30,212,.3);border-radius:8px;background:white;overflow:hidden;margin-bottom:12px;">
+              <span style="padding:9px 10px 9px 12px;font-size:.95rem;font-weight:700;color:#6D1ED4;border-right:1px solid rgba(109,30,212,.2);flex-shrink:0;">$</span>
+              <input type="number" id="zelle-custom-amount" min="1" step="0.01" placeholder="0.00" oninput="updateZellePartialDisplay()" style="border:none;outline:none;padding:9px 12px;font-size:.9rem;font-family:var(--font-body);color:var(--text);flex:1;background:white;min-width:0;"/>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;background:white;border-radius:6px;padding:10px 12px;border:1px solid rgba(109,30,212,.15);">
+              <div style="display:flex;justify-content:space-between;font-size:12.5px;">
+                <span style="color:var(--text-muted);">Order Total</span>
+                <span id="zelle-partial-total" style="font-weight:600;color:var(--text);">$0.00</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:12.5px;">
+                <span style="color:var(--text-muted);">Paying Now</span>
+                <span id="zelle-partial-now" style="font-weight:700;color:#6D1ED4;">$0.00</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:13px;border-top:1px dashed rgba(109,30,212,.2);padding-top:6px;margin-top:2px;">
+                <span style="color:var(--text-muted);">Remaining Balance Due</span>
+                <span id="zelle-partial-remaining" style="font-weight:700;color:var(--orange);">$0.00</span>
+              </div>
+            </div>
+            <div style="margin-top:8px;font-size:11px;color:var(--text-muted);line-height:1.55;">Send only the custom amount via Zelle. Our team will follow up for the remaining balance.</div>
+          </div>
+        </div>
         <button class="btn-zelle-submit" id="zelle-submit-btn" onclick="submitViaZelle()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           I've Sent the Zelle Payment — Submit Order
@@ -1532,13 +1597,17 @@ function vMailPhone() {
 }
 
 function selectShipping(checkbox) {
-  document.querySelectorAll('#chk_fedex_domestic, #chk_fedex_international').forEach(el => {
+  document.querySelectorAll('#chk_fedex_domestic, #chk_fedex_international, #chk_own_label').forEach(el => {
     if (el !== checkbox) el.checked = false;
   });
-  const sigRow   = document.getElementById('sig-required-row');
-  const domCb    = document.getElementById('chk_fedex_domestic');
-  const isDomestic = domCb && domCb.checked;
-  if (sigRow) sigRow.style.display = isDomestic ? 'block' : 'none';
+  const sigRow      = document.getElementById('sig-required-row');
+  const ownLabelRow = document.getElementById('own-label-upload-row');
+  const domCb       = document.getElementById('chk_fedex_domestic');
+  const ownCb       = document.getElementById('chk_own_label');
+  const isDomestic  = domCb && domCb.checked;
+  const isOwn       = ownCb && ownCb.checked;
+  if (sigRow)      sigRow.style.display      = isDomestic ? 'block' : 'none';
+  if (ownLabelRow) ownLabelRow.style.display = isOwn ? 'block' : 'none';
   if (!isDomestic) {
     document.querySelectorAll('input[name="fedex_sig_required"]').forEach(r => r.checked = false);
   }
@@ -1732,8 +1801,10 @@ function collectStep4() {
   formState.return_phone_code = g('return_phone_code');
   const domCb  = document.getElementById('chk_fedex_domestic');
   const intlCb = document.getElementById('chk_fedex_international');
+  const ownCb  = document.getElementById('chk_own_label');
   formState.return_mailing  = (domCb && domCb.checked) ? 'fedex_domestic' :
-                              (intlCb && intlCb.checked) ? 'fedex_international' : '';
+                              (intlCb && intlCb.checked) ? 'fedex_international' :
+                              (ownCb && ownCb.checked) ? 'own_label' : '';
   const sigRadio = document.querySelector('input[name="fedex_sig_required"]:checked');
   formState.fedex_signature = sigRadio ? sigRadio.value : '';
   formState.order_total     = calcOrderTotal();
@@ -1952,6 +2023,7 @@ function buildReviewPanel() {
   const mailingLabels = {
     fedex_domestic:      'FedEx Domestic ($35)',
     fedex_international: 'FedEx International ($85)',
+    own_label:           'Own Shipping Label (provided)',
   };
 
   const planSub = getPlanSubtotal();
@@ -2009,7 +2081,16 @@ function submitViaZelle() {
     return;
   }
   sigErr.style.display = 'none';
-  submitForm({ method: 'zelle' });
+  const zellePartialToggle = document.getElementById('zelle-partial-toggle');
+  const isZelleDue = zellePartialToggle && zellePartialToggle.checked;
+  const zelleCustomEl = document.getElementById('zelle-custom-amount');
+  const zelleCustom = isZelleDue ? (parseFloat(zelleCustomEl ? zelleCustomEl.value : 0) || 0) : 0;
+  submitForm({
+    method:          'zelle',
+    zelleDue:        isZelleDue && zelleCustom > 0,
+    zellePaidNow:    isZelleDue && zelleCustom > 0 ? zelleCustom : 0,
+    zelleDueAmount:  isZelleDue && zelleCustom > 0 ? Math.max(0, calcOrderTotal() - zelleCustom) : 0,
+  });
 }
 
 function copyZelleEmail(btn) {
@@ -2029,6 +2110,55 @@ function copyZelleEmail(btn) {
     btn.textContent = 'Copied!';
     setTimeout(() => { btn.textContent = orig; }, 2000);
   });
+}
+
+// ── OWN SHIPPING LABEL ───────────────────────────────
+function updateOwnLabelDisplay(input) {
+  const nameEl = document.getElementById('own-label-file-name');
+  if (nameEl) nameEl.textContent = input.files[0] ? '✓ ' + input.files[0].name : '';
+}
+
+// ── PAYPAL PARTIAL PAYMENT ───────────────────────────
+function togglePaypalPartial() {
+  const isPartial = document.getElementById('paypal-partial-toggle').checked;
+  document.getElementById('paypal-partial-section').style.display = isPartial ? 'block' : 'none';
+  if (isPartial) updatePaypalPartialDisplay();
+}
+
+function updatePaypalPartialDisplay() {
+  const total     = calcOrderTotal();
+  const customEl  = document.getElementById('paypal-custom-amount');
+  const custom    = parseFloat(customEl ? customEl.value : 0) || 0;
+  const nowWithFee   = custom * 1.04;
+  const remaining    = Math.max(0, total - custom);
+  const totalEl     = document.getElementById('paypal-partial-total');
+  const nowEl       = document.getElementById('paypal-partial-now');
+  const remainingEl = document.getElementById('paypal-partial-remaining');
+  if (totalEl)     totalEl.textContent     = '$' + total.toFixed(2);
+  if (nowEl)       nowEl.textContent       = '$' + nowWithFee.toFixed(2);
+  if (remainingEl) remainingEl.textContent = '$' + remaining.toFixed(2);
+}
+
+// ── ZELLE PARTIAL PAYMENT ────────────────────────────
+function toggleZellePartial() {
+  const isPartial = document.getElementById('zelle-partial-toggle').checked;
+  document.getElementById('zelle-partial-section').style.display = isPartial ? 'block' : 'none';
+  if (isPartial) updateZellePartialDisplay();
+}
+
+function updateZellePartialDisplay() {
+  const total     = calcOrderTotal();
+  const customEl  = document.getElementById('zelle-custom-amount');
+  const custom    = parseFloat(customEl ? customEl.value : 0) || 0;
+  const remaining = Math.max(0, total - custom);
+  const zelleAmountEl = document.getElementById('zelle-amount');
+  if (zelleAmountEl) zelleAmountEl.textContent = custom > 0 ? '$' + custom.toFixed(2) : '$' + total.toFixed(2);
+  const totalEl     = document.getElementById('zelle-partial-total');
+  const nowEl       = document.getElementById('zelle-partial-now');
+  const remainingEl = document.getElementById('zelle-partial-remaining');
+  if (totalEl)     totalEl.textContent     = '$' + total.toFixed(2);
+  if (nowEl)       nowEl.textContent       = '$' + (custom > 0 ? custom : total).toFixed(2);
+  if (remainingEl) remainingEl.textContent = '$' + remaining.toFixed(2);
 }
 
 // ── PAYPAL ───────────────────────────────────────────
@@ -2051,10 +2181,15 @@ function renderPaypalButtons() {
       }
       sigErr.style.display = 'none';
       const total = calcOrderTotal();
+      const partialToggle = document.getElementById('paypal-partial-toggle');
+      const isPartial = partialToggle && partialToggle.checked;
+      const customAmountEl = document.getElementById('paypal-custom-amount');
+      const customAmount = isPartial ? (parseFloat(customAmountEl ? customAmountEl.value : 0) || 0) : 0;
+      const chargeAmount = (isPartial && customAmount > 0) ? customAmount * 1.04 : total * 1.04;
       return actions.order.create({
         purchase_units: [{
           description: 'FBI Apostille — ' + (formState.plan_label || 'US Authentication Services'),
-          amount: { currency_code: 'USD', value: (total * 1.04).toFixed(2) }
+          amount: { currency_code: 'USD', value: chargeAmount.toFixed(2) }
         }]
       });
     },
@@ -2064,11 +2199,18 @@ function renderPaypalButtons() {
       return actions.order.capture().then(function(details) {
         if (loadEl) loadEl.style.display = 'none';
         const capture = details.purchase_units[0].payments.captures[0];
+        const partialToggle2 = document.getElementById('paypal-partial-toggle');
+        const isPartial2 = partialToggle2 && partialToggle2.checked;
+        const customAmountEl2 = document.getElementById('paypal-custom-amount');
+        const customAmount2 = isPartial2 ? (parseFloat(customAmountEl2 ? customAmountEl2.value : 0) || 0) : 0;
         submitForm({
-          orderID:       data.orderID,
-          transactionID: capture.id,
-          payerName:     (details.payer.name.given_name || '') + ' ' + (details.payer.name.surname || ''),
-          payerEmail:    details.payer.email_address || '',
+          orderID:         data.orderID,
+          transactionID:   capture.id,
+          payerName:       (details.payer.name.given_name || '') + ' ' + (details.payer.name.surname || ''),
+          payerEmail:      details.payer.email_address || '',
+          paypalDue:       isPartial2 && customAmount2 > 0,
+          paypalPaidNow:   isPartial2 && customAmount2 > 0 ? customAmount2 : 0,
+          paypalDueAmount: isPartial2 && customAmount2 > 0 ? Math.max(0, calcOrderTotal() - customAmount2) : 0,
         });
       }).catch(function() {
         if (loadEl) loadEl.style.display = 'none';
@@ -2143,8 +2285,17 @@ async function submitForm(paymentDetails = null) {
   fd.append('return_phone',     (formState.return_phone_code ? formState.return_phone_code + ' ' : '') + formState.return_phone);
   fd.append('return_mailing',   formState.return_mailing);
   fd.append('fedex_signature',  formState.fedex_signature);
+  const ownLabelFile = document.getElementById('own_shipping_label_file');
+  if (ownLabelFile && ownLabelFile.files[0]) fd.append('own_shipping_label', ownLabelFile.files[0], ownLabelFile.files[0].name);
   const baseTotal = calcOrderTotal();
-  const finalTotal = (formState.payment_method === 'paypal') ? baseTotal * 1.04 : baseTotal;
+  const isPaypalDue = paymentDetails && paymentDetails.paypalDue;
+  const isZelleDue2 = paymentDetails && paymentDetails.zelleDue;
+  let finalTotal;
+  if (isPaypalDue)                      finalTotal = paymentDetails.paypalPaidNow * 1.04;
+  else if (isZelleDue2)                 finalTotal = paymentDetails.zellePaidNow;
+  else if (formState.payment_method === 'paypal') finalTotal = baseTotal * 1.04;
+  else                                  finalTotal = baseTotal;
+  fd.append('order_base_total',      '$' + baseTotal.toFixed(2));
   fd.append('order_total',           '$' + finalTotal.toFixed(2));
   fd.append('payment_method',        formState.payment_method);
   fd.append('paypal_order_id',       formState.paypal_order_id       || '');
@@ -2152,6 +2303,16 @@ async function submitForm(paymentDetails = null) {
   fd.append('paypal_payer',          formState.paypal_payer_name     || '');
   fd.append('paypal_payer_email',    formState.paypal_payer_email    || '');
   if (isZelle) fd.append('zelle_payment_to', 'info@usauthentication.com');
+  if (isPaypalDue) {
+    fd.append('paypal_due',        'true');
+    fd.append('paypal_paid_now',   '$' + paymentDetails.paypalPaidNow.toFixed(2));
+    fd.append('paypal_due_amount', '$' + paymentDetails.paypalDueAmount.toFixed(2));
+  }
+  if (isZelleDue2) {
+    fd.append('zelle_due',        'true');
+    fd.append('zelle_paid_now',   '$' + paymentDetails.zellePaidNow.toFixed(2));
+    fd.append('zelle_due_amount', '$' + paymentDetails.zelleDueAmount.toFixed(2));
+  }
   fd.append('signature',             formState.signature);
   fd.append('signature_date',        formState.signature_date);
   fd.append('submitted_at',          formState.submitted_at);
