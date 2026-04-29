@@ -1,5 +1,5 @@
 const fs = require('fs');
-let html = fs.readFileSync('index.html', 'utf8');
+let html = fs.readFileSync('index.php', 'utf8');
 
 // ── 1. CSS: replace hiw-header, remove arrows, fix carousel to centered grid ──
 const cssOld =
@@ -112,5 +112,5 @@ const jsOld =
 
 html = html.replace(jsOld, '');
 
-fs.writeFileSync('index.html', html);
+fs.writeFileSync('index.php', html);
 console.log('Done — arrows removed, cards centered, heading upgraded.');

@@ -406,7 +406,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 
 <!-- ── TOP BAR ── -->
 <div class="form-topbar">
-  <a href="index.html" class="topbar-logo">
+  <a href="index.php" class="topbar-logo">
     <img src="brand_assets/logo.jpeg" alt="FBI Apostille Logo"/>
   </a>
   <div class="topbar-divider"></div>

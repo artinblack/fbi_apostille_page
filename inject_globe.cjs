@@ -1,5 +1,5 @@
 const fs = require('fs');
-let html = fs.readFileSync('index.html', 'utf8');
+let html = fs.readFileSync('index.php', 'utf8');
 
 const globeScript = `
 <!-- ═══ HERO GLOBE ═══ -->
@@ -335,5 +335,5 @@ if (document.readyState === 'loading') {
 const lastScript = html.lastIndexOf('</script>');
 if (lastScript === -1) { console.error('no closing script tag'); process.exit(1); }
 html = html.slice(0, lastScript + '</script>'.length) + '\n' + globeScript + html.slice(lastScript + '</script>'.length);
-fs.writeFileSync('index.html', html);
+fs.writeFileSync('index.php', html);
 console.log('Globe script injected, file size:', html.length);

@@ -392,7 +392,7 @@ footer{background:var(--navy);padding:48px 0 0;border-top:2px solid var(--orange
       <li><a href="https://www.usauthentication.com/document-authentication-blog/">Blog</a></li>
       <li><a href="https://www.usauthentication.com/contact/">Contact</a></li>
     </ul>
-    <a href="order-form.html" class="nav-cta">Order Now</a>
+    <a href="order-form.php" class="nav-cta">Order Now</a>
     <button class="nav-burger" id="navBurger" aria-label="Open menu">
       <span></span><span></span><span></span>
     </button>
@@ -431,7 +431,7 @@ footer{background:var(--navy);padding:48px 0 0;border-top:2px solid var(--orange
       <li><a href="https://www.usauthentication.com/document-authentication-blog/">Blog</a></li>
       <li><a href="https://www.usauthentication.com/contact/">Contact</a></li>
     </ul>
-    <a href="order-form.html" class="drawer-cta">Order Now</a>
+    <a href="order-form.php" class="drawer-cta">Order Now</a>
   </div>
 </div>
 
@@ -463,7 +463,7 @@ footer{background:var(--navy);padding:48px 0 0;border-top:2px solid var(--orange
           <span class="hero-pill">🔒 No Mailing Required</span>
         </div>
         <div class="hero-ctas">
-          <a href="order-form.html" class="btn-primary">Get Started →</a>
+          <a href="order-form.php" class="btn-primary">Get Started →</a>
           <a href="tel:+17039717226" class="btn-ghost">📞 703-971-7226</a>
           <a href="https://wa.me/12025529489" class="btn-ghost" style="color:#25d366;border-color:#25d366">💬 WhatsApp Us</a>
         </div>
@@ -800,7 +800,7 @@ footer{background:var(--navy);padding:48px 0 0;border-top:2px solid var(--orange
           <li><span class="pc-cross">✗</span> Free document pre-screening</li>
           <li><span class="pc-cross">✗</span> Digital copy emailed</li>
         </ul>
-        <a href="order-form.html" class="pc-btn">Get started →</a>
+        <a href="order-form.php" class="pc-btn">Get started →</a>
       </div>
 
       <div class="pc-card pc-featured">
@@ -817,7 +817,7 @@ footer{background:var(--navy);padding:48px 0 0;border-top:2px solid var(--orange
           <li><span class="pc-check">✓</span> Digital copy emailed</li>
           <li><span class="pc-check">✓</span> FedEx shipping available globally</li>
         </ul>
-        <a href="order-form.html" class="pc-btn pc-btn-featured">Get started →</a>
+        <a href="order-form.php" class="pc-btn pc-btn-featured">Get started →</a>
       </div>
 
       <div class="pc-card">
@@ -834,7 +834,7 @@ footer{background:var(--navy);padding:48px 0 0;border-top:2px solid var(--orange
           <li><span class="pc-check">✓</span> Free document pre-screening</li>
           <li><span class="pc-cross">✗</span> Digital copy emailed</li>
         </ul>
-        <a href="order-form.html" class="pc-btn">Get started →</a>
+        <a href="order-form.php" class="pc-btn">Get started →</a>
       </div>
 
     </div>

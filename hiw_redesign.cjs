@@ -1,5 +1,5 @@
 const fs = require('fs');
-let html = fs.readFileSync('index.html', 'utf8');
+let html = fs.readFileSync('index.php', 'utf8');
 
 // ── 1. REPLACE CSS ──────────────────────────────────────────────
 const cssStart = html.indexOf('.steps-section{');
@@ -227,5 +227,5 @@ const newHTML =
 
 html = html.slice(0, htmlStart) + newHTML + html.slice(htmlEnd);
 
-fs.writeFileSync('index.html', html);
+fs.writeFileSync('index.php', html);
 console.log('HOW IT WORKS redesign complete.');
