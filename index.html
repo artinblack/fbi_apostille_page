@@ -75,22 +75,47 @@ a{color:inherit;text-decoration:none}
 .pc-footer{text-align:center;font-size:12px;color:var(--text-xlt);margin-top:8px}
 
 /* ── NAVBAR ── */
+/* ── NAVBAR ── */
 .navbar{background:var(--white);border-bottom:1px solid var(--gray-bd);position:sticky;top:0;z-index:100}
-.nav-inner{display:flex;align-items:center;justify-content:center;height:58px;gap:0}
-.nav-links{display:flex;align-items:center;gap:0;list-style:none;flex:1;justify-content:center}
-.nav-links>li{position:relative}
-.nav-links>li>a{display:block;padding:8px 14px;font-size:12px;font-weight:700;color:#555;letter-spacing:.07em;text-transform:uppercase;transition:color .15s}
+.nav-inner{display:flex;align-items:center;height:60px;padding:0 28px;gap:0;max-width:1280px;margin:0 auto}
+.nav-logo{flex-shrink:0;display:flex;align-items:center;text-decoration:none;margin-right:18px}
+.nav-logo img{height:38px;width:auto;object-fit:contain;display:block}
+.nav-links{display:flex;align-items:center;gap:0;list-style:none;flex:1;justify-content:center;flex-wrap:nowrap;overflow:visible}
+.nav-links>li{position:relative;flex-shrink:0}
+.nav-links>li>a{display:block;padding:6px 10px;font-size:11px;font-weight:700;color:#556;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;transition:color .15s;white-space:nowrap}
 .nav-links>li>a:hover{color:var(--navy)}
-.nav-links>li>a.has-arrow::after{content:'▾';font-size:9px;margin-left:4px;vertical-align:middle}
-.nav-acts{display:flex;align-items:center;gap:10px;flex-shrink:0;position:absolute;right:36px}
-.nav-ghost{font-size:12.5px;font-weight:500;color:var(--text-md);padding:7px 15px;border-radius:var(--r-pill);border:0.5px solid var(--gray-bd);background:transparent;cursor:pointer;font-family:var(--font);transition:all .2s;text-decoration:none}
-.nav-ghost:hover{border-color:var(--navy-lt);color:var(--navy-lt)}
-.nav-cta{font-size:12px;font-weight:600;color:var(--blue-pale);background:var(--navy-lt);padding:8px 18px;border-radius:var(--r-lg);border:none;cursor:pointer;font-family:var(--font);transition:background .2s;text-decoration:none}
-.nav-cta:hover{background:var(--navy-mid)}
-.nav-dropdown{position:absolute;top:100%;left:0;min-width:240px;background:#fff;border:1px solid #e2e8f0;border-top:2px solid var(--navy-lt);box-shadow:0 8px 24px rgba(4,44,83,.10);list-style:none;margin:0;padding:6px 0;z-index:200;opacity:0;visibility:hidden;transform:translateY(6px);transition:opacity .18s ease,transform .18s ease,visibility .18s}
+.nav-cta{flex-shrink:0;margin-left:14px;font-size:12px;font-weight:700;color:#fff;background:var(--navy-lt);padding:8px 20px;border-radius:var(--r-pill);border:none;cursor:pointer;font-family:var(--font);transition:background .2s,transform .15s;text-decoration:none;white-space:nowrap}
+.nav-cta:hover{background:var(--navy-mid);transform:translateY(-1px)}
+.nav-dropdown{position:absolute;top:calc(100% + 4px);left:0;min-width:240px;background:#fff;border:1px solid #e2e8f0;border-top:2px solid var(--navy-lt);box-shadow:0 8px 28px rgba(4,44,83,.12);list-style:none;margin:0;padding:6px 0;z-index:500;opacity:0;visibility:hidden;transform:translateY(6px);transition:opacity .18s ease,transform .18s ease,visibility .18s}
 .nav-has-dropdown:hover .nav-dropdown{opacity:1;visibility:visible;transform:translateY(0)}
-.nav-dropdown li a{display:block;padding:9px 18px;font-size:11.5px;font-weight:600;color:#1a3a5c;letter-spacing:.04em;text-transform:uppercase;text-decoration:none;white-space:nowrap;transition:background .12s,color .12s}
+.nav-dropdown li a{display:block;padding:9px 18px;font-size:11px;font-weight:600;color:#1a3a5c;letter-spacing:.04em;text-transform:uppercase;text-decoration:none;white-space:nowrap;transition:background .12s,color .12s}
 .nav-dropdown li a:hover{background:var(--blue-pale);color:var(--navy-lt)}
+/* hamburger */
+.nav-burger{display:none;flex-direction:column;justify-content:center;gap:5px;background:none;border:none;cursor:pointer;padding:8px;margin-left:auto;flex-shrink:0}
+.nav-burger span{display:block;width:22px;height:2px;background:var(--navy);border-radius:2px;transition:transform .25s,opacity .25s}
+/* mobile drawer */
+.nav-drawer{position:fixed;inset:0;z-index:999;pointer-events:none}
+.nav-drawer-overlay{position:absolute;inset:0;background:rgba(4,44,83,.45);opacity:0;transition:opacity .3s}
+.nav-drawer-panel{position:absolute;top:0;right:0;width:min(320px,88vw);height:100%;background:#fff;transform:translateX(100%);transition:transform .32s cubic-bezier(.16,1,.3,1);overflow-y:auto;display:flex;flex-direction:column}
+.nav-drawer.open{pointer-events:all}
+.nav-drawer.open .nav-drawer-overlay{opacity:1}
+.nav-drawer.open .nav-drawer-panel{transform:translateX(0)}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--gray-bd)}
+.drawer-head img{height:34px;width:auto;object-fit:contain}
+.drawer-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-lt);padding:4px 8px;line-height:1}
+.drawer-close:hover{color:var(--navy)}
+.drawer-nav{list-style:none;padding:8px 0;flex:1}
+.drawer-nav li a{display:block;padding:12px 22px;font-size:13px;font-weight:600;color:var(--navy);letter-spacing:.04em;text-transform:uppercase;text-decoration:none;border-bottom:0.5px solid #f0f2f5;transition:background .12s}
+.drawer-nav li a:hover{background:var(--blue-pale);color:var(--navy-lt)}
+.drawer-services-toggle{width:100%;background:none;border:none;border-bottom:0.5px solid #f0f2f5;padding:12px 22px;display:flex;align-items:center;justify-content:space-between;font-family:var(--font);font-size:13px;font-weight:600;color:var(--navy);letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:background .12s}
+.drawer-services-toggle:hover{background:var(--blue-pale)}
+.drawer-services-toggle .chev{font-size:10px;transition:transform .22s;color:var(--text-lt)}
+.drawer-services-toggle.open .chev{transform:rotate(180deg)}
+.drawer-sub{list-style:none;max-height:0;overflow:hidden;transition:max-height .3s ease;background:#f8fafc}
+.drawer-sub.open{max-height:400px}
+.drawer-sub li a{padding:10px 22px 10px 34px;font-size:12px;font-weight:500;letter-spacing:.03em;border-bottom:0.5px solid #edf0f4}
+.drawer-cta{margin:18px 20px 24px;display:block;background:var(--navy-lt);color:#fff;font-family:var(--font);font-size:13.5px;font-weight:700;text-align:center;padding:13px;border-radius:var(--r-pill);text-decoration:none;transition:background .2s}
+.drawer-cta:hover{background:var(--navy-mid)}
 
 /* ── BREADCRUMB ── */
 .breadcrumb{background:var(--white);border-bottom:0.5px solid var(--gray-bd);padding:11px 0}
@@ -286,36 +311,67 @@ footer{background:var(--navy);padding:48px 0 0;border-top:2px solid var(--orange
 .s-cl{background:none;border:none;color:rgba(255,255,255,.25);font-size:17px;cursor:pointer;padding:4px 8px;transition:color .15s}
 .s-cl:hover{color:rgba(255,255,255,.7)}
 
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  .nav-links>li>a{padding:6px 8px;font-size:10.5px}
+}
+@media(max-width:960px){
+  .nav-links,.nav-cta{display:none}
+  .nav-burger{display:flex}
+  .nav-inner{padding:0 20px}
+}
 @media(max-width:900px){
-  .hero-inner,.quote-grid,.foot-grid{grid-template-columns:1fr;gap:28px}
+  .hero-inner{grid-template-columns:1fr;gap:28px}
   .hero-inner>div:last-child{max-width:100%}
   .who-grid{grid-template-columns:repeat(3,1fr)}
   .steps-row{grid-template-columns:1fr}
   .why-grid{grid-template-columns:1fr 1fr}
   .testi-grid{grid-template-columns:1fr}
+  .quote-grid{grid-template-columns:1fr;gap:32px}
+  .foot-grid{grid-template-columns:1fr 1fr;gap:32px}
   .form-2col{grid-template-columns:1fr}
+  .pc-grid{grid-template-columns:1fr!important}
 }
 @media(max-width:600px){
-  .container{padding:0 18px}
-  .nav-links,.nav-acts{display:none}
+  .container{padding:0 16px}
   .who-grid{grid-template-columns:repeat(2,1fr)}
   .why-grid{grid-template-columns:1fr}
-  .sticky{padding:10px 18px}
+  .foot-grid{grid-template-columns:1fr}
+  .sticky{padding:10px 16px;flex-direction:column;gap:8px;text-align:center}
+  .sticky-acts{justify-content:center}
+  .hero{padding:32px 0 28px}
+  .hero h1{font-size:clamp(24px,7vw,36px)}
+  .steps-section,.why-section,.faq-section,.testi-section,.quote-section,.cta-band{padding:36px 0}
+  .who-strip{padding:24px 0}
+  .cta-band h2{font-size:clamp(20px,6vw,30px)}
+  .q-title{font-size:clamp(20px,5.5vw,28px)}
+  .sh{font-size:clamp(20px,5.5vw,30px)}
+  .form-card{padding:20px 16px}
+  .quote-section .container{padding:0 16px}
+  footer{padding:32px 0 0}
+  .foot-bot{flex-direction:column;align-items:flex-start;gap:8px}
+  .bc-inner{flex-wrap:wrap}
+  .trust-inner{gap:10px}
+  .trust-divider{display:none}
+  .hero-ctas{flex-direction:column;gap:8px}
+  .hero-ctas .btn-primary,.hero-ctas .btn-ghost{width:100%;justify-content:center}
+  .cta-btns{flex-direction:column;gap:8px;align-items:stretch;padding:0 32px}
+  .cta-btns .btn-primary,.cta-btns .btn-ghost{justify-content:center}
 }
 </style>
 </head>
 <body>
 
 <!-- NAVBAR -->
-<nav class="navbar" style="position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid #e2e8f0">
-  <div style="max-width:1100px;margin:0 auto;padding:0 36px;position:relative;display:flex;align-items:center;justify-content:center;height:56px">
-    <a href="/" style="position:absolute;left:36px;display:flex;align-items:center;text-decoration:none;flex-shrink:0;">
-      <img src="brand_assets/logo.jpeg" alt="US Authentication Services" style="height:40px;width:auto;object-fit:contain;display:block;"/>
+<nav class="navbar">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="brand_assets/logo.jpeg" alt="US Authentication Services"/>
     </a>
-    <ul style="display:flex;align-items:center;list-style:none;gap:0;margin:0;padding:0">
-      <li><a href="/" style="display:block;padding:8px 14px;font-size:11.5px;font-weight:700;color:#555;letter-spacing:.07em;text-transform:uppercase;text-decoration:none;transition:color .15s">Home</a></li>
-      <li style="position:relative" class="nav-has-dropdown">
-        <a href="https://www.usauthentication.com/us-authentication-services/" style="display:block;padding:8px 14px;font-size:11.5px;font-weight:700;color:#555;letter-spacing:.07em;text-transform:uppercase;text-decoration:none;transition:color .15s">Services ▾</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li class="nav-has-dropdown">
+        <a href="https://www.usauthentication.com/us-authentication-services/">Services ▾</a>
         <ul class="nav-dropdown">
           <li><a href="https://www.usauthentication.com/us-authentication-services/">About Our Authentication Services</a></li>
           <li><a href="https://www.usauthentication.com/us-authentication-services/apostille-service.php">Apostille</a></li>
@@ -327,18 +383,57 @@ footer{background:var(--navy);padding:48px 0 0;border-top:2px solid var(--orange
           <li><a href="https://www.usauthentication.com/us-authentication-services/visa-documentation.php">Visa Services</a></li>
         </ul>
       </li>
-      <li><a href="https://www.usauthentication.com/rates-us-authentication/" style="display:block;padding:8px 14px;font-size:11.5px;font-weight:700;color:#555;letter-spacing:.07em;text-transform:uppercase;text-decoration:none;transition:color .15s">Rates</a></li>
-      <li><a href="https://www.usauthentication.com/countries-us-authentication/" style="display:block;padding:8px 14px;font-size:11.5px;font-weight:700;color:#555;letter-spacing:.07em;text-transform:uppercase;text-decoration:none;transition:color .15s">Countries</a></li>
-      <li><a href="https://www.usauthentication.com/order-document-authentication/" style="display:block;padding:8px 14px;font-size:11.5px;font-weight:700;color:#555;letter-spacing:.07em;text-transform:uppercase;text-decoration:none;transition:color .15s">How to Order</a></li>
-      <li><a href="https://www.usauthentication.com/free-quote/" style="display:block;padding:8px 14px;font-size:11.5px;font-weight:700;color:#555;letter-spacing:.07em;text-transform:uppercase;text-decoration:none;transition:color .15s">Free Quote</a></li>
-      <li><a href="https://www.usauthentication.com/faq-document-authentication/" style="display:block;padding:8px 14px;font-size:11.5px;font-weight:700;color:#555;letter-spacing:.07em;text-transform:uppercase;text-decoration:none;transition:color .15s">FAQ</a></li>
-      <li><a href="https://www.usauthentication.com/testimonials-us-authentication/" style="display:block;padding:8px 14px;font-size:11.5px;font-weight:700;color:#555;letter-spacing:.07em;text-transform:uppercase;text-decoration:none;transition:color .15s">Testimonials</a></li>
-      <li><a href="https://www.usauthentication.com/document-authentication-blog/" style="display:block;padding:8px 14px;font-size:11.5px;font-weight:700;color:#555;letter-spacing:.07em;text-transform:uppercase;text-decoration:none;transition:color .15s">Blog</a></li>
-      <li><a href="https://www.usauthentication.com/contact/" style="display:block;padding:8px 14px;font-size:11.5px;font-weight:700;color:#555;letter-spacing:.07em;text-transform:uppercase;text-decoration:none;transition:color .15s">Contact</a></li>
+      <li><a href="https://www.usauthentication.com/rates-us-authentication/">Rates</a></li>
+      <li><a href="https://www.usauthentication.com/countries-us-authentication/">Countries</a></li>
+      <li><a href="https://www.usauthentication.com/order-document-authentication/">How to Order</a></li>
+      <li><a href="https://www.usauthentication.com/free-quote/">Free Quote</a></li>
+      <li><a href="https://www.usauthentication.com/faq-document-authentication/">FAQ</a></li>
+      <li><a href="https://www.usauthentication.com/testimonials-us-authentication/">Testimonials</a></li>
+      <li><a href="https://www.usauthentication.com/document-authentication-blog/">Blog</a></li>
+      <li><a href="https://www.usauthentication.com/contact/">Contact</a></li>
     </ul>
-    <a href="order-form.html" class="nav-cta" style="position:absolute;right:36px;">Order Now</a>
+    <a href="order-form.html" class="nav-cta">Order Now</a>
+    <button class="nav-burger" id="navBurger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+
+<!-- MOBILE DRAWER -->
+<div class="nav-drawer" id="navDrawer">
+  <div class="nav-drawer-overlay" id="drawerOverlay"></div>
+  <div class="nav-drawer-panel">
+    <div class="drawer-head">
+      <img src="brand_assets/logo.jpeg" alt="US Authentication Services"/>
+      <button class="drawer-close" id="drawerClose">✕</button>
+    </div>
+    <ul class="drawer-nav">
+      <li><a href="/">Home</a></li>
+      <li>
+        <button class="drawer-services-toggle" id="drawerServicesToggle">Services <span class="chev">▾</span></button>
+        <ul class="drawer-sub" id="drawerSub">
+          <li><a href="https://www.usauthentication.com/us-authentication-services/">About Our Authentication Services</a></li>
+          <li><a href="https://www.usauthentication.com/us-authentication-services/apostille-service.php">Apostille</a></li>
+          <li><a href="https://www.usauthentication.com/us-authentication-services/apostille-service.php">Types of Apostille</a></li>
+          <li><a href="https://www.usauthentication.com/us-authentication-services/fbi-background-check.php">FBI Background Check</a></li>
+          <li><a href="https://www.usauthentication.com/us-authentication-services/authentication-services.php">Authentication</a></li>
+          <li><a href="https://www.usauthentication.com/us-authentication-services/document-authentication.php">Document Authentication</a></li>
+          <li><a href="https://www.usauthentication.com/us-authentication-services/document-attestation.php">Document Attestation</a></li>
+          <li><a href="https://www.usauthentication.com/us-authentication-services/visa-documentation.php">Visa Services</a></li>
+        </ul>
+      </li>
+      <li><a href="https://www.usauthentication.com/rates-us-authentication/">Rates</a></li>
+      <li><a href="https://www.usauthentication.com/countries-us-authentication/">Countries</a></li>
+      <li><a href="https://www.usauthentication.com/order-document-authentication/">How to Order</a></li>
+      <li><a href="https://www.usauthentication.com/free-quote/">Free Quote</a></li>
+      <li><a href="https://www.usauthentication.com/faq-document-authentication/">FAQ</a></li>
+      <li><a href="https://www.usauthentication.com/testimonials-us-authentication/">Testimonials</a></li>
+      <li><a href="https://www.usauthentication.com/document-authentication-blog/">Blog</a></li>
+      <li><a href="https://www.usauthentication.com/contact/">Contact</a></li>
+    </ul>
+    <a href="order-form.html" class="drawer-cta">Order Now</a>
+  </div>
+</div>
 
 <!-- BREADCRUMB -->
 
@@ -1048,5 +1143,24 @@ footer{background:var(--navy);padding:48px 0 0;border-top:2px solid var(--orange
     if (d.type==='__deactivate_edit_mode') document.getElementById('tweaks-panel').classList.remove('on');
   });
   try{ window.parent.postMessage({type:'__edit_mode_available'},'*'); }catch(e){}
+})();
+
+// ── Mobile drawer ──
+(function(){
+  const burger=document.getElementById('navBurger');
+  const drawer=document.getElementById('navDrawer');
+  const overlay=document.getElementById('drawerOverlay');
+  const closeBtn=document.getElementById('drawerClose');
+  const servicesToggle=document.getElementById('drawerServicesToggle');
+  const sub=document.getElementById('drawerSub');
+  function openDrawer(){drawer.classList.add('open');document.body.style.overflow='hidden';}
+  function closeDrawer(){drawer.classList.remove('open');document.body.style.overflow='';}
+  burger.addEventListener('click',openDrawer);
+  closeBtn.addEventListener('click',closeDrawer);
+  overlay.addEventListener('click',closeDrawer);
+  servicesToggle.addEventListener('click',function(){
+    const isOpen=sub.classList.toggle('open');
+    servicesToggle.classList.toggle('open',isOpen);
+  });
 })();
 </script>
