@@ -1497,7 +1497,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 
 <script>
 // ── CONFIG ──────────────────────────────────────────
-const N8N_WEBHOOK_URL = '<?= htmlspecialchars(N8N_WEBHOOK_URL) ?>';
+const N8N_WEBHOOK_URL = '<?= htmlspecialchars(N8N_UPLOAD_FORM) ?>';
 
 // ── SIGNATURE PAD STATE ─────────────────────────────
 let signPadDrawing    = false;
