@@ -2301,7 +2301,13 @@ async function submitForm(paymentDetails = null) {
   fd.append('return_mailing',   formState.return_mailing);
   fd.append('fedex_signature',  formState.fedex_signature);
   const ownLabelFile = document.getElementById('own_shipping_label_file');
-  if (ownLabelFile && ownLabelFile.files[0]) fd.append('own_shipping_label', ownLabelFile.files[0], ownLabelFile.files[0].name);
+  if (ownLabelFile && ownLabelFile.files[0]) {
+    fd.append('own_shipping_label',          'yes');
+    fd.append('own_shipping_label_document', ownLabelFile.files[0], ownLabelFile.files[0].name);
+  } else {
+    fd.append('own_shipping_label',          'no');
+    fd.append('own_shipping_label_document', '');
+  }
   const baseTotal = calcOrderTotal();
   const isPaypalDue = paymentDetails && paymentDetails.paypalDue;
   const isZelleDue2 = paymentDetails && paymentDetails.zelleDue;
