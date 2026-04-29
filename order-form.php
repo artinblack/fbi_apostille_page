@@ -2317,17 +2317,13 @@ async function submitForm(paymentDetails = null) {
   fd.append('paypal_transaction_id', formState.paypal_transaction_id || '');
   fd.append('paypal_payer',          formState.paypal_payer_name     || '');
   fd.append('paypal_payer_email',    formState.paypal_payer_email    || '');
-  if (isZelle) fd.append('zelle_payment_to', 'info@usauthentication.com');
-  if (isPaypalDue) {
-    fd.append('paypal_due',        'true');
-    fd.append('paypal_paid_now',   '$' + paymentDetails.paypalPaidNow.toFixed(2));
-    fd.append('paypal_due_amount', '$' + paymentDetails.paypalDueAmount.toFixed(2));
-  }
-  if (isZelleDue2) {
-    fd.append('zelle_due',        'true');
-    fd.append('zelle_paid_now',   '$' + paymentDetails.zellePaidNow.toFixed(2));
-    fd.append('zelle_due_amount', '$' + paymentDetails.zelleDueAmount.toFixed(2));
-  }
+  fd.append('zelle_payment_to',      isZelle ? 'info@usauthentication.com' : '');
+  fd.append('paypal_due',            isPaypalDue ? 'true' : 'false');
+  fd.append('paypal_paid_now',       isPaypalDue ? '$' + paymentDetails.paypalPaidNow.toFixed(2)   : '$0.00');
+  fd.append('paypal_due_amount',     isPaypalDue ? '$' + paymentDetails.paypalDueAmount.toFixed(2) : '$0.00');
+  fd.append('zelle_due',             isZelleDue2 ? 'true' : 'false');
+  fd.append('zelle_paid_now',        isZelleDue2 ? '$' + paymentDetails.zellePaidNow.toFixed(2)    : '$0.00');
+  fd.append('zelle_due_amount',      isZelleDue2 ? '$' + paymentDetails.zelleDueAmount.toFixed(2)  : '$0.00');
   fd.append('signature',             formState.signature);
   fd.append('signature_date',        formState.signature_date);
   fd.append('submitted_at',          formState.submitted_at);
