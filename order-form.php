@@ -1,3 +1,4 @@
+<?php include __DIR__ . '/config.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -400,7 +401,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
   .next-steps { grid-template-columns: 1fr; }
 }
 </style>
-<script src="https://www.paypal.com/sdk/js?client-id=ASkA225-flD38R2RcnpSKRvpyx-OtZcO39WpGEnWXBDBLVZBKKDZkFV-SIr8uNyTTaqVmva8MQKDykUd&currency=USD&intent=capture"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=<?= htmlspecialchars(PAYPAL_CLIENT_ID) ?>&currency=USD&intent=capture"></script>
 </head>
 <body>
 
@@ -1496,7 +1497,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 
 <script>
 // ── CONFIG ──────────────────────────────────────────
-const N8N_WEBHOOK_URL = 'https://n8n.leadaheadindia.com/webhook/upload_form';
+const N8N_WEBHOOK_URL = '<?= htmlspecialchars(N8N_WEBHOOK_URL) ?>';
 
 // ── SIGNATURE PAD STATE ─────────────────────────────
 let signPadDrawing    = false;

@@ -9,6 +9,9 @@ pnpm-lock.yaml
 .env.local
 .env.*.local
 
+# PHP config (contains real credentials — never commit)
+config.php
+
 # Build & Dist
 dist/
 build/
