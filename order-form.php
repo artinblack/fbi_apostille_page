@@ -2303,10 +2303,10 @@ async function submitForm(paymentDetails = null) {
   const ownLabelFile = document.getElementById('own_shipping_label_file');
   if (ownLabelFile && ownLabelFile.files[0]) {
     fd.append('own_shipping_label',          'yes');
-    fd.append('own_shipping_label_document', ownLabelFile.files[0], ownLabelFile.files[0].name);
+    fd.append('shipping_label_upload', ownLabelFile.files[0], ownLabelFile.files[0].name);
   } else {
-    fd.append('own_shipping_label',          'no');
-    fd.append('own_shipping_label_document', '');
+    fd.append('own_shipping_label',     'no');
+    fd.append('shipping_label_upload',  '');
   }
   const baseTotal = calcOrderTotal();
   const isPaypalDue = paymentDetails && paymentDetails.paypalDue;
