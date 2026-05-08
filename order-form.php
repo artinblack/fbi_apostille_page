@@ -5,6 +5,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Order Form — FBI Apostille · US Authentication Services</title>
+<link rel="icon" type="image/jpeg" href="/brand_assets/logo.jpeg">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 :root {
@@ -243,6 +244,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 .sig-clear-btn { position: absolute; top: 7px; right: 9px; background: white; border: 1px solid var(--border); color: var(--text-muted); border-radius: 6px; padding: 3px 10px; font-size: 11px; font-family: var(--font-body); cursor: pointer; transition: border-color .15s, color .15s; }
 .sig-clear-btn:hover { border-color: var(--red); color: var(--red); }
 .sig-canvas-hint { font-size: 10.5px; color: var(--text-muted); margin-top: 5px; }
+
 
 /* ── PAYPAL SECTION ── */
 .paypal-payment-section { margin-top: 1.5rem; border: 1.5px solid var(--border); border-radius: 12px; padding: 1.4rem 1.6rem; background: white; }
@@ -714,32 +716,32 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
           <div class="plan-badge-placeholder"></div>
           <div class="plan-tier">Economy</div>
           <div class="plan-price"><sup>$</sup>69 <span class="per-doc">/ doc</span></div>
-          <div class="plan-turn">5+ weeks turnaround</div>
+          <div class="plan-turn"><strong>5+ weeks turnaround</strong></div>
           <hr class="plan-div"/>
           <ul class="plan-features">
             <li><span class="plan-check">✓</span> All government fees included</li>
+            <li><span class="plan-check">✓</span> Free document pre-screening</li>
             <li><span class="plan-check">✓</span> PDF upload online</li>
             <li><span class="plan-check">✓</span> Email confirmation</li>
-            <li><span class="plan-cross">✗</span> Return shipping</li>
-            <li><span class="plan-cross">✗</span> Free document pre-screening</li>
+            <li><span class="plan-check">✓</span> FedEx shipping available globally</li>
             <li><span class="plan-cross">✗</span> Digital copy emailed</li>
           </ul>
         </label>
 
         <!-- STANDARD -->
-        <label class="plan-card featured" id="plan-standard-card" onclick="selectPlan('standard',89,'Standard — 15 business days')">
+        <label class="plan-card featured" id="plan-standard-card" onclick="selectPlan('standard',89,'Standard — 12–14 business days')">
           <input type="radio" name="selected_plan" value="standard"/>
-          <div class="plan-badge">Most popular</div>
+          <div class="plan-badge">⚡ Best Value</div>
           <div class="plan-tier">Standard</div>
           <div class="plan-price"><sup>$</sup>89 <span class="per-doc">/ doc</span></div>
-          <div class="plan-turn">15 business days</div>
+          <div class="plan-turn"><strong>12–14 business days*</strong></div>
           <hr class="plan-div"/>
           <ul class="plan-features">
             <li><span class="plan-check">✓</span> All government fees included</li>
+            <li><span class="plan-check">✓</span> Free document pre-screening</li>
             <li><span class="plan-check">✓</span> PDF upload online</li>
             <li><span class="plan-check">✓</span> Email confirmation</li>
-            <li><span class="plan-cross">✗</span> Return shipping</li>
-            <li><span class="plan-check">✓</span> Free document pre-screening</li>
+            <li><span class="plan-check">✓</span> FedEx shipping available globally</li>
             <li><span class="plan-cross">✗</span> Digital copy emailed</li>
           </ul>
         </label>
@@ -750,15 +752,15 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
           <div class="plan-badge-placeholder"></div>
           <div class="plan-tier">Express</div>
           <div class="plan-price"><sup>$</sup>109 <span class="per-doc">/ doc</span></div>
-          <div class="plan-turn">8–9 business days*</div>
+          <div class="plan-turn"><strong>8–9 business days*</strong></div>
           <hr class="plan-div"/>
           <ul class="plan-features">
             <li><span class="plan-check">✓</span> All government fees included</li>
+            <li><span class="plan-check">✓</span> Free document pre-screening</li>
             <li><span class="plan-check">✓</span> PDF upload online</li>
             <li><span class="plan-check">✓</span> Email confirmation</li>
-            <li><span class="plan-check">✓</span> Free document pre-screening</li>
-            <li><span class="plan-check">✓</span> Digital copy emailed</li>
             <li><span class="plan-check">✓</span> FedEx shipping available globally</li>
+            <li><span class="plan-check">✓</span> Digital copy emailed</li>
           </ul>
         </label>
 
@@ -771,7 +773,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
         <span class="sub-amount" id="plan-subtotal-display">—</span>
       </div>
 
-      <p style="font-size:11px;color:var(--text-muted);margin-top:.6rem">* Fridays are not counted as a working day at the US Dept. of State for the Express option.</p>
+      <p style="font-size:11px;color:var(--text-muted);margin-top:.6rem">* Fridays are not counted as a working day at the US Dept. of State <strong>(Express and Standard options)</strong></p>
 
       <div class="nav-row">
         <button class="btn-back" onclick="goBack(2)">← Back</button>
@@ -923,8 +925,11 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
         </div>
       </div>
 
+      <!-- Add-ons summary text -->
+      <div id="addon-summary-text" style="display:none;font-size:12px;color:var(--text-muted);background:var(--navy-light);border:1px solid rgba(4,44,83,.1);border-radius:8px;padding:10px 14px;margin-top:1.2rem;line-height:1.6;"></div>
+
       <!-- Add-ons subtotal -->
-      <div class="doc-subtotal-bar" style="margin-top:1.2rem">
+      <div class="doc-subtotal-bar" style="margin-top:.75rem">
         <div>
           <div class="sub-label">Add-ons Subtotal</div>
           <div style="font-size:10.5px;opacity:.55;margin-top:2px">Translation + Scanning charges</div>
@@ -948,6 +953,9 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
   <div class="panel" id="panel-4">
     <div class="panel-card">
       <div class="panel-title">Return Mailing Information <span>Step 4 of 5</span></div>
+
+
+<div id="mailing-grid-section">
       <div class="mailing-grid">
         <div>
           <div class="field-row cols-2">
@@ -963,7 +971,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
           <div class="field-row">
             <div class="field">
               <label>Street Address</label>
-              <input type="text" id="return_address" placeholder="123 Main St, Apt 4B"/>
+              <textarea id="return_address" placeholder="123 Main St, Apt 4B" rows="2" style="min-height:unset;line-height:1.5;"></textarea>
             </div>
           </div>
           <div class="field-row cols-3">
@@ -1194,19 +1202,8 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
           <div class="card-title">Select Return Shipping</div>
           <label class="mail-opt">
             <input type="checkbox" id="chk_fedex_domestic" value="fedex_domestic" onchange="selectShipping(this)"/>
-            FedEx Domestic — $35
+            FEDEX US Domestic — $35
           </label>
-          <div id="sig-required-row" class="sig-required-row" style="display:none">
-            <div class="sig-question">Signature Required?</div>
-            <label class="mail-opt">
-              <input type="radio" name="fedex_sig_required" value="yes"/>
-              Yes
-            </label>
-            <label class="mail-opt">
-              <input type="radio" name="fedex_sig_required" value="no"/>
-              No
-            </label>
-          </div>
           <label class="mail-opt">
             <input type="checkbox" id="chk_fedex_international" value="fedex_international" onchange="selectShipping(this)"/>
             FedEx International — $85
@@ -1218,28 +1215,16 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
           </div>
         </div>
       </div>
+      </div><!-- /mailing-grid-section -->
 
-      <!-- Own shipping label divider -->
-      <div style="display:flex;align-items:center;gap:12px;margin:1.4rem 0 1rem;color:var(--text-muted);font-size:11.5px;">
-        <div style="flex:1;height:1px;background:var(--border);"></div>
-        or use your own shipping label
-        <div style="flex:1;height:1px;background:var(--border);"></div>
-      </div>
-
-      <!-- Own shipping label section -->
-      <div style="border:1.5px solid var(--border);border-radius:10px;padding:10px 14px;background:white;margin-bottom:1.2rem;display:flex;align-items:center;gap:12px;">
-        <label for="own_shipping_label_file" id="own-label-drop-zone" style="display:flex;align-items:center;gap:10px;border:1.5px dashed var(--border);border-radius:8px;padding:9px 14px;background:var(--bg);cursor:pointer;transition:border-color .2s,background .2s;flex:1;min-width:0;" onmouseenter="this.style.borderColor='var(--navy)';this.style.background='var(--navy-light)'" onmouseleave="if(!document.getElementById('own_shipping_label_file').files[0]){this.style.borderColor='var(--border)';this.style.background='var(--bg)'}">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/>
-          </svg>
-          <div>
-            <div style="font-size:12.5px;font-weight:700;color:var(--navy);">I Have My Own Shipping Label</div>
-            <div id="own-label-file-name" style="font-size:11px;color:var(--green);font-weight:600;display:none;margin-top:1px;"></div>
-            <div id="own-label-hint" style="font-size:11px;color:var(--text-muted);margin-top:1px;">Click to upload — PDF, JPG or PNG</div>
-          </div>
-        </label>
-        <input type="file" id="own_shipping_label_file" accept=".pdf,.jpg,.jpeg,.png" style="display:none;" onchange="updateOwnLabelDisplay(this)"/>
-      </div>
+      <!-- No-shipping opt-out -->
+      <label style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;background:white;cursor:pointer;margin-bottom:1.4rem;transition:border-color .15s,background .15s;" onmouseenter="this.style.borderColor='var(--navy)';this.style.background='var(--navy-light)'" onmouseleave="if(!document.getElementById('chk_no_shipping').checked){this.style.borderColor='var(--border)';this.style.background='white'}" id="no-shipping-label">
+        <input type="checkbox" id="chk_no_shipping" style="accent-color:var(--navy);width:15px;height:15px;flex-shrink:0;margin-top:2px;" onchange="toggleNoShipping(this.checked)"/>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:2px;">I do not require my document to be shipped</div>
+          <div style="font-size:11.5px;color:var(--text-muted);line-height:1.5;">I have requested a scanned copy of my document</div>
+        </div>
+      </label>
 
       <div class="order-summary">
         <div class="os-title">Order Summary</div>
@@ -1331,34 +1316,6 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
         <div style="margin-top:10px;padding:12px 16px;background:rgba(0,112,240,.07);border:1.5px solid rgba(0,112,240,.28);border-radius:8px;font-size:13.5px;font-weight:700;color:#1a3a6e;line-height:1.65;">
           PayPal payments are subject to a 4% processing fee, which has already been added to the amount shown. If you'd prefer to pay without any fees, Zelle is available as a no-fee payment option.
         </div>
-        <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:14px;">
-          <label style="display:flex;align-items:center;gap:9px;cursor:pointer;font-size:13px;font-weight:600;color:var(--navy);">
-            <input type="checkbox" id="paypal-partial-toggle" onchange="togglePaypalPartial()" style="accent-color:var(--navy);width:15px;height:15px;flex-shrink:0;"/>
-            Pay a custom amount now — settle remaining balance later
-          </label>
-          <div id="paypal-partial-section" style="display:none;margin-top:12px;background:var(--navy-light);border-radius:8px;padding:14px 16px;border:1px solid rgba(4,44,83,.15);">
-            <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Custom Payment Amount</div>
-            <div style="display:flex;align-items:center;border:1.5px solid var(--border);border-radius:8px;background:white;overflow:hidden;margin-bottom:12px;">
-              <span style="padding:9px 10px 9px 12px;font-size:.95rem;font-weight:700;color:var(--navy);border-right:1px solid var(--border);flex-shrink:0;">$</span>
-              <input type="number" id="paypal-custom-amount" min="1" step="0.01" placeholder="0.00" oninput="updatePaypalPartialDisplay()" style="border:none;outline:none;padding:9px 12px;font-size:.9rem;font-family:var(--font-body);color:var(--text);flex:1;background:white;min-width:0;"/>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:6px;background:white;border-radius:6px;padding:10px 12px;border:1px solid var(--border);">
-              <div style="display:flex;justify-content:space-between;font-size:12.5px;">
-                <span style="color:var(--text-muted);">Order Total (base)</span>
-                <span id="paypal-partial-total" style="font-weight:600;color:var(--text);">$0.00</span>
-              </div>
-              <div style="display:flex;justify-content:space-between;font-size:12.5px;">
-                <span style="color:var(--text-muted);">Paying Now <span style="font-size:10.5px;">(incl. 4% fee)</span></span>
-                <span id="paypal-partial-now" style="font-weight:700;color:var(--navy);">$0.00</span>
-              </div>
-              <div style="display:flex;justify-content:space-between;font-size:13px;border-top:1px dashed var(--border);padding-top:6px;margin-top:2px;">
-                <span style="color:var(--text-muted);">Remaining Balance Due</span>
-                <span id="paypal-partial-remaining" style="font-weight:700;color:var(--orange);">$0.00</span>
-              </div>
-            </div>
-            <div style="margin-top:8px;font-size:11px;color:var(--text-muted);line-height:1.55;">A 4% processing fee applies to your custom amount. Our team will follow up for the remaining balance.</div>
-          </div>
-        </div>
       </div>
 
       <!-- Zelle payment section -->
@@ -1399,38 +1356,10 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
           </div>
           <div class="zelle-qr-wrap">
             <div class="zelle-qr-label">Scan to Pay</div>
-            <img src="brand_assets/zelle_qr.png" alt="Zelle QR Code" class="zelle-qr-img"/>
+            <img src="brand_assets/zelle_qr2.png" alt="Zelle QR Code" class="zelle-qr-img"/>
           </div>
         </div>
 
-        <div style="margin-bottom:14px;border:1.5px solid rgba(109,30,212,.2);border-radius:10px;padding:12px 14px;background:rgba(109,30,212,.025);">
-          <label style="display:flex;align-items:center;gap:9px;cursor:pointer;font-size:13px;font-weight:600;color:#6D1ED4;">
-            <input type="checkbox" id="zelle-partial-toggle" onchange="toggleZellePartial()" style="accent-color:#6D1ED4;width:15px;height:15px;flex-shrink:0;"/>
-            Pay a custom amount now — settle remaining balance later
-          </label>
-          <div id="zelle-partial-section" style="display:none;margin-top:12px;">
-            <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;">Custom Payment Amount</div>
-            <div style="display:flex;align-items:center;border:1.5px solid rgba(109,30,212,.3);border-radius:8px;background:white;overflow:hidden;margin-bottom:12px;">
-              <span style="padding:9px 10px 9px 12px;font-size:.95rem;font-weight:700;color:#6D1ED4;border-right:1px solid rgba(109,30,212,.2);flex-shrink:0;">$</span>
-              <input type="number" id="zelle-custom-amount" min="1" step="0.01" placeholder="0.00" oninput="updateZellePartialDisplay()" style="border:none;outline:none;padding:9px 12px;font-size:.9rem;font-family:var(--font-body);color:var(--text);flex:1;background:white;min-width:0;"/>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:6px;background:white;border-radius:6px;padding:10px 12px;border:1px solid rgba(109,30,212,.15);">
-              <div style="display:flex;justify-content:space-between;font-size:12.5px;">
-                <span style="color:var(--text-muted);">Order Total</span>
-                <span id="zelle-partial-total" style="font-weight:600;color:var(--text);">$0.00</span>
-              </div>
-              <div style="display:flex;justify-content:space-between;font-size:12.5px;">
-                <span style="color:var(--text-muted);">Paying Now</span>
-                <span id="zelle-partial-now" style="font-weight:700;color:#6D1ED4;">$0.00</span>
-              </div>
-              <div style="display:flex;justify-content:space-between;font-size:13px;border-top:1px dashed rgba(109,30,212,.2);padding-top:6px;margin-top:2px;">
-                <span style="color:var(--text-muted);">Remaining Balance Due</span>
-                <span id="zelle-partial-remaining" style="font-weight:700;color:var(--orange);">$0.00</span>
-              </div>
-            </div>
-            <div style="margin-top:8px;font-size:11px;color:var(--text-muted);line-height:1.55;">Send only the custom amount via Zelle. Our team will follow up for the remaining balance.</div>
-          </div>
-        </div>
         <button class="btn-zelle-submit" id="zelle-submit-btn" onclick="submitViaZelle()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           I've Sent the Zelle Payment — Submit Order
@@ -1461,29 +1390,30 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
           </svg>
         </div>
         <h2>Order Submitted!</h2>
-        <p>Thank you — your order has been received. Our team will review your documents and contact you within 1 business hour.</p>
+        <p>Thank you — your document has been submitted using the selected service option. Our team will review your documents and contact you the same business day*</p>
         <div class="order-ref" id="order-ref-display">Processing…</div>
         <p>Check your email for a confirmation. For urgent inquiries call <strong>(703) 971-7226</strong> or WhatsApp <strong>202-552-9489</strong>.</p>
         <div class="next-steps">
           <div class="next-step-card">
             <div class="next-step-num">01</div>
             <div class="next-step-title">We Review Your Documents</div>
-            <div class="next-step-body">Our specialists verify your documents and confirm the exact service required — usually within 1 hour.</div>
+            <div class="next-step-body">Our specialists verify your documents and confirm the service selection</div>
           </div>
           <div class="next-step-card">
             <div class="next-step-num">02</div>
-            <div class="next-step-title">We Process &amp; Hand-Deliver</div>
-            <div class="next-step-body">We hand-deliver daily to the US Dept. of State. No mailing required for most FBI background checks.</div>
+            <div class="next-step-title">We Process &amp; Submit</div>
+            <div class="next-step-body">We process your order and submit your document(s)</div>
           </div>
           <div class="next-step-card">
             <div class="next-step-num">03</div>
             <div class="next-step-title">You Receive Your Apostille</div>
-            <div class="next-step-body">Your certified document is delivered as a digital scan and/or physical copy via FedEx or DHL.</div>
+            <div class="next-step-body">Your certified document is delivered as a digital scan and/or physical copy via FedEx.</div>
           </div>
         </div>
         <button onclick="resetForm()" style="margin-top:2rem;background:var(--navy);color:white;border:none;border-radius:var(--radius);padding:11px 26px;font-size:13.5px;font-family:var(--font-body);font-weight:600;cursor:pointer;">
           ↺ Submit Another Order
         </button>
+        <p style="margin-top:1.5rem;font-size:11px;color:var(--text-muted);line-height:1.6;">*Orders submitted by 3:30 PM EST will be confirmed the same day</p>
       </div>
     </div>
   </div>
@@ -1507,7 +1437,7 @@ let signPadInited     = false;
 // ── PLAN CONFIG ─────────────────────────────────────
 const PLANS = {
   economy:  { label: 'Economy',  price: 69,  turn: '5+ weeks'          },
-  standard: { label: 'Standard', price: 89,  turn: '15 business days'  },
+  standard: { label: 'Standard', price: 89,  turn: '12–14 business days' },
   express:  { label: 'Express',  price: 109, turn: '8–9 business days' },
 };
 
@@ -1515,7 +1445,7 @@ const PLANS = {
 let currentStep = 1;
 
 // docSlots: source of truth for document upload state
-let docSlots = [{ file: null, pages: 0, translate: false, scan: false, translate_language: '' }];
+let docSlots = [{ file: null, pages: 0, translate: false, scan: false, translate_language: '', has_cover_page: null }];
 
 const formState = {
   first_name:'', last_name:'', email:'', phone_code:'', phone:'',
@@ -1525,7 +1455,7 @@ const formState = {
   docs: [],
   doc_subtotal: 0,
   return_name:'', return_company:'', return_address:'', return_city:'', return_state:'',
-  return_postal:'', return_country:'', return_phone:'', return_phone_code:'', return_mailing:'', fedex_signature:'',
+  return_postal:'', return_country:'', return_phone:'', return_phone_code:'', return_mailing:'', fedex_signature:'', no_shipping: false,
   signature:'', signature_date:'',
   paypal_order_id:'', paypal_transaction_id:'', paypal_payer_name:'', paypal_payer_email:'', payment_method:'',
   order_total: 0, submitted_at:''
@@ -1605,22 +1535,24 @@ function vMailPhone() {
   return ok;
 }
 
+function toggleNoShipping(checked) {
+  const mailingSection = document.getElementById('mailing-grid-section');
+  const noShipLabel    = document.getElementById('no-shipping-label');
+  if (mailingSection) mailingSection.style.display = checked ? 'none' : '';
+  if (noShipLabel) {
+    noShipLabel.style.borderColor = checked ? 'var(--navy)' : 'var(--border)';
+    noShipLabel.style.background  = checked ? 'var(--navy-light)' : 'white';
+  }
+  if (checked) {
+    document.querySelectorAll('#chk_fedex_domestic, #chk_fedex_international').forEach(el => el.checked = false);
+  }
+  calcOrderTotal();
+}
+
 function selectShipping(checkbox) {
   document.querySelectorAll('#chk_fedex_domestic, #chk_fedex_international').forEach(el => {
     if (el !== checkbox) el.checked = false;
   });
-  const sigRow     = document.getElementById('sig-required-row');
-  const domCb      = document.getElementById('chk_fedex_domestic');
-  const isDomestic = domCb && domCb.checked;
-  if (sigRow) sigRow.style.display = isDomestic ? 'block' : 'none';
-  if (!isDomestic) {
-    document.querySelectorAll('input[name="fedex_sig_required"]').forEach(r => r.checked = false);
-  }
-  // Clear own label when FedEx is chosen
-  if (checkbox.checked) {
-    const ownLabelEl = document.getElementById('own_shipping_label_file');
-    if (ownLabelEl) { ownLabelEl.value = ''; updateOwnLabelDisplay(ownLabelEl); }
-  }
   calcOrderTotal();
 }
 
@@ -1628,7 +1560,7 @@ function selectShipping(checkbox) {
 function changeDocCount(delta) {
   const newCount = Math.max(1, Math.min(10, docSlots.length + delta));
   while (docSlots.length < newCount) {
-    docSlots.push({ file: null, pages: 0, translate: false, scan: false, translate_language: '' });
+    docSlots.push({ file: null, pages: 0, translate: false, scan: false, translate_language: '', has_cover_page: null });
   }
   while (docSlots.length > newCount) {
     docSlots.pop();
@@ -1651,8 +1583,9 @@ function renderDocCards() {
     const addOnCost = calcDocCost(slot);
     const hasCost   = addOnCost > 0;
 
+    const effPages = effectivePages(slot);
     const translationLabel = slot.translate && slot.pages > 0
-      ? `$${(60 * (slot.pages + 1)).toFixed(2)} (${slot.pages} pages + 1)`
+      ? `$${(60 * (effPages + 1)).toFixed(2)} (${effPages} pages + 1)`
       : '$60 × (pages + 1)';
 
     return `
@@ -1682,20 +1615,38 @@ function renderDocCards() {
           </div>
         </div>
         <div class="doc-options">
+          <div style="font-size:9.5px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em;padding-bottom:6px;border-bottom:1px solid var(--border);margin-bottom:4px;">ADD-ON Services</div>
           <div class="doc-checks">
             <label class="doc-check">
               <input type="checkbox" ${slot.translate ? 'checked' : ''} onchange="toggleDocOption(${i}, 'translate', this.checked)"/>
               <div class="check-info">
                 <div class="check-title">Translation</div>
-                <div class="check-price-line">$60 × (pages + 1) per document</div>
+                <div style="font-size:10px;color:var(--text-muted);margin-top:2px;line-height:1.4;">We use American Translation Association (ATA) certified translators</div>
+                <div style="font-size:10px;color:var(--text-muted);margin-top:2px;line-height:1.4;font-style:italic;">Please note: The translation includes an additional page of translation for the apostille page.</div>
+                <div class="check-price-line" style="margin-top:3px;">$60 × (pages + 1) per document</div>
                 ${slot.translate ? `<div class="check-price-computed">${translationLabel}</div>` : ''}
               </div>
             </label>
-            ${slot.translate ? `
-            <div style="padding:8px 10px;background:var(--navy-light);border-radius:8px;border:1px solid rgba(4,44,83,.12);">
-              <label style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:5px;">Translation Language</label>
-              <input type="text" placeholder="e.g. Spanish, French, Arabic…" value="${slot.translate_language || ''}" oninput="setTranslateLanguage(${i}, this.value)" style="border:1.5px solid var(--border);border-radius:8px;padding:7px 10px;font-size:.85rem;font-family:var(--font-body);color:var(--text);width:100%;background:white;outline:none;" onfocus="this.style.borderColor='var(--navy)'" onblur="this.style.borderColor='var(--border)'"/>
-            </div>` : ''}
+            <div style="padding:10px 12px;background:var(--navy-light);border-radius:8px;border:1px solid rgba(4,44,83,.12);display:flex;flex-direction:column;gap:8px;">
+              <div>
+                <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;">Does your FBI report have a cover page?</div>
+                <div style="display:flex;gap:20px;">
+                  <label style="display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;cursor:pointer;color:var(--text);">
+                    <input type="radio" name="cover_page_${i}" value="yes" ${slot.has_cover_page === true ? 'checked' : ''} onchange="setCoverPage(${i}, true)" style="accent-color:var(--navy);width:14px;height:14px;"/>
+                    Yes
+                  </label>
+                  <label style="display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;cursor:pointer;color:var(--text);">
+                    <input type="radio" name="cover_page_${i}" value="no" ${slot.has_cover_page === false ? 'checked' : ''} onchange="setCoverPage(${i}, false)" style="accent-color:var(--navy);width:14px;height:14px;"/>
+                    No
+                  </label>
+                </div>
+              </div>
+              ${slot.translate ? `
+              <div>
+                <label style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:5px;">Translation Language</label>
+                <input type="text" placeholder="e.g. Spanish, French, Arabic…" value="${slot.translate_language || ''}" oninput="setTranslateLanguage(${i}, this.value)" style="border:1.5px solid var(--border);border-radius:8px;padding:7px 10px;font-size:.85rem;font-family:var(--font-body);color:var(--text);width:100%;background:white;outline:none;" onfocus="this.style.borderColor='var(--navy)'" onblur="this.style.borderColor='var(--border)'"/>
+              </div>` : ''}
+            </div>
             ${showScan ? `
             <label class="doc-check">
               <input type="checkbox" ${slot.scan ? 'checked' : ''} onchange="toggleDocOption(${i}, 'scan', this.checked)"/>
@@ -1737,7 +1688,15 @@ function handleFileUpload(index, file) {
 
 function toggleDocOption(index, option, checked) {
   docSlots[index][option] = checked;
-  if (option === 'translate' && !checked) docSlots[index].translate_language = '';
+  if (option === 'translate' && !checked) {
+    docSlots[index].translate_language = '';
+    docSlots[index].has_cover_page = null;
+  }
+  renderDocCards();
+}
+
+function setCoverPage(index, hasCoverPage) {
+  docSlots[index].has_cover_page = hasCoverPage;
   renderDocCards();
 }
 
@@ -1745,9 +1704,14 @@ function setTranslateLanguage(index, value) {
   docSlots[index].translate_language = value;
 }
 
+function effectivePages(slot) {
+  if (slot.has_cover_page === true) return Math.max(0, slot.pages - 1);
+  return slot.pages;
+}
+
 function calcDocCost(slot) {
   let cost = 0;
-  if (slot.translate) cost += 60 * (slot.pages + 1);
+  if (slot.translate) cost += 60 * (effectivePages(slot) + 1);
   if (slot.scan) cost += 10;
   return cost;
 }
@@ -1756,10 +1720,37 @@ function calcDocSubtotal() {
   return docSlots.reduce((sum, slot) => sum + calcDocCost(slot), 0);
 }
 
+function updateAddonSummaryText() {
+  const el = document.getElementById('addon-summary-text');
+  if (!el) return;
+  const translatedSlots = docSlots.filter(s => s.translate);
+  const scannedSlots    = docSlots.filter(s => s.scan);
+  if (translatedSlots.length === 0 && scannedSlots.length === 0) {
+    el.style.display = 'none';
+    return;
+  }
+  el.style.display = 'block';
+  let text = 'You have selected apostille certification';
+  if (translatedSlots.length > 0) {
+    const totalPages = translatedSlots.reduce((sum, s) => sum + effectivePages(s), 0);
+    const docCount   = translatedSlots.length;
+    text += ` and translation add-on service for ${totalPages} page${totalPages !== 1 ? 's' : ''} in ${docCount} document${docCount !== 1 ? 's' : ''}`;
+  }
+  if (scannedSlots.length > 0) {
+    const scanCount = scannedSlots.length;
+    text += `${translatedSlots.length > 0 ? ' &' : ' and'} scan add-on service for ${scanCount} document${scanCount !== 1 ? 's' : ''}`;
+  }
+  if (translatedSlots.length > 0) {
+    text += '. Please note: The translation includes an additional page of translation for the apostille page';
+  }
+  el.textContent = text;
+}
+
 function updateDocSubtotal() {
   const total = calcDocSubtotal();
   const el = document.getElementById('doc-subtotal-display');
   if (el) el.textContent = '$' + total.toFixed(2);
+  updateAddonSummaryText();
   calcOrderTotal();
 }
 
@@ -1788,12 +1779,14 @@ function collectStep3() {
   formState.doc_count           = docSlots.length;
   formState.destination_country = g('destination_country');
   formState.docs = docSlots.map((s, i) => ({
-    index:           i + 1,
-    filename:        s.file ? s.file.name : '',
-    pages:           s.pages,
-    translate:       s.translate,
-    scan:            s.scan,
-    translation_cost: s.translate ? 60 * (s.pages + 1) : 0,
+    index:            i + 1,
+    filename:         s.file ? s.file.name : '',
+    pages:            s.pages,
+    effective_pages:  effectivePages(s),
+    has_cover_page:   s.has_cover_page,
+    translate:        s.translate,
+    scan:             s.scan,
+    translation_cost: s.translate ? 60 * (effectivePages(s) + 1) : 0,
     scan_cost:        s.scan ? 10 : 0,
   }));
   formState.doc_subtotal = calcDocSubtotal();
@@ -1809,15 +1802,14 @@ function collectStep4() {
   formState.return_country    = g('return_country').trim();
   formState.return_phone      = g('return_phone').trim();
   formState.return_phone_code = g('return_phone_code');
-  const domCb      = document.getElementById('chk_fedex_domestic');
-  const intlCb     = document.getElementById('chk_fedex_international');
-  const ownLabelEl = document.getElementById('own_shipping_label_file');
-  const hasOwnLabel = ownLabelEl && ownLabelEl.files[0];
-  formState.return_mailing  = hasOwnLabel ? 'own_label' :
-                              (domCb && domCb.checked) ? 'fedex_domestic' :
-                              (intlCb && intlCb.checked) ? 'fedex_international' : '';
-  const sigRadio = document.querySelector('input[name="fedex_sig_required"]:checked');
-  formState.fedex_signature = sigRadio ? sigRadio.value : '';
+  const noShipCb = document.getElementById('chk_no_shipping');
+  const domCb    = document.getElementById('chk_fedex_domestic');
+  const intlCb   = document.getElementById('chk_fedex_international');
+  formState.no_shipping    = noShipCb && noShipCb.checked;
+  formState.return_mailing = formState.no_shipping ? 'no_shipping' :
+                             (domCb && domCb.checked) ? 'fedex_domestic' :
+                             (intlCb && intlCb.checked) ? 'fedex_international' : '';
+  formState.fedex_signature = '';
   formState.order_total     = calcOrderTotal();
 }
 
@@ -2022,9 +2014,9 @@ function buildReviewPanel() {
   if (rt) rt.textContent = '$' + total.toFixed(2);
 
   const mailingLabels = {
-    fedex_domestic:      'FedEx Domestic ($35)',
+    fedex_domestic:      'FEDEX US Domestic ($35)',
     fedex_international: 'FedEx International ($85)',
-    own_label:           'Own Shipping Label (provided)',
+    no_shipping:         'No shipping — scanned copy only',
   };
 
   const planSub = getPlanSubtotal();
@@ -2062,10 +2054,9 @@ function buildReviewPanel() {
     </div>
     <div class="review-block">
       <div class="review-block-title">Return Mailing <span class="edit-link" onclick="setStep(4)">Edit</span></div>
-      <div class="review-row"><span class="label">Name</span><span class="value">${formState.return_name}</span></div>
-      <div class="review-row"><span class="label">Address</span><span class="value">${formState.return_address}, ${formState.return_city} ${formState.return_state} ${formState.return_postal}, ${formState.return_country}</span></div>
+      ${formState.no_shipping ? '' : `<div class="review-row"><span class="label">Name</span><span class="value">${formState.return_name}</span></div>`}
+      ${formState.no_shipping ? '' : `<div class="review-row"><span class="label">Address</span><span class="value">${formState.return_address}, ${formState.return_city} ${formState.return_state} ${formState.return_postal}, ${formState.return_country}</span></div>`}
       <div class="review-row"><span class="label">Shipping</span><span class="value">${mailingLabels[formState.return_mailing] || '—'}</span></div>
-      ${formState.return_mailing === 'fedex_domestic' && formState.fedex_signature ? `<div class="review-row"><span class="label">Signature req.</span><span class="value">${formState.fedex_signature === 'yes' ? 'Yes' : 'No'}</span></div>` : ''}
     </div>`;
 
   renderPaypalButtons();
@@ -2082,16 +2073,7 @@ function submitViaZelle() {
     return;
   }
   sigErr.style.display = 'none';
-  const zellePartialToggle = document.getElementById('zelle-partial-toggle');
-  const isZelleDue = zellePartialToggle && zellePartialToggle.checked;
-  const zelleCustomEl = document.getElementById('zelle-custom-amount');
-  const zelleCustom = isZelleDue ? (parseFloat(zelleCustomEl ? zelleCustomEl.value : 0) || 0) : 0;
-  submitForm({
-    method:          'zelle',
-    zelleDue:        isZelleDue && zelleCustom > 0,
-    zellePaidNow:    isZelleDue && zelleCustom > 0 ? zelleCustom : 0,
-    zelleDueAmount:  isZelleDue && zelleCustom > 0 ? Math.max(0, calcOrderTotal() - zelleCustom) : 0,
-  });
+  submitForm({ method: 'zelle' });
 }
 
 function copyZelleEmail(btn) {
@@ -2111,69 +2093,6 @@ function copyZelleEmail(btn) {
     btn.textContent = 'Copied!';
     setTimeout(() => { btn.textContent = orig; }, 2000);
   });
-}
-
-// ── OWN SHIPPING LABEL ───────────────────────────────
-function updateOwnLabelDisplay(input) {
-  const nameEl   = document.getElementById('own-label-file-name');
-  const dropZone = document.getElementById('own-label-drop-zone');
-  const hintEl = document.getElementById('own-label-hint');
-  if (input.files[0]) {
-    if (nameEl) { nameEl.textContent = '✓ ' + input.files[0].name; nameEl.style.display = 'block'; }
-    if (hintEl) hintEl.style.display = 'none';
-    if (dropZone) { dropZone.style.borderColor = 'var(--green)'; dropZone.style.borderStyle = 'solid'; dropZone.style.background = 'var(--green-light)'; }
-    document.querySelectorAll('#chk_fedex_domestic, #chk_fedex_international').forEach(el => el.checked = false);
-    const sigRow = document.getElementById('sig-required-row');
-    if (sigRow) sigRow.style.display = 'none';
-    document.querySelectorAll('input[name="fedex_sig_required"]').forEach(r => r.checked = false);
-  } else {
-    if (nameEl) { nameEl.textContent = ''; nameEl.style.display = 'none'; }
-    if (hintEl) hintEl.style.display = 'block';
-    if (dropZone) { dropZone.style.borderColor = 'var(--border)'; dropZone.style.borderStyle = 'dashed'; dropZone.style.background = 'var(--bg)'; }
-  }
-}
-
-// ── PAYPAL PARTIAL PAYMENT ───────────────────────────
-function togglePaypalPartial() {
-  const isPartial = document.getElementById('paypal-partial-toggle').checked;
-  document.getElementById('paypal-partial-section').style.display = isPartial ? 'block' : 'none';
-  if (isPartial) updatePaypalPartialDisplay();
-}
-
-function updatePaypalPartialDisplay() {
-  const total     = calcOrderTotal();
-  const customEl  = document.getElementById('paypal-custom-amount');
-  const custom    = parseFloat(customEl ? customEl.value : 0) || 0;
-  const nowWithFee   = custom * 1.04;
-  const remaining    = Math.max(0, total - custom);
-  const totalEl     = document.getElementById('paypal-partial-total');
-  const nowEl       = document.getElementById('paypal-partial-now');
-  const remainingEl = document.getElementById('paypal-partial-remaining');
-  if (totalEl)     totalEl.textContent     = '$' + total.toFixed(2);
-  if (nowEl)       nowEl.textContent       = '$' + nowWithFee.toFixed(2);
-  if (remainingEl) remainingEl.textContent = '$' + remaining.toFixed(2);
-}
-
-// ── ZELLE PARTIAL PAYMENT ────────────────────────────
-function toggleZellePartial() {
-  const isPartial = document.getElementById('zelle-partial-toggle').checked;
-  document.getElementById('zelle-partial-section').style.display = isPartial ? 'block' : 'none';
-  if (isPartial) updateZellePartialDisplay();
-}
-
-function updateZellePartialDisplay() {
-  const total     = calcOrderTotal();
-  const customEl  = document.getElementById('zelle-custom-amount');
-  const custom    = parseFloat(customEl ? customEl.value : 0) || 0;
-  const remaining = Math.max(0, total - custom);
-  const zelleAmountEl = document.getElementById('zelle-amount');
-  if (zelleAmountEl) zelleAmountEl.textContent = custom > 0 ? '$' + custom.toFixed(2) : '$' + total.toFixed(2);
-  const totalEl     = document.getElementById('zelle-partial-total');
-  const nowEl       = document.getElementById('zelle-partial-now');
-  const remainingEl = document.getElementById('zelle-partial-remaining');
-  if (totalEl)     totalEl.textContent     = '$' + total.toFixed(2);
-  if (nowEl)       nowEl.textContent       = '$' + (custom > 0 ? custom : total).toFixed(2);
-  if (remainingEl) remainingEl.textContent = '$' + remaining.toFixed(2);
 }
 
 // ── PAYPAL ───────────────────────────────────────────
@@ -2196,15 +2115,10 @@ function renderPaypalButtons() {
       }
       sigErr.style.display = 'none';
       const total = calcOrderTotal();
-      const partialToggle = document.getElementById('paypal-partial-toggle');
-      const isPartial = partialToggle && partialToggle.checked;
-      const customAmountEl = document.getElementById('paypal-custom-amount');
-      const customAmount = isPartial ? (parseFloat(customAmountEl ? customAmountEl.value : 0) || 0) : 0;
-      const chargeAmount = (isPartial && customAmount > 0) ? customAmount * 1.04 : total * 1.04;
       return actions.order.create({
         purchase_units: [{
           description: 'FBI Apostille — ' + (formState.plan_label || 'US Authentication Services'),
-          amount: { currency_code: 'USD', value: chargeAmount.toFixed(2) }
+          amount: { currency_code: 'USD', value: (total * 1.04).toFixed(2) }
         }]
       });
     },
@@ -2214,18 +2128,11 @@ function renderPaypalButtons() {
       return actions.order.capture().then(function(details) {
         if (loadEl) loadEl.style.display = 'none';
         const capture = details.purchase_units[0].payments.captures[0];
-        const partialToggle2 = document.getElementById('paypal-partial-toggle');
-        const isPartial2 = partialToggle2 && partialToggle2.checked;
-        const customAmountEl2 = document.getElementById('paypal-custom-amount');
-        const customAmount2 = isPartial2 ? (parseFloat(customAmountEl2 ? customAmountEl2.value : 0) || 0) : 0;
         submitForm({
-          orderID:         data.orderID,
-          transactionID:   capture.id,
-          payerName:       (details.payer.name.given_name || '') + ' ' + (details.payer.name.surname || ''),
-          payerEmail:      details.payer.email_address || '',
-          paypalDue:       isPartial2 && customAmount2 > 0,
-          paypalPaidNow:   isPartial2 && customAmount2 > 0 ? customAmount2 : 0,
-          paypalDueAmount: isPartial2 && customAmount2 > 0 ? Math.max(0, calcOrderTotal() - customAmount2) : 0,
+          orderID:       data.orderID,
+          transactionID: capture.id,
+          payerName:     (details.payer.name.given_name || '') + ' ' + (details.payer.name.surname || ''),
+          payerEmail:    details.payer.email_address || '',
         });
       }).catch(function() {
         if (loadEl) loadEl.style.display = 'none';
@@ -2235,11 +2142,12 @@ function renderPaypalButtons() {
     },
     onError: function() {
       const errEl = document.getElementById('paypal-error');
-      if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'PayPal encountered an error. Please try again or use "Submit & Request Invoice" below.'; }
+      if (errEl) { errEl.style.display = 'block'; errEl.textContent = 'PayPal encountered an error. Please try again.'; }
     },
     onCancel: function() {}
   }).render('#paypal-button-container').catch(function(e) { console.warn('PayPal render:', e); });
 }
+
 
 // ── SUBMIT ───────────────────────────────────────────
 async function submitForm(paymentDetails = null) {
@@ -2282,12 +2190,14 @@ async function submitForm(paymentDetails = null) {
 
   docSlots.forEach((slot, i) => {
     if (slot.file) fd.append(`doc_${i+1}_file`, slot.file, slot.file.name);
-    fd.append(`doc_${i+1}_pages`,            slot.pages);
+    fd.append(`doc_${i+1}_pages`,              slot.pages);
+    fd.append(`doc_${i+1}_effective_pages`,    effectivePages(slot));
+    fd.append(`doc_${i+1}_has_cover_page`,     slot.has_cover_page === null ? '' : (slot.has_cover_page ? 'yes' : 'no'));
     fd.append(`doc_${i+1}_translate`,          slot.translate);
     fd.append(`doc_${i+1}_translation_language`, slot.translate ? (slot.translate_language || '') : '');
-    fd.append(`doc_${i+1}_scan`,             slot.scan);
-    fd.append(`doc_${i+1}_translation_cost`, slot.translate ? '$' + (60*(slot.pages+1)).toFixed(2) : '$0');
-    fd.append(`doc_${i+1}_scan_cost`,        slot.scan ? '$10' : '$0');
+    fd.append(`doc_${i+1}_scan`,               slot.scan);
+    fd.append(`doc_${i+1}_translation_cost`,   slot.translate ? '$' + (60*(effectivePages(slot)+1)).toFixed(2) : '$0');
+    fd.append(`doc_${i+1}_scan_cost`,          slot.scan ? '$10' : '$0');
   });
 
   fd.append('return_name',      formState.return_name);
@@ -2298,24 +2208,11 @@ async function submitForm(paymentDetails = null) {
   fd.append('return_postal',    formState.return_postal);
   fd.append('return_country',   formState.return_country);
   fd.append('return_phone',     (formState.return_phone_code ? formState.return_phone_code + ' ' : '') + formState.return_phone);
-  fd.append('return_mailing',   formState.return_mailing);
+  fd.append('no_shipping',               formState.no_shipping ? 'yes' : 'no');
+  fd.append('return_mailing',            formState.return_mailing);
   fd.append('fedex_signature',  formState.fedex_signature);
-  const ownLabelFile = document.getElementById('own_shipping_label_file');
-  if (ownLabelFile && ownLabelFile.files[0]) {
-    fd.append('own_shipping_label',          'yes');
-    fd.append('shipping_label_upload', ownLabelFile.files[0], ownLabelFile.files[0].name);
-  } else {
-    fd.append('own_shipping_label',     'no');
-    fd.append('shipping_label_upload',  '');
-  }
   const baseTotal = calcOrderTotal();
-  const isPaypalDue = paymentDetails && paymentDetails.paypalDue;
-  const isZelleDue2 = paymentDetails && paymentDetails.zelleDue;
-  let finalTotal;
-  if (isPaypalDue)                      finalTotal = paymentDetails.paypalPaidNow * 1.04;
-  else if (isZelleDue2)                 finalTotal = paymentDetails.zellePaidNow;
-  else if (formState.payment_method === 'paypal') finalTotal = baseTotal * 1.04;
-  else                                  finalTotal = baseTotal;
+  const finalTotal = formState.payment_method === 'paypal' ? baseTotal * 1.04 : baseTotal;
   fd.append('order_base_total',      '$' + baseTotal.toFixed(2));
   fd.append('order_total',           '$' + finalTotal.toFixed(2));
   fd.append('payment_method',        formState.payment_method);
@@ -2324,17 +2221,17 @@ async function submitForm(paymentDetails = null) {
   fd.append('paypal_payer',          formState.paypal_payer_name     || '');
   fd.append('paypal_payer_email',    formState.paypal_payer_email    || '');
   fd.append('zelle_payment_to',      isZelle ? 'info@usauthentication.com' : '');
-  fd.append('paypal_due',            isPaypalDue ? 'true' : 'false');
-  fd.append('paypal_paid_now',       isPaypalDue ? '$' + paymentDetails.paypalPaidNow.toFixed(2)   : '$0.00');
-  fd.append('paypal_due_amount',     isPaypalDue ? '$' + paymentDetails.paypalDueAmount.toFixed(2) : '$0.00');
-  fd.append('zelle_due',             isZelleDue2 ? 'true' : 'false');
-  fd.append('zelle_paid_now',        isZelleDue2 ? '$' + paymentDetails.zellePaidNow.toFixed(2)    : '$0.00');
-  fd.append('zelle_due_amount',      isZelleDue2 ? '$' + paymentDetails.zelleDueAmount.toFixed(2)  : '$0.00');
   fd.append('signature',             formState.signature);
   fd.append('signature_date',        formState.signature_date);
   fd.append('submitted_at',          formState.submitted_at);
 
-  const ref = 'ORD-' + Date.now().toString(36).toUpperCase();
+  const _ordSeq = (parseInt(localStorage.getItem('ord_seq') || '0', 10) + 1);
+  localStorage.setItem('ord_seq', _ordSeq);
+  const _now = new Date();
+  const _dd   = String(_now.getDate()).padStart(2, '0');
+  const _mm   = String(_now.getMonth() + 1).padStart(2, '0');
+  const _yyyy = _now.getFullYear();
+  const ref = 'ORD-' + String(_ordSeq).padStart(3, '0') + '-' + _dd + _mm + _yyyy;
   fd.append('order_ref', ref);
 
   try {
@@ -2358,7 +2255,7 @@ function resetForm() {
     else if (Array.isArray(formState[k])) formState[k] = [];
     else formState[k] = '';
   });
-  docSlots = [{ file: null, pages: 0, translate: false, scan: false, translate_language: '' }];
+  docSlots = [{ file: null, pages: 0, translate: false, scan: false, translate_language: '', has_cover_page: null }];
   document.getElementById('doc-count-display').textContent = '1';
   document.getElementById('plan-subtotal-display').textContent = '—';
   document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="date"], textarea')
@@ -2370,12 +2267,11 @@ function resetForm() {
   if (phoneErr) phoneErr.classList.remove('show');
   document.querySelectorAll('input[type="radio"], input[type="checkbox"]')
     .forEach(el => el.checked = false);
+  toggleNoShipping(false);
   const returnPhoneWrap = document.getElementById('return-phone-wrap');
   if (returnPhoneWrap) returnPhoneWrap.classList.remove('error');
   const returnPhoneErr = document.getElementById('return-phone-err');
   if (returnPhoneErr) returnPhoneErr.classList.remove('show');
-  const sigRow = document.getElementById('sig-required-row');
-  if (sigRow) sigRow.style.display = 'none';
   document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
   document.getElementById('plan-err').classList.remove('show');
   clearSignaturePad();
