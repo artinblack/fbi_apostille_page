@@ -8,6 +8,7 @@ const PORT = 3000;
 
 const MIME = {
   '.html': 'text/html',
+  '.php':  'text/html',
   '.css':  'text/css',
   '.js':   'application/javascript',
   '.mjs':  'application/javascript',
@@ -23,7 +24,7 @@ const MIME = {
 };
 
 http.createServer((req, res) => {
-  let urlPath = req.url.split('?')[0];
+  let urlPath = decodeURIComponent(req.url.split('?')[0]);
   if (urlPath === '/') urlPath = '/index.php';
   const filePath = path.join(__dirname, urlPath);
   const ext = path.extname(filePath).toLowerCase();
