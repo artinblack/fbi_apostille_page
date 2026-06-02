@@ -23,7 +23,7 @@
   --bg:         #f4f7fb;
   --white:      #ffffff;
   --radius:     10px;
-  --font-display: 'Playfair Display', Georgia, serif;
+  --font-display: 'Franklin Gothic Medium','Franklin Gothic','ITC Franklin Gothic',Arial,sans-serif;
   --font-body:    'DM Sans', sans-serif;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -97,21 +97,21 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 @media(min-width:560px){ .step-label { display: block; } }
 
 /* ── FORM BODY ── */
-.form-outer { padding: 2.5rem 5% 4rem; }
-.panel { display: none; animation: fadeUp .3s ease; max-width: 1200px; margin: 0 auto; }
+.form-outer { padding: 2.5rem 3% 4rem; }
+.panel { display: none; animation: fadeUp .3s ease; max-width: 1500px; margin: 0 auto; }
 .panel.active { display: block; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-.panel-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 2rem 2.5rem; }
+.panel-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 2.2rem 3rem; }
 
 /* ── PANEL TITLE ── */
 .panel-title {
   font-family: var(--font-display);
-  font-size: 1.4rem; color: var(--navy);
+  font-size: 1.7rem; color: var(--navy);
   border-bottom: 2px solid var(--navy-light);
   padding-bottom: .6rem; margin-bottom: 1.75rem;
   font-weight: 500; display: flex; align-items: baseline; gap: 10px;
 }
-.panel-title span { font-family: var(--font-body); font-size: 11px; font-weight: 600; color: var(--text-muted); background: var(--bg); padding: 3px 9px; border-radius: 20px; border: 1px solid var(--border); }
+.panel-title span { font-family: var(--font-body); font-size: 13px; font-weight: 600; color: var(--text-muted); background: var(--bg); padding: 3px 9px; border-radius: 20px; border: 1px solid var(--border); }
 
 /* ── FIELDS ── */
 .field-row { display: grid; gap: 14px; margin-bottom: 14px; }
@@ -119,11 +119,11 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 .field-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
 .field-row.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
 .field { display: flex; flex-direction: column; gap: 5px; }
-.field label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; }
+.field label { font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; }
 .field label .req { color: var(--red); margin-left: 2px; }
 .field input, .field select, .field textarea {
   border: 1.5px solid var(--border); border-radius: var(--radius);
-  padding: 9px 12px; font-size: .9rem; font-family: var(--font-body);
+  padding: 11px 14px; font-size: 1rem; font-family: var(--font-body);
   color: var(--text); background: white; transition: border-color .2s, box-shadow .2s;
 }
 .field textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
@@ -141,15 +141,15 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 .svc-card:hover { border-color: var(--navy); background: var(--navy-light); }
 .svc-card.selected { border-color: var(--navy); background: var(--navy-light); }
 .svc-card input[type="radio"] { position: absolute; opacity: 0; }
-.svc-card-title { font-size: 13.5px; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
-.svc-card-desc { font-size: 11.5px; color: var(--text-muted); line-height: 1.5; }
-.svc-card-badge { display: inline-block; margin-top: 6px; font-size: 10.5px; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
+.svc-card-title { font-size: 15.5px; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+.svc-card-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+.svc-card-badge { display: inline-block; margin-top: 6px; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
 .svc-card-badge.green { background: var(--green-light); color: var(--green); }
 .svc-card-badge.orange { background: rgba(249,115,22,.1); color: var(--orange-dk); }
 
 /* ── DOC COUNT ── */
 .doc-count-bar { display: flex; align-items: center; gap: 14px; background: var(--navy-light); border-radius: var(--radius); padding: .9rem 1.2rem; margin-bottom: 1.4rem; border: 1px solid rgba(4,44,83,.1); }
-.doc-count-bar label { font-size: .9rem; font-weight: 500; color: var(--navy); flex: 1; }
+.doc-count-bar label { font-size: 1.05rem; font-weight: 500; color: var(--navy); flex: 1; }
 .count-controls { display: flex; align-items: center; border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; background: white; }
 .count-btn { width: 36px; height: 36px; border: none; background: white; color: var(--navy); font-size: 1.2rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .15s; }
 .count-btn:hover { background: var(--navy-light); }
@@ -162,7 +162,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 .doc-card-header { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; padding: 10px 16px; background: var(--bg); border-bottom: 1px solid var(--border); }
 .doc-card-num { display: flex; align-items: center; gap: 8px; }
 .slot-badge { width: 26px; height: 26px; background: var(--navy); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
-.doc-card-label { font-size: 13px; font-weight: 600; color: var(--text); }
+.doc-card-label { font-size: 15px; font-weight: 600; color: var(--text); }
 .doc-price-badge { background: var(--navy); color: white; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; white-space: nowrap; min-width: 52px; text-align: center; }
 .doc-price-badge.tbd { background: rgba(107,118,148,.45); }
 .doc-card-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
@@ -172,10 +172,13 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 .upload-box { border: 1.5px dashed var(--border); border-radius: 8px; padding: 12px 14px; background: white; display: flex; align-items: center; gap: 10px; cursor: pointer; transition: border-color .2s, background .2s; position: relative; overflow: hidden; }
 .upload-box:hover { border-color: var(--navy); background: var(--navy-light); }
 .upload-box.has-file { border-color: var(--green); border-style: solid; background: var(--green-light); }
+.upload-box.missing-file { border-color: var(--red); border-style: dashed; background: rgba(217,64,64,.04); }
+.upload-err-msg { font-size: 11px; color: var(--red); margin-top: 5px; display: none; }
+.upload-err-msg.show { display: block; }
 .upload-box input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; z-index: 2; }
 .upload-icon svg { width: 22px; height: 22px; flex-shrink: 0; }
-.upload-text .up-primary { font-size: 12.5px; font-weight: 500; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 220px; }
-.upload-text .up-secondary { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+.upload-text .up-primary { font-size: 14.5px; font-weight: 500; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 260px; }
+.upload-text .up-secondary { font-size: 12.5px; color: var(--text-muted); margin-top: 1px; }
 .check-icon { display: none; width: 22px; height: 22px; background: var(--green); border-radius: 50%; align-items: center; justify-content: center; flex-shrink: 0; margin-left: auto; }
 .upload-box.has-file .check-icon { display: flex; }
 
@@ -186,9 +189,9 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 .doc-check:hover { border-color: var(--navy); background: var(--navy-light); }
 .doc-check input[type="checkbox"] { accent-color: var(--navy); width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; }
 .check-info { display: flex; flex-direction: column; gap: 2px; }
-.check-title { font-size: 12.5px; font-weight: 600; color: var(--text); }
-.check-price-line { font-size: 11px; color: var(--text-muted); }
-.check-price-computed { font-size: 11.5px; font-weight: 700; color: var(--green); }
+.check-title { font-size: 14.5px; font-weight: 600; color: var(--text); }
+.check-price-line { font-size: 13px; color: var(--text-muted); }
+.check-price-computed { font-size: 13.5px; font-weight: 700; color: var(--green); }
 
 /* ── DOC SUBTOTAL ── */
 .doc-subtotal-bar { background: var(--navy); color: white; border-radius: 10px; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; }
@@ -202,7 +205,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 .mailing-grid { display: grid; grid-template-columns: 1fr 280px; gap: 2rem; align-items: start; }
 .mailing-sidebar { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem; }
 .mailing-sidebar .card-title { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; text-align: center; margin-bottom: 12px; }
-.mail-opt { display: flex; align-items: center; gap: 9px; font-size: 13px; color: var(--text); cursor: pointer; margin-bottom: 8px; padding: 8px 10px; border-radius: 8px; transition: background .15s; }
+.mail-opt { display: flex; align-items: center; gap: 9px; font-size: 15px; color: var(--text); cursor: pointer; margin-bottom: 8px; padding: 8px 10px; border-radius: 8px; transition: background .15s; }
 .mail-opt:hover { background: var(--navy-light); }
 .mail-opt input[type="radio"], .mail-opt input[type="checkbox"] { accent-color: var(--navy); flex-shrink: 0; }
 .sig-required-row { background: var(--navy-light); border-radius: 8px; padding: 8px 10px 4px; border: 1px solid rgba(4,44,83,.12); margin: 2px 0 6px 0; }
@@ -213,15 +216,15 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 /* ── ORDER SUMMARY ── */
 .order-summary { background: var(--navy-light); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem 1.4rem; margin-top: 1.4rem; }
 .order-summary .os-title { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 10px; }
-.os-line { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
-.os-line.total { font-size: 15px; font-weight: 700; color: var(--navy); border-top: 1px solid var(--border); padding-top: 8px; margin-top: 8px; }
+.os-line { display: flex; justify-content: space-between; font-size: 15px; color: var(--text-muted); margin-bottom: 6px; }
+.os-line.total { font-size: 17px; font-weight: 700; color: var(--navy); border-top: 1px solid var(--border); padding-top: 8px; margin-top: 8px; }
 
 /* ── REVIEW STEP ── */
 .review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 1.5rem; }
 .review-block { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 14px 18px; }
 .review-block-title { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
 .review-block-title .edit-link { margin-left: auto; font-size: 11px; font-weight: 600; color: var(--navy); cursor: pointer; text-transform: none; letter-spacing: 0; text-decoration: underline; text-underline-offset: 2px; }
-.review-row { display: flex; justify-content: space-between; font-size: 12.5px; margin-bottom: 5px; gap: 12px; }
+.review-row { display: flex; justify-content: space-between; font-size: 14.5px; margin-bottom: 5px; gap: 12px; }
 .review-row .label { color: var(--text-muted); flex-shrink: 0; }
 .review-row .value { color: var(--text); font-weight: 500; text-align: right; }
 .review-total-bar { background: var(--navy); color: white; border-radius: 10px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
@@ -229,7 +232,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 .review-total-bar .rt-amount { font-family: var(--font-display); font-size: 1.8rem; font-weight: 600; }
 
 /* ── SIGNATURE ── */
-.auth-block { background: var(--navy-light); border-left: 3px solid var(--navy); border-radius: 0 var(--radius) var(--radius) 0; padding: 1rem 1.2rem; font-size: 12.5px; color: var(--text-muted); line-height: 1.75; margin-bottom: 1.4rem; font-style: italic; }
+.auth-block { background: var(--navy-light); border-left: 3px solid var(--navy); border-radius: 0 var(--radius) var(--radius) 0; padding: 1rem 1.2rem; font-size: 14.5px; color: var(--text-muted); line-height: 1.75; margin-bottom: 1.4rem; font-style: italic; }
 .sign-row { display: grid; grid-template-columns: 1fr 200px; gap: 16px; align-items: start; }
 .sign-line label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .07em; display: block; margin-bottom: 8px; }
 .sign-line input { border: none; border-bottom: 2px solid var(--navy); border-radius: 0; padding: 7px 2px; font-size: 1.05rem; font-family: var(--font-display); width: 100%; background: transparent; color: var(--text); }
@@ -282,6 +285,71 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 .btn-zelle-submit:disabled { background: #bbb; box-shadow: none; cursor: not-allowed; transform: none; }
 .zelle-loading { display: none; align-items: center; justify-content: center; gap: 8px; padding: 10px; font-size: 13px; color: var(--text-muted); margin-top: 6px; }
 .zelle-error { background: rgba(217,64,64,.07); border: 1px solid rgba(217,64,64,.25); border-radius: 8px; padding: 10px 14px; font-size: 12.5px; color: var(--red); margin-top: 10px; }
+.zelle-expand-btn { display: inline-flex; align-items: center; gap: 6px; border: none; background: transparent; color: #6D1ED4; font-size: 11px; font-weight: 700; font-family: var(--font-body); cursor: pointer; padding: 0; margin-top: 6px; letter-spacing: .04em; text-transform: uppercase; transition: opacity .15s; }
+.zelle-expand-btn:hover { opacity: .7; }
+.zelle-expand-btn svg { transition: transform .2s; }
+.zelle-expand-btn:hover svg { transform: scale(1.15); }
+
+/* ── QR MODAL ── */
+.zelle-qr-modal-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(4,4,20,.72);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  opacity: 0; pointer-events: none;
+  transition: opacity .35s cubic-bezier(.4,0,.2,1);
+}
+.zelle-qr-modal-overlay.open { opacity: 1; pointer-events: all; }
+.zelle-qr-modal {
+  position: relative;
+  background: #fff;
+  border-radius: 24px;
+  padding: 2.8rem 2.5rem 2.2rem;
+  max-width: 400px; width: 90%;
+  display: flex; flex-direction: column; align-items: center; gap: 1.2rem;
+  box-shadow: 0 32px 80px rgba(109,30,212,.35), 0 8px 24px rgba(0,0,0,.18);
+  transform: translateY(28px) scale(.95);
+  transition: transform .4s cubic-bezier(.34,1.56,.64,1), opacity .35s ease;
+  opacity: 0;
+}
+.zelle-qr-modal-overlay.open .zelle-qr-modal { transform: translateY(0) scale(1); opacity: 1; }
+.zelle-qr-modal-glow {
+  position: absolute; inset: -2px; border-radius: 26px; z-index: -1;
+  background: linear-gradient(135deg,#6D1ED4,#4C0BFF,#b04eff);
+  opacity: .18; filter: blur(18px);
+  animation: zelleGlowPulse 3s ease-in-out infinite;
+}
+@keyframes zelleGlowPulse { 0%,100%{opacity:.18;} 50%{opacity:.32;} }
+.zelle-modal-logo { display: flex; align-items: center; gap: 8px; margin-bottom: .2rem; }
+.zelle-modal-icon { width: 38px; height: 38px; background: linear-gradient(135deg,#6D1ED4,#4C0BFF); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 19px; font-weight: 900; font-family: var(--font-display); box-shadow: 0 4px 14px rgba(109,30,212,.4); }
+.zelle-modal-wordname { font-size: 26px; font-weight: 800; color: #6D1ED4; letter-spacing: -.04em; }
+.zelle-modal-subtitle { font-size: 13px; color: var(--text-muted); font-weight: 500; text-align: center; }
+.zelle-modal-qr-frame {
+  background: linear-gradient(135deg,#6D1ED4 0%,#4C0BFF 100%);
+  border-radius: 20px; padding: 14px;
+  box-shadow: 0 12px 40px rgba(109,30,212,.38);
+  animation: zelleQrFloat 4s ease-in-out infinite;
+}
+@keyframes zelleQrFloat { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-6px);} }
+.zelle-modal-qr-inner { background: white; border-radius: 10px; padding: 10px; }
+.zelle-modal-qr-img { width: 220px; height: 220px; object-fit: contain; display: block; border-radius: 6px; }
+.zelle-modal-email-row { display: flex; align-items: center; gap: 10px; background: rgba(109,30,212,.06); border: 1px solid rgba(109,30,212,.18); border-radius: 10px; padding: 10px 14px; width: 100%; }
+.zelle-modal-email-text { font-size: 14px; font-weight: 600; color: #6D1ED4; flex: 1; word-break: break-all; }
+.zelle-modal-copy-btn { border: 1px solid rgba(109,30,212,.3); background: white; color: #6D1ED4; border-radius: 6px; padding: 5px 13px; font-size: 12px; font-weight: 700; font-family: var(--font-body); cursor: pointer; white-space: nowrap; transition: background .15s, transform .1s; flex-shrink: 0; }
+.zelle-modal-copy-btn:hover { background: rgba(109,30,212,.1); }
+.zelle-modal-copy-btn:active { transform: scale(.95); }
+.zelle-modal-note { font-size: 11.5px; color: var(--text-muted); text-align: center; line-height: 1.6; max-width: 300px; }
+.zelle-modal-close {
+  position: absolute; top: 14px; right: 14px;
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid var(--border); background: white;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--text-muted);
+  transition: background .15s, color .15s, transform .15s;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+.zelle-modal-close:hover { background: #6D1ED4; color: white; transform: rotate(90deg); border-color: #6D1ED4; }
 
 /* ── NAV BUTTONS ── */
 .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
@@ -720,10 +788,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
           <hr class="plan-div"/>
           <ul class="plan-features">
             <li><span class="plan-check">✓</span> All government fees included</li>
-            <li><span class="plan-check">✓</span> Free document pre-screening</li>
-            <li><span class="plan-check">✓</span> PDF upload online</li>
             <li><span class="plan-check">✓</span> Email confirmation</li>
-            <li><span class="plan-check">✓</span> FedEx shipping available globally</li>
             <li><span class="plan-cross">✗</span> Digital copy emailed</li>
           </ul>
         </label>
@@ -738,10 +803,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
           <hr class="plan-div"/>
           <ul class="plan-features">
             <li><span class="plan-check">✓</span> All government fees included</li>
-            <li><span class="plan-check">✓</span> Free document pre-screening</li>
-            <li><span class="plan-check">✓</span> PDF upload online</li>
             <li><span class="plan-check">✓</span> Email confirmation</li>
-            <li><span class="plan-check">✓</span> FedEx shipping available globally</li>
             <li><span class="plan-cross">✗</span> Digital copy emailed</li>
           </ul>
         </label>
@@ -756,10 +818,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
           <hr class="plan-div"/>
           <ul class="plan-features">
             <li><span class="plan-check">✓</span> All government fees included</li>
-            <li><span class="plan-check">✓</span> Free document pre-screening</li>
-            <li><span class="plan-check">✓</span> PDF upload online</li>
             <li><span class="plan-check">✓</span> Email confirmation</li>
-            <li><span class="plan-check">✓</span> FedEx shipping available globally</li>
             <li><span class="plan-check">✓</span> Digital copy emailed</li>
           </ul>
         </label>
@@ -773,7 +832,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
         <span class="sub-amount" id="plan-subtotal-display">—</span>
       </div>
 
-      <p style="font-size:11px;color:var(--text-muted);margin-top:.6rem">* Fridays are not counted as a working day at the US Dept. of State <strong>(Express and Standard options)</strong></p>
+      <p style="font-size:18px;font-weight:700;color:var(--text-muted);margin-top:.6rem">* Fridays are not counted as a working day at the US Dept. of State <strong>(Express and Standard options)</strong></p>
 
       <div class="nav-row">
         <button class="btn-back" onclick="goBack(2)">← Back</button>
@@ -960,8 +1019,9 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
         <div>
           <div class="field-row cols-2">
             <div class="field">
-              <label>Full Name</label>
-              <input type="text" id="return_name" placeholder="Jane Doe"/>
+              <label>Full Name <span class="req">*</span></label>
+              <input type="text" id="return_name" placeholder="Jane Doe" oninput="clearErr(this)"/>
+              <span class="err-msg">Full name is required</span>
             </div>
             <div class="field">
               <label>Company (optional)</label>
@@ -970,28 +1030,33 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
           </div>
           <div class="field-row">
             <div class="field">
-              <label>Street Address</label>
-              <textarea id="return_address" placeholder="123 Main St, Apt 4B" rows="2" style="min-height:unset;line-height:1.5;"></textarea>
+              <label>Street Address <span class="req">*</span></label>
+              <textarea id="return_address" placeholder="123 Main St, Apt 4B" rows="2" style="min-height:unset;line-height:1.5;" oninput="clearErr(this)"></textarea>
+              <span class="err-msg">Street address is required</span>
             </div>
           </div>
           <div class="field-row cols-3">
             <div class="field">
-              <label>City</label>
-              <input type="text" id="return_city" placeholder="Springfield"/>
+              <label>City <span class="req">*</span></label>
+              <input type="text" id="return_city" placeholder="Springfield" oninput="clearErr(this)"/>
+              <span class="err-msg">City is required</span>
             </div>
             <div class="field">
-              <label>State / Province</label>
-              <input type="text" id="return_state" placeholder="VA"/>
+              <label>State / Province <span class="req">*</span></label>
+              <input type="text" id="return_state" placeholder="VA" oninput="clearErr(this)"/>
+              <span class="err-msg">State is required</span>
             </div>
             <div class="field">
-              <label>Postal Code</label>
-              <input type="text" id="return_postal" placeholder="22150"/>
+              <label>Postal Code <span class="req">*</span></label>
+              <input type="text" id="return_postal" placeholder="22150" oninput="clearErr(this)"/>
+              <span class="err-msg">Postal code is required</span>
             </div>
           </div>
           <div class="field-row cols-2">
             <div class="field">
-              <label>Country</label>
-              <input type="text" id="return_country" placeholder="USA"/>
+              <label>Country <span class="req">*</span></label>
+              <input type="text" id="return_country" placeholder="USA" oninput="clearErr(this)"/>
+              <span class="err-msg">Country is required</span>
             </div>
             <div class="field">
               <label>Contact Phone</label>
@@ -1202,12 +1267,13 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
           <div class="card-title">Select Return Shipping</div>
           <label class="mail-opt">
             <input type="checkbox" id="chk_fedex_domestic" value="fedex_domestic" onchange="selectShipping(this)"/>
-            FEDEX US Domestic — $35
+            FEDEX US Domestic
           </label>
           <label class="mail-opt">
             <input type="checkbox" id="chk_fedex_international" value="fedex_international" onchange="selectShipping(this)"/>
-            FedEx International — $85
+            FedEx International
           </label>
+          <div id="shipping-err" style="display:none;font-size:11px;color:var(--red);margin:4px 2px 2px;">Please select a shipping option or choose &ldquo;I do not require my document to be shipped&rdquo;.</div>
           <div class="hr-div"></div>
           <div class="grand-total-bar">
             <span>Order Total</span>
@@ -1356,8 +1422,28 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
           </div>
           <div class="zelle-qr-wrap">
             <div class="zelle-qr-label">Scan to Pay</div>
-            <img src="brand_assets/zelle_qr2.png" alt="Zelle QR Code" class="zelle-qr-img"/>
+            <img src="brand_assets/zelle_qr2.png" alt="Zelle QR Code" class="zelle-qr-img" onclick="openZelleQrModal()" style="cursor:zoom-in;transition:transform .2s,box-shadow .2s;" onmouseover="this.style.transform='scale(1.07)';this.style.boxShadow='0 4px 18px rgba(109,30,212,.3)'" onmouseout="this.style.transform='';this.style.boxShadow=''" title="Click to expand"/>
+            <button class="zelle-expand-btn" onclick="openZelleQrModal()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+              Click to Expand
+            </button>
           </div>
+        </div>
+
+        <div style="margin-bottom:1rem;">
+          <label style="display:block;font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;">
+            Payer's Zelle Email / Phone
+            <span style="color:var(--red);margin-left:2px;">*</span>
+          </label>
+          <input
+            type="text"
+            id="zelle-payer-email"
+            placeholder="e.g. john@gmail.com or +1 (555) 000-0000"
+            style="width:100%;border:1.5px solid rgba(109,30,212,.3);border-radius:8px;padding:10px 14px;font-size:.95rem;font-family:var(--font-body);color:var(--text);background:white;outline:none;transition:border-color .2s,box-shadow .2s;"
+            onfocus="this.style.borderColor='#6D1ED4';this.style.boxShadow='0 0 0 3px rgba(109,30,212,.1)'"
+            onblur="this.style.borderColor='rgba(109,30,212,.3)';this.style.boxShadow='none'"
+          />
+          <div id="zelle-payer-email-err" style="font-size:11px;color:var(--red);margin-top:4px;display:none;">Please enter the email or phone number registered with your Zelle account.</div>
         </div>
 
         <button class="btn-zelle-submit" id="zelle-submit-btn" onclick="submitViaZelle()">
@@ -1545,6 +1631,8 @@ function toggleNoShipping(checked) {
   }
   if (checked) {
     document.querySelectorAll('#chk_fedex_domestic, #chk_fedex_international').forEach(el => el.checked = false);
+    const shippingErr = document.getElementById('shipping-err');
+    if (shippingErr) shippingErr.style.display = 'none';
   }
   calcOrderTotal();
 }
@@ -1553,6 +1641,8 @@ function selectShipping(checkbox) {
   document.querySelectorAll('#chk_fedex_domestic, #chk_fedex_international').forEach(el => {
     if (el !== checkbox) el.checked = false;
   });
+  const shippingErr = document.getElementById('shipping-err');
+  if (shippingErr) shippingErr.style.display = 'none';
   calcOrderTotal();
 }
 
@@ -1600,7 +1690,7 @@ function renderDocCards() {
       <div class="doc-card-body">
         <div class="upload-zone">
           <div class="upload-box ${slot.file ? 'has-file' : ''}" id="upload-box-${i}">
-            <input type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" onchange="handleFileUpload(${i}, this.files[0])"/>
+            <input type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" onchange="handleFileUpload(${i}, this.files[0])" required/>
             <div class="upload-icon">
               ${slot.file
                 ? '<svg viewBox="0 0 24 24" fill="none" stroke="#1a9e75" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'
@@ -1613,6 +1703,7 @@ function renderDocCards() {
             </div>
             ${slot.file ? `<div class="check-icon"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 4.5 8.5 10 3"/></svg></div>` : ''}
           </div>
+          <div class="upload-err-msg" id="upload-err-${i}">A file is required for Document ${i + 1}.</div>
         </div>
         <div class="doc-options">
           <div style="font-size:9.5px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em;padding-bottom:6px;border-bottom:1px solid var(--border);margin-bottom:4px;">ADD-ON Services</div>
@@ -1623,6 +1714,7 @@ function renderDocCards() {
                 <div class="check-title">Translation</div>
                 <div style="font-size:10px;color:var(--text-muted);margin-top:2px;line-height:1.4;">We use American Translation Association (ATA) certified translators</div>
                 <div style="font-size:10px;color:var(--text-muted);margin-top:2px;line-height:1.4;font-style:italic;">Please note: The translation includes an additional page of translation for the apostille page.</div>
+                <div style="font-size:10px;color:var(--navy);margin-top:4px;line-height:1.4;font-weight:600;">⏱ Translation adds 2–3 business days to processing.</div>
                 <div class="check-price-line" style="margin-top:3px;">$60 × (pages + 1) per document</div>
                 ${slot.translate ? `<div class="check-price-computed">${translationLabel}</div>` : ''}
               </div>
@@ -1643,8 +1735,9 @@ function renderDocCards() {
               </div>
               ${slot.translate ? `
               <div>
-                <label style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:5px;">Translation Language</label>
-                <input type="text" placeholder="e.g. Spanish, French, Arabic…" value="${slot.translate_language || ''}" oninput="setTranslateLanguage(${i}, this.value)" style="border:1.5px solid var(--border);border-radius:8px;padding:7px 10px;font-size:.85rem;font-family:var(--font-body);color:var(--text);width:100%;background:white;outline:none;" onfocus="this.style.borderColor='var(--navy)'" onblur="this.style.borderColor='var(--border)'"/>
+                <label style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:5px;">Translation Language <span style="color:var(--red)">*</span></label>
+                <input type="text" id="translate-lang-${i}" placeholder="e.g. Spanish, French, Arabic…" value="${slot.translate_language || ''}" oninput="setTranslateLanguage(${i}, this.value)" style="border:1.5px solid var(--border);border-radius:8px;padding:7px 10px;font-size:.85rem;font-family:var(--font-body);color:var(--text);width:100%;background:white;outline:none;" onfocus="this.style.borderColor='var(--navy)'" onblur="this.style.borderColor='var(--border)'"/>
+                <div class="upload-err-msg" id="translate-lang-err-${i}">Please enter the target translation language.</div>
               </div>` : ''}
             </div>
             ${showScan ? `
@@ -1668,6 +1761,10 @@ function renderDocCards() {
 function handleFileUpload(index, file) {
   if (!file) return;
   docSlots[index].file = file;
+  const box = document.getElementById('upload-box-' + index);
+  if (box) box.classList.remove('missing-file');
+  const errEl = document.getElementById('upload-err-' + index);
+  if (errEl) errEl.classList.remove('show');
 
   if (file.type === 'application/pdf') {
     const reader = new FileReader();
@@ -1702,6 +1799,12 @@ function setCoverPage(index, hasCoverPage) {
 
 function setTranslateLanguage(index, value) {
   docSlots[index].translate_language = value;
+  if (value.trim()) {
+    const input = document.getElementById('translate-lang-' + index);
+    if (input) input.style.borderColor = 'var(--border)';
+    const errEl = document.getElementById('translate-lang-err-' + index);
+    if (errEl) errEl.classList.remove('show');
+  }
 }
 
 function effectivePages(slot) {
@@ -1926,11 +2029,77 @@ function goNext(step) {
     calcOrderTotal();
   }
   if (step === 3) {
+    let allHaveFiles = true;
+    let firstMissingIdx = -1;
+    docSlots.forEach((slot, i) => {
+      if (!slot.file) {
+        allHaveFiles = false;
+        if (firstMissingIdx === -1) firstMissingIdx = i;
+        const box = document.getElementById('upload-box-' + i);
+        if (box) box.classList.add('missing-file');
+        const errEl = document.getElementById('upload-err-' + i);
+        if (errEl) errEl.classList.add('show');
+      }
+    });
+    let allHaveLang = true;
+    let firstMissingLangIdx = -1;
+    docSlots.forEach((slot, i) => {
+      if (slot.translate && !slot.translate_language.trim()) {
+        allHaveLang = false;
+        if (firstMissingLangIdx === -1) firstMissingLangIdx = i;
+        const input = document.getElementById('translate-lang-' + i);
+        if (input) input.style.borderColor = 'var(--red)';
+        const errEl = document.getElementById('translate-lang-err-' + i);
+        if (errEl) errEl.classList.add('show');
+      }
+    });
     const destOk = vField('destination_country', req);
-    if (!destOk) return;
+    if (!allHaveFiles || !allHaveLang || !destOk) {
+      if (firstMissingIdx !== -1) {
+        const firstBox = document.getElementById('upload-box-' + firstMissingIdx);
+        if (firstBox) firstBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (firstMissingLangIdx !== -1) {
+        const firstLang = document.getElementById('translate-lang-' + firstMissingLangIdx);
+        if (firstLang) firstLang.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
+    }
     collectStep3();
   }
   if (step === 4) {
+    const noShipCb  = document.getElementById('chk_no_shipping');
+    const domCb     = document.getElementById('chk_fedex_domestic');
+    const intlCb    = document.getElementById('chk_fedex_international');
+    const noShip    = noShipCb && noShipCb.checked;
+    const hasShipping = (domCb && domCb.checked) || (intlCb && intlCb.checked);
+    const shippingOk  = noShip || hasShipping;
+    const shippingErr = document.getElementById('shipping-err');
+
+    let addressOk = true;
+    if (hasShipping) {
+      addressOk = [
+        vField('return_name',    req),
+        vField('return_address', req),
+        vField('return_city',    req),
+        vField('return_state',   req),
+        vField('return_postal',  req),
+        vField('return_country', req),
+      ].every(Boolean);
+    }
+
+    if (!shippingOk) {
+      if (shippingErr) shippingErr.style.display = 'block';
+      if (shippingErr) shippingErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    if (shippingErr) shippingErr.style.display = 'none';
+
+    if (!addressOk) {
+      const firstErr = document.querySelector('#return_name.error, #return_address.error, #return_city.error, #return_state.error, #return_postal.error, #return_country.error');
+      if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
     collectStep4();
     buildReviewPanel();
   }
@@ -2014,8 +2183,8 @@ function buildReviewPanel() {
   if (rt) rt.textContent = '$' + total.toFixed(2);
 
   const mailingLabels = {
-    fedex_domestic:      'FEDEX US Domestic ($35)',
-    fedex_international: 'FedEx International ($85)',
+    fedex_domestic:      'FEDEX US Domestic',
+    fedex_international: 'FedEx International',
     no_shipping:         'No shipping — scanned copy only',
   };
 
@@ -2073,6 +2242,19 @@ function submitViaZelle() {
     return;
   }
   sigErr.style.display = 'none';
+
+  const payerEmailInput = document.getElementById('zelle-payer-email');
+  const payerEmailErr   = document.getElementById('zelle-payer-email-err');
+  const payerEmail = payerEmailInput ? payerEmailInput.value.trim() : '';
+  if (!payerEmail) {
+    payerEmailErr.style.display = 'block';
+    payerEmailInput.style.borderColor = 'var(--red)';
+    payerEmailInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  payerEmailErr.style.display = 'none';
+  payerEmailInput.style.borderColor = 'rgba(109,30,212,.3)';
+
   submitForm({ method: 'zelle' });
 }
 
@@ -2173,57 +2355,102 @@ async function submitForm(paymentDetails = null) {
   if (loadEl) loadEl.style.display = 'flex';
 
   const fd = new FormData();
+
+  // ── CUSTOMER INFO ──
   fd.append('first_name',  formState.first_name);
   fd.append('last_name',   formState.last_name);
   fd.append('email',       formState.email);
   fd.append('phone_code',  formState.phone_code);
-  fd.append('phone',       formState.phone_code + ' ' + formState.phone);
+  fd.append('phone_number', formState.phone);
+  fd.append('phone',       (formState.phone_code ? formState.phone_code + ' ' : '') + formState.phone);
 
+  // ── PLAN ──
   fd.append('selected_plan', formState.selected_plan);
   fd.append('plan_label',    formState.plan_label);
-  fd.append('plan_price',    '$' + formState.plan_price);
+  fd.append('plan_price',    formState.plan_price ? '$' + formState.plan_price : '');
   fd.append('doc_count',     formState.doc_count);
   fd.append('plan_subtotal', '$' + getPlanSubtotal().toFixed(2));
 
+  // ── DOCUMENTS ──
   fd.append('destination_country', formState.destination_country);
   fd.append('doc_subtotal',        '$' + formState.doc_subtotal.toFixed(2));
 
   docSlots.forEach((slot, i) => {
-    if (slot.file) fd.append(`doc_${i+1}_file`, slot.file, slot.file.name);
-    fd.append(`doc_${i+1}_pages`,              slot.pages);
-    fd.append(`doc_${i+1}_effective_pages`,    effectivePages(slot));
-    fd.append(`doc_${i+1}_has_cover_page`,     slot.has_cover_page === null ? '' : (slot.has_cover_page ? 'yes' : 'no'));
-    fd.append(`doc_${i+1}_translate`,          slot.translate);
-    fd.append(`doc_${i+1}_translation_language`, slot.translate ? (slot.translate_language || '') : '');
-    fd.append(`doc_${i+1}_scan`,               slot.scan);
-    fd.append(`doc_${i+1}_translation_cost`,   slot.translate ? '$' + (60*(effectivePages(slot)+1)).toFixed(2) : '$0');
-    fd.append(`doc_${i+1}_scan_cost`,          slot.scan ? '$10' : '$0');
+    const n = i + 1;
+    if (slot.file) {
+      fd.append(`doc_${n}_file`,      slot.file, slot.file.name);
+      fd.append(`doc_${n}_file_name`, slot.file.name);
+      fd.append(`doc_${n}_file_size`, slot.file.size + ' bytes');
+      fd.append(`doc_${n}_file_type`, slot.file.type || '');
+    } else {
+      fd.append(`doc_${n}_file`,      '');
+      fd.append(`doc_${n}_file_name`, '');
+      fd.append(`doc_${n}_file_size`, '');
+      fd.append(`doc_${n}_file_type`, '');
+    }
+    fd.append(`doc_${n}_pages`,               slot.pages || 0);
+    fd.append(`doc_${n}_effective_pages`,     effectivePages(slot));
+    fd.append(`doc_${n}_has_cover_page`,      slot.has_cover_page === null ? 'not answered' : (slot.has_cover_page ? 'yes' : 'no'));
+    fd.append(`doc_${n}_translate`,           slot.translate ? 'yes' : 'no');
+    fd.append(`doc_${n}_translation_language`, slot.translate ? (slot.translate_language || '') : '');
+    fd.append(`doc_${n}_translation_cost`,    slot.translate ? '$' + (60 * (effectivePages(slot) + 1)).toFixed(2) : '$0');
+    fd.append(`doc_${n}_scan`,                slot.scan ? 'yes' : 'no');
+    fd.append(`doc_${n}_scan_cost`,           slot.scan ? '$10' : '$0');
   });
 
-  fd.append('return_name',      formState.return_name);
-  fd.append('return_company',   formState.return_company);
-  fd.append('return_address',   formState.return_address);
-  fd.append('return_city',      formState.return_city);
-  fd.append('return_state',     formState.return_state);
-  fd.append('return_postal',    formState.return_postal);
-  fd.append('return_country',   formState.return_country);
-  fd.append('return_phone',     (formState.return_phone_code ? formState.return_phone_code + ' ' : '') + formState.return_phone);
-  fd.append('no_shipping',               formState.no_shipping ? 'yes' : 'no');
-  fd.append('return_mailing',            formState.return_mailing);
-  fd.append('fedex_signature',  formState.fedex_signature);
-  const baseTotal = calcOrderTotal();
+  // ── MAILING / RETURN ADDRESS ──
+  const _domCb  = document.getElementById('chk_fedex_domestic');
+  const _intlCb = document.getElementById('chk_fedex_international');
+  const _shippingCost = (_domCb && _domCb.checked) ? 35 : (_intlCb && _intlCb.checked) ? 85 : 0;
+  const _mailingLabelMap = {
+    fedex_domestic:      'FedEx US Domestic ($35)',
+    fedex_international: 'FedEx International ($85)',
+    no_shipping:         'No shipping — scanned copy only',
+    '':                  'Not selected',
+  };
+
+  fd.append('no_shipping',          formState.no_shipping ? 'yes' : 'no');
+  fd.append('return_mailing',       formState.return_mailing || '');
+  fd.append('return_mailing_label', _mailingLabelMap[formState.return_mailing] || 'Not selected');
+  fd.append('shipping_cost',        '$' + _shippingCost.toFixed(2));
+  fd.append('fedex_signature',      formState.fedex_signature || 'no');
+
+  fd.append('return_name',         formState.return_name);
+  fd.append('return_company',      formState.return_company);
+  fd.append('return_address',      formState.return_address);
+  fd.append('return_city',         formState.return_city);
+  fd.append('return_state',        formState.return_state);
+  fd.append('return_postal',       formState.return_postal);
+  fd.append('return_country',      formState.return_country);
+  fd.append('return_phone_code',   formState.return_phone_code || '');
+  fd.append('return_phone_number', formState.return_phone);
+  fd.append('return_phone',        (formState.return_phone_code ? formState.return_phone_code + ' ' : '') + formState.return_phone);
+
+  // ── ORDER TOTALS ──
+  const baseTotal  = calcOrderTotal();
   const finalTotal = formState.payment_method === 'paypal' ? baseTotal * 1.04 : baseTotal;
+  const planSub    = getPlanSubtotal();
+  const docSub     = formState.doc_subtotal || 0;
+  fd.append('plan_subtotal_amount',  '$' + planSub.toFixed(2));
+  fd.append('addons_subtotal',       '$' + docSub.toFixed(2));
+  fd.append('shipping_subtotal',     '$' + _shippingCost.toFixed(2));
   fd.append('order_base_total',      '$' + baseTotal.toFixed(2));
+  fd.append('paypal_fee',            formState.payment_method === 'paypal' ? '$' + (baseTotal * 0.04).toFixed(2) : '$0');
   fd.append('order_total',           '$' + finalTotal.toFixed(2));
-  fd.append('payment_method',        formState.payment_method);
+
+  // ── PAYMENT ──
+  fd.append('payment_method',        formState.payment_method || '');
   fd.append('paypal_order_id',       formState.paypal_order_id       || '');
   fd.append('paypal_transaction_id', formState.paypal_transaction_id || '');
   fd.append('paypal_payer',          formState.paypal_payer_name     || '');
   fd.append('paypal_payer_email',    formState.paypal_payer_email    || '');
   fd.append('zelle_payment_to',      isZelle ? 'info@usauthentication.com' : '');
-  fd.append('signature',             formState.signature);
-  fd.append('signature_date',        formState.signature_date);
-  fd.append('submitted_at',          formState.submitted_at);
+  fd.append('zelle_payer_email',     isZelle ? (document.getElementById('zelle-payer-email') ? document.getElementById('zelle-payer-email').value.trim() : '') : '');
+
+  // ── SIGNATURE & META ──
+  fd.append('signature',      formState.signature);
+  fd.append('signature_date', formState.signature_date);
+  fd.append('submitted_at',   formState.submitted_at);
 
   const _ordSeq = (parseInt(localStorage.getItem('ord_seq') || '0', 10) + 1);
   localStorage.setItem('ord_seq', _ordSeq);
@@ -2287,6 +2514,65 @@ function resetForm() {
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('signature_date').value = new Date().toISOString().split('T')[0];
   renderDocCards();
+});
+</script>
+
+<!-- ── ZELLE QR MODAL ── -->
+<div class="zelle-qr-modal-overlay" id="zelleQrModalOverlay" onclick="closeZelleQrModal(event)">
+  <div class="zelle-qr-modal" role="dialog" aria-modal="true" aria-label="Zelle QR Code">
+    <div class="zelle-qr-modal-glow"></div>
+    <button class="zelle-modal-close" onclick="closeZelleQrModal()" aria-label="Close">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="zelle-modal-logo">
+      <div class="zelle-modal-icon">Z</div>
+      <span class="zelle-modal-wordname">elle</span>
+    </div>
+    <p class="zelle-modal-subtitle">Scan the QR code with your banking app to pay</p>
+    <div class="zelle-modal-qr-frame">
+      <div class="zelle-modal-qr-inner">
+        <img src="brand_assets/zelle_qr2.png" alt="Zelle QR Code" class="zelle-modal-qr-img"/>
+      </div>
+    </div>
+    <div class="zelle-modal-email-row">
+      <span class="zelle-modal-email-text">info@usauthentication.com</span>
+      <button class="zelle-modal-copy-btn" id="zelleModalCopyBtn" onclick="copyZelleEmailModal(this)">Copy</button>
+    </div>
+    <p class="zelle-modal-note">Include your <strong>full name</strong> in the memo field when sending.<br/>Amount: <strong id="zelle-modal-amount">$0.00</strong></p>
+  </div>
+</div>
+
+<script>
+function openZelleQrModal() {
+  const overlay = document.getElementById('zelleQrModalOverlay');
+  const amountEl = document.getElementById('zelle-amount');
+  const modalAmount = document.getElementById('zelle-modal-amount');
+  if (amountEl && modalAmount) modalAmount.textContent = amountEl.textContent;
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeZelleQrModal(e) {
+  if (e && e.target !== document.getElementById('zelleQrModalOverlay')) return;
+  const overlay = document.getElementById('zelleQrModalOverlay');
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+function copyZelleEmailModal(btn) {
+  navigator.clipboard.writeText('info@usauthentication.com').then(() => {
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    btn.style.background = 'rgba(109,30,212,.15)';
+    setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 1800);
+  });
+}
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const overlay = document.getElementById('zelleQrModalOverlay');
+    if (overlay && overlay.classList.contains('open')) {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  }
 });
 </script>
 </body>

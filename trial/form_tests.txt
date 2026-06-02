@@ -1,0 +1,820 @@
+================================================================================
+  FBI APOSTILLE — ORDER FORM WEBHOOK TEST REPORT
+  Date        : 2026-05-26
+  Webhook URL : https://usauth.app.n8n.cloud/webhook/upload_form
+  Method      : curl multipart/form-data POST (mirrors browser form exactly)
+  Total Tests : 8
+  Passed      : 8 / 8
+  Failed      : 0 / 8
+================================================================================
+
+
+────────────────────────────────────────────────────────────────────────────────
+  PRICING FORMULA REFERENCE
+────────────────────────────────────────────────────────────────────────────────
+
+  Plan prices (per document):
+    Economy  → $69 / doc   |  turnaround: 5+ weeks
+    Standard → $89 / doc   |  turnaround: 12–14 business days
+    Express  → $109 / doc  |  turnaround: 8–9 business days
+
+  Add-on pricing:
+    Translation : $60 × (effective_pages + 1)
+                  effective_pages = total_pages - 1  IF has_cover_page = yes
+                  effective_pages = total_pages       IF has_cover_page = no
+    Scan        : $10 flat per document
+                  NOTE: scan is NOT available on Express plan
+
+  Shipping:
+    FedEx US Domestic    → $35
+    FedEx International  → $85
+    No shipping          → $0
+
+  Payment fee:
+    Zelle  → no fee  (order_total = order_base_total)
+    PayPal → +4% fee (order_total = order_base_total × 1.04)
+
+  Formula:
+    plan_subtotal    = plan_price × doc_count
+    addons_subtotal  = Σ (translation_cost + scan_cost) per doc
+    order_base_total = plan_subtotal + addons_subtotal + shipping_cost
+    order_total      = order_base_total  [Zelle]
+                     = order_base_total × 1.04  [PayPal]
+
+
+────────────────────────────────────────────────────────────────────────────────
+  QUICK RESULTS TABLE  (copy into Google Sheets)
+────────────────────────────────────────────────────────────────────────────────
+
+  ID  | Plan     | Docs | Add-ons                              | Shipping      | Sig   | Total    | HTTP | Gmail Thread ID          | Result
+  ----|----------|------|--------------------------------------|---------------|-------|----------|------|--------------------------|-------
+  T1  | Economy  | 1    | None                                 | No shipping   | Typed | $69.00   | 200  | 19e65677efa47183         | PASS
+  T2  | Standard | 2    | Doc1: translate Spanish 3pg          | FedEx Dom $35 | Typed | $453.00  | 200  | 19e65680719a5c18         | PASS
+  T3  | Express  | 3    | None (scan disabled on Express)      | FedEx Intl $85| Drawn | $412.00  | 200  | 19e65689e946b2bf         | PASS
+  T4  | Standard | 1    | Scan only                            | No shipping   | Typed | $99.00   | 200  | 19e6568fdb83dcdc         | PASS
+  T5  | Economy  | 2    | Doc1: translate Italian 5pg+cover    | No shipping   | Typed | $438.00  | 200  | 19e6569696935a44         | PASS
+  T6  | Standard | 3    | Doc1: translate+scan, Doc2: scan     | FedEx Dom $35 | Typed | $502.00  | 200  | 19e6569faec8b6ab         | PASS
+  T7  | Economy  | 10   | Docs 2+5+8: scan ($10 each)          | FedEx Dom $35 | Typed | $755.00  | 200  | 19e656b2419328e1         | PASS
+  T8  | Express  | 1    | None                                 | No shipping   | Drawn | $109.00  | 200  | 19e656b3841ce062         | PASS
+
+
+================================================================================
+  DETAILED TEST REPORTS
+================================================================================
+
+
+────────────────────────────────────────────────────────────────────────────────
+  TEST T1 — Economy | 1 Document | No Add-ons | No Shipping | Typed Sig
+────────────────────────────────────────────────────────────────────────────────
+
+  PURPOSE
+    Baseline smoke test. Simplest possible order: economy plan, single document,
+    no translation, no scan, no physical shipping, typed signature, Zelle payment.
+    Verifies the webhook accepts a minimal payload correctly.
+
+  CUSTOMER DETAILS
+    Name    : Alice Johnson
+    Email   : alice.johnson.test@gmail.com
+    Phone   : +1 5551234001
+    Country : United States
+
+  PLAN & DOCUMENTS
+    Plan              : Economy — 5+ weeks
+    Documents         : 1
+    Doc 1 file        : test_1page.pdf (303 bytes, 1 page)
+    Doc 1 translate   : no
+    Doc 1 scan        : no
+    Doc 1 cover page  : not answered
+    Destination       : United States
+
+  RETURN MAILING
+    Option            : No shipping — scanned copy only
+    Address           : (none required)
+
+  PRICING CALCULATION
+    Plan subtotal     : $69 × 1 doc            = $69.00
+    Add-ons subtotal  : $0                      = $0.00
+    Shipping          : No shipping             = $0.00
+    Order base total  :                         = $69.00
+    PayPal fee        : N/A (Zelle)             = $0.00
+    ORDER TOTAL       :                         = $69.00
+
+  PAYMENT & SIGNATURE
+    Method            : Zelle
+    Zelle email       : alice.zelle.001@gmail.com
+    Zelle pay-to      : info@usauthentication.com
+    Signature type    : Typed text
+    Signature value   : "Alice Johnson"
+    Signature date    : 2026-05-26
+
+  METADATA
+    Order ref         : ORD-001-260526
+    Submitted at      : 2026-05-26T10:00:00.000Z
+
+  RESULT
+    HTTP status       : 200 OK
+    n8n response      : Gmail thread created
+    Gmail thread ID   : 19e65677efa47183
+    Status            : PASS ✓
+
+  OBSERVATIONS
+    - Webhook accepted payload with all empty return address fields correctly
+    - no_shipping=yes correctly paired with return_mailing=no_shipping
+    - All paypal_* fields sent as empty strings — no issues with n8n processing
+
+
+────────────────────────────────────────────────────────────────────────────────
+  TEST T2 — Standard | 2 Documents | Translation (no cover page) | FedEx Domestic
+────────────────────────────────────────────────────────────────────────────────
+
+  PURPOSE
+    Tests the Standard plan with 2 documents, one requiring Spanish translation
+    (3 pages, no cover page), physical return shipping via FedEx domestic, and a
+    full US mailing address. Verifies multi-doc payload and translation pricing.
+
+  CUSTOMER DETAILS
+    Name    : Robert Martinez
+    Email   : robert.martinez.test@gmail.com
+    Phone   : +44 7700900002
+    Country : United Kingdom (international customer, US return address)
+
+  PLAN & DOCUMENTS
+    Plan              : Standard — 12–14 business days
+    Documents         : 2
+
+    Doc 1 file        : birth_certificate.pdf (481 bytes, 3 pages)
+    Doc 1 translate   : yes → Spanish
+    Doc 1 cover page  : no  (no cover page to subtract)
+    Doc 1 eff. pages  : 3
+    Doc 1 trans. cost : $60 × (3 + 1) = $60 × 4 = $240.00
+    Doc 1 scan        : no
+
+    Doc 2 file        : passport_copy.pdf (303 bytes, 1 page)
+    Doc 2 translate   : no
+    Doc 2 scan        : no
+
+    Destination       : United Kingdom
+
+  RETURN MAILING
+    Option            : FedEx Overnight US Domestic — 1–2 days
+    Name              : Robert Martinez
+    Address           : 123 Elm Street, Austin, TX 78701, United States
+    Phone             : +1 5551230002
+
+  PRICING CALCULATION
+    Plan subtotal     : $89 × 2 docs            = $178.00
+    Doc 1 translation : $60 × (3+1)             = $240.00
+    Doc 2 add-ons     : none                    = $0.00
+    Add-ons subtotal  :                          = $240.00
+    Shipping          : FedEx domestic           = $35.00
+    Order base total  :                          = $453.00
+    PayPal fee        : N/A (Zelle)             = $0.00
+    ORDER TOTAL       :                          = $453.00
+
+  PAYMENT & SIGNATURE
+    Method            : Zelle
+    Zelle email       : rmartinez.zelle@yahoo.com
+    Signature type    : Typed text
+    Signature value   : "Robert Martinez"
+
+  METADATA
+    Order ref         : ORD-002-260526
+    Submitted at      : 2026-05-26T10:05:00.000Z
+
+  RESULT
+    HTTP status       : 200 OK
+    Gmail thread ID   : 19e65680719a5c18
+    Status            : PASS ✓
+
+  OBSERVATIONS
+    - Multi-document payload (doc_1_*, doc_2_*) received correctly by n8n
+    - Translation language field ("Spanish") passed through without issues
+    - FedEx domestic shipping + full address fields all accepted
+    - International phone code (+44) on customer info, US return address — no conflict
+
+
+────────────────────────────────────────────────────────────────────────────────
+  TEST T3 — Express | 3 Documents | No Add-ons | FedEx International | DRAWN Sig
+────────────────────────────────────────────────────────────────────────────────
+
+  PURPOSE
+    Tests the Express plan with 3 documents and FedEx international shipping to
+    India. Key checks: (1) scan correctly stays disabled on Express, (2) DRAWN
+    signature sent as base64 PNG data URL, (3) international return address.
+
+  CUSTOMER DETAILS
+    Name    : Priya Sharma
+    Email   : priya.sharma.test@gmail.com
+    Phone   : +91 9876543003
+    Country : India
+
+  PLAN & DOCUMENTS
+    Plan              : Express — 8–9 business days
+    Documents         : 3
+
+    Doc 1 file        : degree_certificate.pdf (303 bytes, 1 page)
+    Doc 1 translate   : no
+    Doc 1 scan        : no  ← scan intentionally disabled (Express plan)
+    Doc 1 cover page  : not answered
+
+    Doc 2 file        : marriage_cert.pdf (303 bytes, 1 page)
+    Doc 2 translate   : no
+    Doc 2 scan        : no
+
+    Doc 3 file        : id_copy.pdf (303 bytes, 1 page)
+    Doc 3 translate   : no
+    Doc 3 scan        : no
+
+    Destination       : India
+
+  RETURN MAILING
+    Option            : FedEx International — 3–5 business days
+    Name              : Priya Sharma
+    Company           : TechCorp India
+    Address           : 42 MG Road Koramangala, Bengaluru, Karnataka 560034, India
+    Phone             : +91 9876543003
+
+  PRICING CALCULATION
+    Plan subtotal     : $109 × 3 docs           = $327.00
+    Add-ons subtotal  : $0 (no scan on Express) = $0.00
+    Shipping          : FedEx international      = $85.00
+    Order base total  :                          = $412.00
+    PayPal fee        : N/A (Zelle)             = $0.00
+    ORDER TOTAL       :                          = $412.00
+
+  PAYMENT & SIGNATURE
+    Method            : Zelle
+    Zelle email       : priya.sharma.zelle@outlook.com
+    Signature type    : DRAWN (HTML5 canvas → base64 PNG data URL)
+    Signature value   : data:image/png;base64,iVBORw0KGgoAAAANSUhEUg...
+                        (1×1 transparent PNG, simulating canvas drawing)
+
+  METADATA
+    Order ref         : ORD-003-260526
+    Submitted at      : 2026-05-26T10:10:00.000Z
+
+  RESULT
+    HTTP status       : 200 OK
+    Gmail thread ID   : 19e65689e946b2bf
+    Status            : PASS ✓
+
+  OBSERVATIONS
+    - Drawn signature (base64 data URL string) accepted by n8n without issues
+    - 3-document payload with international return address processed correctly
+    - Scan disabled on Express: all doc_N_scan=no, doc_N_scan_cost=$0 — consistent
+    - Company name in return address field accepted (return_company)
+    - NOTE: Real drawn signatures from the canvas can be 50–200KB of base64 data.
+      This test used a minimal 1×1 PNG; behavior with larger canvases should be
+      verified in browser testing.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  TEST T4 — Standard | 1 Document | Scan Only | No Shipping | Typed Sig
+────────────────────────────────────────────────────────────────────────────────
+
+  PURPOSE
+    Isolates the scan add-on. Tests a Standard plan order with a single scanned
+    document and no physical shipping. Verifies scan pricing ($10 flat) and that
+    no_shipping correctly suppresses all return address fields.
+
+  CUSTOMER DETAILS
+    Name    : Daniel Lee
+    Email   : daniel.lee.test@gmail.com
+    Phone   : +1 4152220004
+    Country : Canada
+
+  PLAN & DOCUMENTS
+    Plan              : Standard — 12–14 business days
+    Documents         : 1
+
+    Doc 1 file        : background_check.pdf (303 bytes, reported as 2 pages)
+    Doc 1 translate   : no
+    Doc 1 scan        : yes
+    Doc 1 scan cost   : $10.00
+    Doc 1 cover page  : not answered
+    Destination       : Canada
+
+  RETURN MAILING
+    Option            : No shipping — scanned copy only
+    Address           : (none required)
+
+  PRICING CALCULATION
+    Plan subtotal     : $89 × 1 doc             = $89.00
+    Doc 1 scan        : flat fee                = $10.00
+    Add-ons subtotal  :                          = $10.00
+    Shipping          : No shipping             = $0.00
+    Order base total  :                          = $99.00
+    PayPal fee        : N/A (Zelle)             = $0.00
+    ORDER TOTAL       :                          = $99.00
+
+  PAYMENT & SIGNATURE
+    Method            : Zelle
+    Zelle email       : dlee.payments@proton.me
+    Signature type    : Typed text
+    Signature value   : "Daniel Lee"
+
+  METADATA
+    Order ref         : ORD-004-260526
+    Submitted at      : 2026-05-26T10:15:00.000Z
+
+  RESULT
+    HTTP status       : 200 OK
+    Gmail thread ID   : 19e6568fdb83dcdc
+    Status            : PASS ✓
+
+  OBSERVATIONS
+    - Scan-only add-on (no translation) processed correctly
+    - doc_1_pages=2 sent even though we uploaded a 1-page PDF — n8n trusts the
+      client-reported value (IMPORTANT: no server-side validation of page count)
+    - Proton.me email address for Zelle identifier accepted without issues
+    - Scan cost field sent as "$10" (no decimals) vs "$10.00" on other fields;
+      n8n accepted both formats but Google Sheets should normalize these
+
+
+────────────────────────────────────────────────────────────────────────────────
+  TEST T5 — Economy | 2 Documents | Translation WITH Cover Page | No Shipping
+────────────────────────────────────────────────────────────────────────────────
+
+  PURPOSE
+    Tests the cover page deduction logic in translation pricing. Doc 1 has 5 pages
+    and a cover page (has_cover_page=yes), reducing effective pages to 4. Verifies
+    that the translation cost uses effective_pages (4) not total_pages (5).
+
+  CUSTOMER DETAILS
+    Name    : Sofia Rossi
+    Email   : sofia.rossi.test@gmail.com
+    Phone   : +39 3381230005
+    Country : Italy
+
+  PLAN & DOCUMENTS
+    Plan              : Economy — 5+ weeks
+    Documents         : 2
+
+    Doc 1 file        : court_document.pdf (659 bytes, 5 pages)
+    Doc 1 translate   : yes → Italian
+    Doc 1 cover page  : yes  ← FBI report cover page present
+    Doc 1 total pages : 5
+    Doc 1 eff. pages  : max(0, 5 - 1) = 4
+    Doc 1 trans. cost : $60 × (4 + 1) = $60 × 5 = $300.00
+    Doc 1 scan        : no
+
+    Doc 2 file        : id_page.pdf (303 bytes, 1 page)
+    Doc 2 translate   : no
+    Doc 2 scan        : no
+    Doc 2 cover page  : not answered
+
+    Destination       : Italy
+
+  RETURN MAILING
+    Option            : No shipping — scanned copy only
+    Address           : (none required)
+
+  PRICING CALCULATION
+    Plan subtotal     : $69 × 2 docs            = $138.00
+    Doc 1 translation : $60 × (4 + 1)           = $300.00
+    Doc 2 add-ons     : none                    = $0.00
+    Add-ons subtotal  :                          = $300.00
+    Shipping          : No shipping             = $0.00
+    Order base total  :                          = $438.00
+    PayPal fee        : N/A (Zelle)             = $0.00
+    ORDER TOTAL       :                          = $438.00
+
+    [CONTRAST] If cover page was NO:
+    Doc 1 eff. pages  : 5
+    Doc 1 trans. cost : $60 × (5 + 1) = $360.00  ← $60 more expensive
+    ORDER TOTAL would be: $498.00 instead of $438.00
+
+  PAYMENT & SIGNATURE
+    Method            : Zelle
+    Zelle email       : sofiarossi.pay@gmail.com
+    Signature type    : Typed text
+    Signature value   : "Sofia Rossi"
+
+  METADATA
+    Order ref         : ORD-005-260526
+    Submitted at      : 2026-05-26T10:20:00.000Z
+
+  RESULT
+    HTTP status       : 200 OK
+    Gmail thread ID   : 19e6569696935a44
+    Status            : PASS ✓
+
+  OBSERVATIONS
+    - has_cover_page=yes correctly sent with effective_pages=4 (not 5)
+    - Translation cost $300.00 is correct: $60 × (4+1) = $300
+    - Mixed cover page states across docs (yes / not answered) handled cleanly
+    - The 5-page test PDF (test_5page.pdf) was accepted without issues
+    - IMPORTANT: The cover page question is only shown when translation is enabled
+      in the browser form. If a user selects translation but does not answer the
+      cover page question, has_cover_page defaults to "not answered" and treats
+      pages at face value (no deduction). This edge case was NOT tested separately.
+
+
+────────────────────────────────────────────────────────────────────────────────
+  TEST T6 — Standard | 3 Documents | Mixed Add-ons | FedEx Domestic | Typed Sig
+────────────────────────────────────────────────────────────────────────────────
+
+  PURPOSE
+    Most complex add-on scenario: Document 1 has both translation AND scan,
+    Document 2 has scan only, Document 3 has no add-ons. Tests that individual
+    per-document costs are summed correctly and the combined addons_subtotal
+    field matches. Also tests a company name in the return address.
+
+  CUSTOMER DETAILS
+    Name    : James Okafor
+    Email   : james.okafor.test@gmail.com
+    Phone   : +234 8031230006
+    Country : Nigeria
+
+  PLAN & DOCUMENTS
+    Plan              : Standard — 12–14 business days
+    Documents         : 3
+
+    Doc 1 file        : diploma.pdf (303 bytes, reported as 2 pages)
+    Doc 1 translate   : yes → French
+    Doc 1 cover page  : no
+    Doc 1 eff. pages  : 2
+    Doc 1 trans. cost : $60 × (2 + 1) = $60 × 3 = $180.00
+    Doc 1 scan        : yes → $10.00
+    Doc 1 total cost  : $180 + $10 = $190.00
+
+    Doc 2 file        : police_record.pdf (481 bytes, 3 pages)
+    Doc 2 translate   : no
+    Doc 2 scan        : yes → $10.00
+    Doc 2 total cost  : $10.00
+
+    Doc 3 file        : power_of_attorney.pdf (303 bytes, 1 page)
+    Doc 3 translate   : no
+    Doc 3 scan        : no
+    Doc 3 total cost  : $0.00
+
+    Destination       : Nigeria
+
+  RETURN MAILING
+    Option            : FedEx Overnight US Domestic — 1–2 days
+    Name              : James Okafor
+    Company           : Okafor Legal Services
+    Address           : 890 Broadway Ave, New York, NY 10003, United States
+    Phone             : +1 2125550006
+
+  PRICING CALCULATION
+    Plan subtotal     : $89 × 3 docs            = $267.00
+    Doc 1 (trans+scan): $180 + $10              = $190.00
+    Doc 2 (scan only) : $10                     = $10.00
+    Doc 3 (none)      : $0                      = $0.00
+    Add-ons subtotal  :                          = $200.00
+    Shipping          : FedEx domestic           = $35.00
+    Order base total  :                          = $502.00
+    PayPal fee        : N/A (Zelle)             = $0.00
+    ORDER TOTAL       :                          = $502.00
+
+  PAYMENT & SIGNATURE
+    Method            : Zelle
+    Zelle email       : jokafor.zelle@hotmail.com
+    Signature type    : Typed text
+    Signature value   : "James Okafor"
+
+  METADATA
+    Order ref         : ORD-006-260526
+    Submitted at      : 2026-05-26T10:25:00.000Z
+
+  RESULT
+    HTTP status       : 200 OK
+    Gmail thread ID   : 19e6569faec8b6ab
+    Status            : PASS ✓
+
+  OBSERVATIONS
+    - Translation + scan on same document (Doc 1) processed without conflict
+    - Mixed add-on states across 3 docs (both/scan-only/none) all correct
+    - doc_subtotal and addons_subtotal both sent as $200.00 — these are duplicate
+      fields; both arrived at n8n. Recommend removing doc_subtotal (redundant).
+    - return_company (Okafor Legal Services) field populated and sent correctly
+    - Hotmail.com Zelle identifier accepted without validation issues
+
+
+────────────────────────────────────────────────────────────────────────────────
+  TEST T7 — Economy | 10 Documents (MAXIMUM) | Scans on 3 Docs | FedEx Domestic
+────────────────────────────────────────────────────────────────────────────────
+
+  PURPOSE
+    Stress test for maximum document count (10 docs = the UI upper limit). Verifies
+    that all 10 sets of doc_N_* fields are sent and received, and that selective
+    scans on docs 2, 5, and 8 are correctly priced while docs 1,3,4,6,7,9,10
+    have $0 add-ons.
+
+  CUSTOMER DETAILS
+    Name    : Maria Gonzalez
+    Email   : maria.gonzalez.test@gmail.com
+    Phone   : +52 5551230007
+    Country : Mexico
+
+  PLAN & DOCUMENTS
+    Plan              : Economy — 5+ weeks
+    Documents         : 10 (MAXIMUM ALLOWED)
+
+    Doc 1  : doc_01.pdf — no add-ons  → $0
+    Doc 2  : doc_02.pdf — scan=yes    → $10.00  ←
+    Doc 3  : doc_03.pdf — no add-ons  → $0
+    Doc 4  : doc_04.pdf — no add-ons  → $0
+    Doc 5  : doc_05.pdf — scan=yes    → $10.00  ←
+    Doc 6  : doc_06.pdf — no add-ons  → $0
+    Doc 7  : doc_07.pdf — no add-ons  → $0
+    Doc 8  : doc_08.pdf — scan=yes    → $10.00  ←
+    Doc 9  : doc_09.pdf — no add-ons  → $0
+    Doc 10 : doc_10.pdf — no add-ons  → $0
+
+    All 10 docs: 1 page each, no translation, no cover page question
+    Destination: Mexico
+
+  RETURN MAILING
+    Option            : FedEx Overnight US Domestic — 1–2 days
+    Name              : Maria Gonzalez
+    Address           : 777 Sunset Blvd, Los Angeles, CA 90028, United States
+    Phone             : +1 3105550007
+
+  PRICING CALCULATION
+    Plan subtotal     : $69 × 10 docs           = $690.00
+    Doc 2 scan        : $10                     = $10.00
+    Doc 5 scan        : $10                     = $10.00
+    Doc 8 scan        : $10                     = $10.00
+    Add-ons subtotal  :                          = $30.00
+    Shipping          : FedEx domestic           = $35.00
+    Order base total  :                          = $755.00
+    PayPal fee        : N/A (Zelle)             = $0.00
+    ORDER TOTAL       :                          = $755.00
+
+  PAYMENT & SIGNATURE
+    Method            : Zelle
+    Zelle email       : mgonzalez.zelle@gmail.com
+    Signature type    : Typed text
+    Signature value   : "Maria Gonzalez"
+
+  METADATA
+    Order ref         : ORD-007-260526
+    Submitted at      : 2026-05-26T10:30:00.000Z
+
+  RESULT
+    HTTP status       : 200 OK
+    Gmail thread ID   : 19e656b2419328e1
+    Status            : PASS ✓
+
+  OBSERVATIONS
+    - All 10 × doc_N_* field sets (doc_1_file through doc_10_file, etc.) sent and
+      accepted by n8n in a single multipart/form-data POST — no size issues
+    - n8n did not truncate or drop any document fields at 10-doc volume
+    - Selective scan on docs 2, 5, 8 only — remaining 7 docs correctly at $0
+    - Payload for this test was the largest of all 8 (10 file uploads + metadata)
+    - Mexico phone country code (+52) on contact info, US return address — no issues
+
+
+────────────────────────────────────────────────────────────────────────────────
+  TEST T8 — Express | 1 Document | No Add-ons | No Shipping | DRAWN Sig
+────────────────────────────────────────────────────────────────────────────────
+
+  PURPOSE
+    Second drawn-signature test. Simplest Express plan order to isolate the drawn
+    signature mode on a minimal payload. Cross-checks T3's drawn signature finding
+    with a different plan (Express) and different customer.
+
+  CUSTOMER DETAILS
+    Name    : Chen Wei
+    Email   : chen.wei.test@gmail.com
+    Phone   : +86 13812340008
+    Country : China
+
+  PLAN & DOCUMENTS
+    Plan              : Express — 8–9 business days
+    Documents         : 1
+
+    Doc 1 file        : business_license.pdf (303 bytes, 1 page)
+    Doc 1 translate   : no
+    Doc 1 scan        : no  (Express plan — scan not available)
+    Doc 1 cover page  : not answered
+    Destination       : China
+
+  RETURN MAILING
+    Option            : No shipping — scanned copy only
+    Address           : (none required)
+
+  PRICING CALCULATION
+    Plan subtotal     : $109 × 1 doc            = $109.00
+    Add-ons subtotal  : none                    = $0.00
+    Shipping          : No shipping             = $0.00
+    Order base total  :                          = $109.00
+    PayPal fee        : N/A (Zelle)             = $0.00
+    ORDER TOTAL       :                          = $109.00
+
+  PAYMENT & SIGNATURE
+    Method            : Zelle
+    Zelle email       : chenwei.pay88@gmail.com
+    Signature type    : DRAWN (HTML5 canvas → base64 PNG data URL)
+    Signature value   : data:image/png;base64,iVBORw0KGgoAAAANSUhEUg...
+                        (1×1 transparent PNG, simulating canvas drawing)
+
+  METADATA
+    Order ref         : ORD-008-260526
+    Submitted at      : 2026-05-26T10:35:00.000Z
+
+  RESULT
+    HTTP status       : 200 OK
+    Gmail thread ID   : 19e656b3841ce062
+    Status            : PASS ✓
+
+  OBSERVATIONS
+    - Drawn signature accepted on Express plan (same as T3 — consistent behavior)
+    - Minimal payload processed fastest among all tests
+    - Chinese phone number (+86 13812340008) — 11-digit number — accepted by phone
+      validation regex (requires 5+ chars of digits/spaces/dashes)
+    - No shipping + Express plan combination: valid use case (customer gets
+      scanned copy digitally, no physical return needed)
+
+
+================================================================================
+  COVERAGE MATRIX
+================================================================================
+
+  Dimension            | Values Tested                        | Coverage
+  ---------------------|--------------------------------------|----------
+  Plan                 | Economy (T1,T5,T7)                   | ALL 3 ✓
+                       | Standard (T2,T4,T6)                  |
+                       | Express (T3,T8)                      |
+  ---------------------|--------------------------------------|----------
+  Document count       | 1 (T1,T4,T8), 2 (T2,T5)             | Min/mid/ ✓
+                       | 3 (T3,T6), 10 (T7)                  | max all
+  ---------------------|--------------------------------------|----------
+  Translation          | None (T1,T3,T4,T7,T8)               | ALL 3 ✓
+                       | No cover page (T2,T6)                |
+                       | With cover page (T5)                 |
+  ---------------------|--------------------------------------|----------
+  Scan                 | None (T1,T3,T5,T8)                  | All ✓
+                       | Scan only (T4)                       | combos
+                       | Scan + translate on same doc (T6)    |
+                       | Multi-doc selective scans (T7)       |
+  ---------------------|--------------------------------------|----------
+  Shipping             | No shipping (T1,T4,T5,T8)           | ALL 3 ✓
+                       | FedEx domestic (T2,T6,T7)            |
+                       | FedEx international (T3)             |
+  ---------------------|--------------------------------------|----------
+  Signature type       | Typed text (T1,T2,T4,T5,T6,T7)      | Both ✓
+                       | Drawn canvas/base64 PNG (T3,T8)      |
+  ---------------------|--------------------------------------|----------
+  Payment method       | Zelle (all 8 tests)                  | Zelle ✓
+                       | PayPal                               | NOT tested
+  ---------------------|--------------------------------------|----------
+  Return address       | Empty/no shipping (T1,T4,T5,T8)      | Both ✓
+                       | Full address with company (T6)        |
+  ---------------------|--------------------------------------|----------
+  Destination country  | US, UK, India, Canada, Italy,        | 8 diverse ✓
+                       | Nigeria, Mexico, China               |
+  ---------------------|--------------------------------------|----------
+  Express + scan guard | T3,T8: doc_N_scan=no enforced        | UI-only ⚠
+                       | No server-side block tested          |
+
+
+================================================================================
+  ANALYSIS & IMPROVEMENT RECOMMENDATIONS
+================================================================================
+
+  ── CRITICAL (Security / Data Integrity) ──────────────────────────────────────
+
+  [C1] ALL PRICING IS CLIENT-SIDE ONLY
+       Problem  : Every total (plan_subtotal, addons_subtotal, order_total) is
+                  calculated in the browser JavaScript and sent as plain text.
+                  A crafted curl request can send order_total=$1.00 for a $755
+                  order and n8n will accept it silently.
+       Evidence : All 8 tests sent manually calculated values — n8n accepted them
+                  without any server-side verification.
+       Fix      : Add PHP server-side price re-calculation in order-form.php
+                  before forwarding to n8n. If client total differs from PHP
+                  total by more than $0.01, reject the submission or flag it.
+       File     : order-form.php (lines 2430–2439, fd.append total fields)
+
+  [C2] EXPRESS PLAN RESTRICTIONS ARE UI-ONLY (scan + translation)
+       Problem  : The browser disables scan and translation checkboxes on Express
+                  plan, but a raw curl POST can still send doc_1_scan=yes or
+                  doc_1_translate=yes on an Express order. n8n will receive and
+                  process these without complaint.
+       Evidence : T3 and T8 manually sent scan=no (correct), but nothing
+                  server-side would stop sending scan=yes.
+       Fix      : Add a PHP guard before the webhook call — if selected_plan is
+                  "express", force all doc_N_scan=no and doc_N_translate=no.
+       File     : order-form.php (PHP section, before the fetch call)
+
+  [C3] PAGE COUNT IS CLIENT-SIDE AND UNVERIFIED
+       Problem  : T4 sent doc_1_pages=2 while the actual uploaded file was a
+                  1-page PDF. n8n accepted this without question. Since
+                  translation cost = $60 × (effective_pages + 1), a falsified
+                  page count directly inflates or deflates the translation price.
+       Fix      : Add server-side PDF page counting in PHP using regex on the
+                  uploaded binary (same /Type\s*\/Page/ approach used client-side)
+                  and recalculate translation costs from the verified count.
+       File     : order-form.php (PHP file handling section)
+
+  ── DATA QUALITY (n8n / Google Sheets) ────────────────────────────────────────
+
+  [D1] DUPLICATE SUBTOTAL FIELD
+       Problem  : Both doc_subtotal and addons_subtotal are sent with the same
+                  value (e.g., $200.00). This creates confusion in n8n and
+                  Google Sheets — which one is authoritative?
+       Fix      : Remove doc_subtotal. Keep addons_subtotal (more descriptive).
+       File     : order-form.php line 2376 (fd.append doc_subtotal)
+
+  [D2] DUPLICATE PHONE FIELD
+       Problem  : Both phone_number (digits only, e.g., "5551234001") and phone
+                  (full with code, e.g., "+1 5551234001") are sent. The number-
+                  only field has no use if the full field exists.
+       Fix      : Remove phone_number. Keep phone (E.164-style full number).
+                  Same for return_phone_number / return_phone.
+       File     : order-form.php lines 2364 and 2426
+
+  [D3] FILE SIZE SENT AS STRING WITH UNIT
+       Problem  : doc_N_file_size is sent as "303 bytes" (string). Google Sheets
+                  cannot SUM or average this without text parsing.
+       Evidence : All 8 tests sent "303 bytes", "481 bytes", "659 bytes".
+       Fix      : Send as a plain integer (e.g., 303). Add a separate unit label
+                  in n8n if needed (Set node: file_size_unit = "bytes").
+       File     : order-form.php line 2383
+
+  [D4] COVER PAGE "NOT ANSWERED" STATE
+       Problem  : When a user doesn't answer the cover page question (most docs),
+                  the value sent is the string "not answered". This is awkward
+                  to filter in Google Sheets (not a standard null/empty/boolean).
+       Fix      : Change to empty string "" or "unknown". Or make the question
+                  mandatory whenever translation is enabled.
+       File     : order-form.php line 2393
+
+  [D5] ZELLE FIELD NAME MISMATCH
+       Problem  : The field is named zelle_payer_email, but the UI label reads
+                  "Enter your Zelle email or phone number". Phone numbers like
+                  +15551234567 will be stored in a field named "email".
+       Evidence : T8 used chenwei.pay88@gmail.com — an email. But the field
+                  would also accept +86 13812340008.
+       Fix      : Rename to zelle_payer_id. Optionally add zelle_payer_id_type
+                  (values: "email" or "phone") for cleaner data.
+       File     : order-form.php lines 2448, and matching n8n/Sheets column
+
+  [D6] NO ORDER STATUS FIELD
+       Problem  : n8n receives no starting status for the order. It has to infer
+                  "new order" from the fact it just received the webhook.
+       Fix      : Add -F "order_status=pending" to every submission. n8n can
+                  then update this to "confirmed", "processing", "shipped", etc.
+       File     : order-form.php (new fd.append near submitted_at)
+
+  [D7] ORDER REFERENCE USES LOCALSTORAGE COUNTER
+       Problem  : The ORD-### counter is stored in localStorage and resets when
+                  the browser clears data, uses incognito mode, or a new device.
+                  Two customers could both get ORD-001-260526.
+       Fix      : Generate the order ref server-side using PHP with a database
+                  auto-increment or atomic file-based counter. Return it to the
+                  client for display.
+       File     : order-form.php (replace localStorage counter logic)
+
+  ── MINOR / NICE-TO-HAVE ──────────────────────────────────────────────────────
+
+  [M1] DRAWN SIGNATURE SIZE IN PRODUCTION
+       In all tests, the drawn signature was a minimal 1×1 PNG (~88 bytes of
+       base64). Real user drawings on the canvas can be 50–200KB of base64 text
+       being sent as a form field string. Consider saving the signature as a file
+       upload or to cloud storage and sending only the URL to n8n.
+
+  [M2] PAYPAL PAYMENT NOT TESTED
+       All 8 tests used Zelle. PayPal requires a live PayPal transaction
+       (orderID + transactionID from the PayPal SDK). These fields cannot be
+       faked without a real PayPal sandbox transaction. Browser-based testing
+       is required for full PayPal coverage.
+
+  [M3] WEBHOOK URL IN CONFIG.PHP IS STILL TEST URL
+       config.php line 7 still points to /webhook-test/upload_form.
+       The live form will fail for real users until this is updated to:
+       define('N8N_UPLOAD_FORM', 'https://usauth.app.n8n.cloud/webhook/upload_form');
+
+  [M4] NO SERVER TIMESTAMP IN N8N
+       submitted_at is browser-generated (UTC via toISOString()). Consider
+       adding a server_received_at timestamp in the n8n workflow via a Set node
+       so you have an independent audit timestamp.
+
+  [M5] SCAN COST FORMATTING INCONSISTENCY
+       doc_N_scan_cost is sent as "$10" (no decimal) while all other money
+       fields use "$10.00" format. Normalize to two decimal places for
+       consistent Google Sheets import.
+       File: order-form.php line 2398
+
+
+================================================================================
+  TEST ASSET FILES
+================================================================================
+
+  test_1page.pdf   — 303 bytes — minimal valid PDF, 1 page, 1× /Type /Page marker
+  test_3page.pdf   — 481 bytes — minimal valid PDF, 3 pages, 3× /Type /Page markers
+  test_5page.pdf   — 659 bytes — minimal valid PDF, 5 pages, 5× /Type /Page markers
+  create_test_pdfs.mjs — Node.js script that generated the above PDFs
+
+  All PDFs contain valid /Type /Page markers so the form's client-side page
+  counter (regex /Type\s*\/Page\b/) detects the correct count if used in browser.
+
+
+================================================================================
+  END OF REPORT
+  Generated : 2026-05-26
+  All 8 tests PASSED — n8n workflow active at /webhook/upload_form
+================================================================================

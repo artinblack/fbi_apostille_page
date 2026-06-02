@@ -4,8 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FBI Background Check Apostille Service | Fast & Reliable — US Authentication</title>
-<meta name="description" content="How to apostille your FBI criminal background check: licensed agents, in-person US Dept. of State submission. From $69. Free quote.">
+<title>FBI Background Check Apostille | From $69 | US Authentication Services</title>
+<meta name="description" content="Get an Apostille on your FBI Background Check from $69. Licensed agency with in-person submission to the US Dept. of State. Expedited 8–9 business days. BBB Accredited A+.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
