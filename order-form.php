@@ -5,6 +5,8 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Order Form — FBI Apostille · US Authentication Services</title>
+<meta name="description" content="Order your FBI Background Check apostille online. Economy, Standard and Express plans from $69. Secure payment via Zelle or PayPal."/>
+<link rel="canonical" href="https://usauth.basenincorp.com/order-form.php"/>
 <link rel="icon" type="image/jpeg" href="/brand_assets/logo.jpeg">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
@@ -474,11 +476,15 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 <script src="https://www.paypal.com/sdk/js?client-id=<?= htmlspecialchars(PAYPAL_CLIENT_ID) ?>&currency=USD&intent=capture"></script>
 </head>
 <body>
+<h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">FBI Background Check Apostille — Order Form</h1>
 
 <!-- ── TOP BAR ── -->
 <div class="form-topbar">
   <a href="index.php" class="topbar-logo">
-    <img src="brand_assets/logo.jpeg" alt="FBI Apostille Logo"/>
+    <picture>
+      <source srcset="brand_assets/logo.webp" type="image/webp"/>
+      <img src="brand_assets/logo.jpeg" alt="FBI Apostille Logo" width="481" height="450"/>
+    </picture>
   </a>
   <div class="topbar-divider"></div>
   <div class="topbar-title">
@@ -1422,7 +1428,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
           </div>
           <div class="zelle-qr-wrap">
             <div class="zelle-qr-label">Scan to Pay</div>
-            <img src="brand_assets/zelle_qr2.png" alt="Zelle QR Code" class="zelle-qr-img" onclick="openZelleQrModal()" style="cursor:zoom-in;transition:transform .2s,box-shadow .2s;" onmouseover="this.style.transform='scale(1.07)';this.style.boxShadow='0 4px 18px rgba(109,30,212,.3)'" onmouseout="this.style.transform='';this.style.boxShadow=''" title="Click to expand"/>
+            <img src="brand_assets/zelle_qr2.png" alt="Zelle QR Code" class="zelle-qr-img" width="126" height="123" onclick="openZelleQrModal()" style="cursor:zoom-in;transition:transform .2s,box-shadow .2s;" onmouseover="this.style.transform='scale(1.07)';this.style.boxShadow='0 4px 18px rgba(109,30,212,.3)'" onmouseout="this.style.transform='';this.style.boxShadow=''" title="Click to expand"/>
             <button class="zelle-expand-btn" onclick="openZelleQrModal()">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
               Click to Expand
@@ -2531,7 +2537,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <p class="zelle-modal-subtitle">Scan the QR code with your banking app to pay</p>
     <div class="zelle-modal-qr-frame">
       <div class="zelle-modal-qr-inner">
-        <img src="brand_assets/zelle_qr2.png" alt="Zelle QR Code" class="zelle-modal-qr-img"/>
+        <img src="brand_assets/zelle_qr2.png" alt="Zelle QR Code" class="zelle-modal-qr-img" width="126" height="123"/>
       </div>
     </div>
     <div class="zelle-modal-email-row">

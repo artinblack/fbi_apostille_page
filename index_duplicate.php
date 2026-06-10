@@ -1,4 +1,8 @@
-﻿<?php /* FBI Background Check Apostille — US Authentication Services */ ?>
+﻿<?php
+header("HTTP/1.1 301 Moved Permanently");
+header("Location: /");
+exit;
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
