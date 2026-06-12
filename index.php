@@ -10,6 +10,7 @@ if (!headers_sent()) { header("Strict-Transport-Security: max-age=31536000; incl
 <meta name="description" content="Licensed FBI apostille services in Washington DC. In-person US Dept. of State submission. Express: 8–9 days, from $69. All 50 states accepted.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://usauth.basenincorp.com/">
+<link rel="icon" type="image/jpeg" href="/brand_assets/logo.jpeg">
 <meta property="og:type" content="website">
 <meta property="og:title" content="FBI Apostille Services Washington DC | US Authentication">
 <meta property="og:description" content="Licensed FBI apostille services in Washington DC. In-person US Dept. of State submission. Express: 8–9 business days. From $69. All 50 states accepted.">
