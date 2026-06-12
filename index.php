@@ -1,4 +1,6 @@
-﻿<?php /* FBI Background Check Apostille — US Authentication Services */ ?>
+﻿<?php /* FBI Background Check Apostille — US Authentication Services */
+if (!headers_sent()) { header("Strict-Transport-Security: max-age=31536000; includeSubDomains"); }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
