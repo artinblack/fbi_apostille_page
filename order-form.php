@@ -502,10 +502,6 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="11" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
       Secure &amp; Encrypted
     </span>
-    <span>
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      8–9 Business Days
-    </span>
   </div>
 </div>
 
@@ -875,6 +871,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
       </div>
 
       <!-- Country where documents will be used -->
+      <p style="font-weight:700; color:#042C53; margin-bottom:8px;">Countries which require Embassy Legalization are subject to additional steps and costs. Please contact us for more information.</p>
       <div class="dest-country-wrap field-row">
         <div class="field">
           <label>Country Documents to be Used In <span class="req">*</span></label>
@@ -933,10 +930,8 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
             <option>Israel</option>
             <option>Italy</option>
             <option>Japan</option>
-            <option>Jordan</option>
             <option>Kazakhstan</option>
             <option>Kenya</option>
-            <option>Kuwait</option>
             <option>Latvia</option>
             <option>Lebanon</option>
             <option>Lithuania</option>
@@ -962,7 +957,6 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
             <option>Philippines</option>
             <option>Poland</option>
             <option>Portugal</option>
-            <option>Qatar</option>
             <option>Romania</option>
             <option>Russia</option>
             <option>Saudi Arabia</option>
@@ -980,13 +974,11 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
             <option>Thailand</option>
             <option>Turkey</option>
             <option>Ukraine</option>
-            <option>United Arab Emirates</option>
             <option>United Kingdom</option>
             <option>United States</option>
             <option>Uruguay</option>
             <option>Uzbekistan</option>
             <option>Venezuela</option>
-            <option>Vietnam</option>
           </select>
           <span class="err-msg">Please select the destination country</span>
         </div>
