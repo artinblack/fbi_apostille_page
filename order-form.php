@@ -975,7 +975,6 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
             <option>Turkey</option>
             <option>Ukraine</option>
             <option>United Kingdom</option>
-            <option>United States</option>
             <option>Uruguay</option>
             <option>Uzbekistan</option>
             <option>Venezuela</option>

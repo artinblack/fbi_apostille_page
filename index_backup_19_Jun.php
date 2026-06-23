@@ -1,10 +1,24 @@
+﻿<?php /* FBI Background Check Apostille — US Authentication Services */
+if (!headers_sent()) { header("Strict-Transport-Security: max-age=31536000; includeSubDomains"); }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>-Need an Apostille for FBI Background Check - US Authentication Services</title>
-<meta name="description" content="-Need an Apostille for FBI Background Check - US Authentication Services">
+<title>FBI Apostille Services Washington DC | US Authentication</title>
+<meta name="description" content="Licensed FBI apostille services in Washington DC. In-person US Dept. of State submission. Express: 8–9 days, from $69. All 50 states accepted.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://usauth.basenincorp.com/">
+<link rel="icon" type="image/jpeg" href="/brand_assets/logo.jpeg">
+<meta property="og:type" content="website">
+<meta property="og:title" content="FBI Apostille Services Washington DC | US Authentication">
+<meta property="og:description" content="Licensed FBI apostille services in Washington DC. In-person US Dept. of State submission. Express: 8–9 business days. From $69. All 50 states accepted.">
+<meta property="og:url" content="https://usauth.basenincorp.com/">
+<meta property="og:site_name" content="US Authentication Services">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FBI Apostille Services Washington DC | US Authentication">
+<meta name="twitter:description" content="Licensed FBI apostille services in Washington DC. Express: 8–9 business days. From $69.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -184,6 +198,15 @@ a{color:inherit;text-decoration:none}
 .form-submit{width:100%;padding:12px;background:var(--orange);color:var(--white);font-family:var(--font);font-size:13.5px;font-weight:700;border:none;border-radius:var(--r-pill);cursor:pointer;transition:background .15s;margin-top:4px;box-shadow:0 3px 12px rgba(249,115,22,.3)}
 .form-submit:hover{background:var(--orange-dk)}
 .form-note{text-align:center;margin-top:8px;font-size:11px;color:var(--text-xlt)}
+.fq-title{font-size:17px;font-weight:800;color:var(--navy-lt);text-align:center;margin-bottom:16px;line-height:1.35}
+.fq-row{display:grid;grid-template-columns:105px 1fr;align-items:center;gap:8px;margin-bottom:10px}
+.fq-label{font-size:12.5px;font-weight:600;color:var(--text-md);text-align:right;line-height:1.35}
+.fq-label sup{color:var(--orange);font-size:11px}
+.fq-input{width:100%;padding:8px 12px;border:1px solid #ccd;border-radius:5px;font-family:var(--font);font-size:12.5px;color:var(--text);background:#fff;transition:border-color .15s;-webkit-appearance:none}
+.fq-input:focus{outline:none;border-color:var(--blue)}
+.fq-input::placeholder{color:#aab}
+.fq-btn{width:100%;padding:12px;background:var(--orange);color:#fff;font-family:var(--font);font-size:14px;font-weight:700;border:none;border-radius:6px;cursor:pointer;transition:background .15s;margin-top:6px;letter-spacing:.01em}
+.fq-btn:hover{background:var(--orange-dk)}
 
 /* Contact card */
 .contact-card{background:var(--navy);border-radius:var(--r-lg);padding:20px}
@@ -262,7 +285,148 @@ footer{background:#fff;border-top:4px solid var(--navy);padding:0}
   .form-2col{grid-template-columns:1fr}
   .foot-grid{grid-template-columns:1fr}
 }
+
+/* ── FAQ ACCORDION ── */
+.faq-list{display:flex;flex-direction:column;border:0.5px solid var(--gray-bd);border-radius:var(--r-lg);overflow:hidden;background:var(--white)}
+details.faq-item{border-bottom:0.5px solid var(--gray-bd)}
+details.faq-item:last-child{border-bottom:none}
+details.faq-item summary{list-style:none;padding:16px 20px;font-size:14px;font-weight:600;color:var(--navy);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;user-select:none;transition:background .15s}
+details.faq-item summary::-webkit-details-marker{display:none}
+details.faq-item summary::after{content:'+';font-size:20px;font-weight:300;color:var(--navy-lt);flex-shrink:0;transition:transform .2s,color .15s;line-height:1}
+details.faq-item[open] summary::after{transform:rotate(45deg);color:var(--orange)}
+details.faq-item summary:hover{background:var(--off-white)}
+details.faq-item[open] summary{background:var(--off-white);color:var(--navy-lt)}
+.faq-ans{padding:2px 20px 16px;font-size:13.5px;color:var(--text-md);line-height:1.75}
+.faq-ans a{color:var(--blue);text-decoration:underline}
 </style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "US Authentication Services",
+  "description": "Licensed FBI background check apostille services in the Washington DC metro area. In-person submission at the US Department of State.",
+  "url": "https://usauth.basenincorp.com",
+  "telephone": "+17039717226",
+  "email": "info@usauthentication.com",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "6800 Backlick Road, Suite 300",
+    "addressLocality": "Springfield",
+    "addressRegion": "VA",
+    "postalCode": "22150",
+    "addressCountry": "US"
+  },
+  "areaServed": "United States",
+  "priceRange": "$69–$109",
+  "openingHours": "Mo-Fr 09:00-17:00",
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "FBI Apostille Services",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {"@type": "Service", "name": "FBI Background Check Apostille — Economy", "description": "Economy FBI apostille service, 5+ weeks turnaround. All government fees included."},
+        "price": "69", "priceCurrency": "USD"
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {"@type": "Service", "name": "FBI Background Check Apostille — Standard", "description": "Standard FBI apostille service, 12–14 business days. All government fees included."},
+        "price": "89", "priceCurrency": "USD"
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {"@type": "Service", "name": "FBI Background Check Apostille — Express", "description": "Express FBI apostille service, 8–9 business days. All government fees included. Digital copy emailed."},
+        "price": "109", "priceCurrency": "USD"
+      }
+    ]
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.9",
+    "ratingCount": "87",
+    "bestRating": "5"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How long does FBI apostille processing take?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our Express plan takes 8–9 business days and our Standard plan takes 12–14 business days from the date of in-person submission at the US Department of State in Washington DC. The Economy plan is 5+ weeks. Note: Fridays do not count as working days at the US Dept. of State for Express and Standard orders."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the FBI apostille wait time in Washington DC?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "With our Express plan ($109), the Washington DC wait time at the US Department of State is 8–9 business days. Standard processing is 12–14 business days ($89). We offer in-person submission at the US Dept. of State, which is the fastest available method."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I expedite my FBI apostille?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Our Express plan ($109 per document) offers expedited processing in just 8–9 business days via in-person submission at the US Department of State in Washington DC. This is significantly faster than mail-in options, which typically take 6–10 weeks."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What are the FBI apostille fees in Washington DC?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "FBI apostille service fees start at $69 (Economy, 5+ weeks), $89 (Standard, 12–14 business days), or $109 (Express, 8–9 business days) per document. All government fees are included. Optional add-ons: domestic FedEx shipping ($35), international FedEx shipping ($85), certified translation ($60/document)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you provide FBI apostille services for Spain?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Spain is a member of the Hague Convention, so a federal apostille from the US Department of State is required — not a state apostille. We regularly assist clients applying for Spain's non-lucrative residency visa, digital nomad visa, and Golden Visa. Certified Spanish translation of your FBI report is also available for $60."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you serve clients from all 50 states — including Minnesota, Colorado, Utah, Nevada, and Oklahoma?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Because the FBI background check is a federal document, the apostille must be issued by the US Department of State in Washington DC regardless of which state you live in. We serve clients from Minnesota, Colorado, Utah, Nevada, Oklahoma, and all other states. Simply submit your PDF online — no travel or mailing required in most cases."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I submit my FBI background check online?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes — most clients complete the entire process without traveling or mailing. Simply email or upload your original FBI report PDF. We confirm what's needed, provide a free exact quote, then handle in-person submission to the US Department of State and ship your apostilled document via FedEx."
+      }
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://usauth.basenincorp.com/"},
+    {"@type": "ListItem", "position": 2, "name": "Services", "item": "https://usauth.basenincorp.com/services"},
+    {"@type": "ListItem", "position": 3, "name": "FBI Background Check Apostille", "item": "https://usauth.basenincorp.com/"}
+  ]
+}
+</script>
+
 </head>
 <body>
 
@@ -337,7 +501,7 @@ footer{background:#fff;border-top:4px solid var(--navy);padding:0}
   <div class="container">
     <div class="bc-inner">
       <a href="/">Home</a><span class="bc-sep">›</span>
-      <a href="/services">Services</a><span class="bc-sep">›</span>
+      <a href="#">Services</a><span class="bc-sep">›</span>
       <span class="bc-current">FBI Background Check Apostille</span>
     </div>
   </div>
@@ -346,7 +510,7 @@ footer{background:#fff;border-top:4px solid var(--navy);padding:0}
 <!-- PAGE TITLE -->
 <div class="page-title-strip">
   <div class="container">
-    <h1>Apostille for FBI Background Check</h1>
+    <h1>FBI Background Check Apostille Services</h1>
     <p>We work with many clients &amp; agencies from all countries to obtain an <strong>Apostille on the FBI Background checks</strong> once the results have been obtained.</p>
     <div class="pts-badges">
       <span class="pts-badge">📜 Federal Apostille</span>
@@ -371,15 +535,9 @@ footer{background:#fff;border-top:4px solid var(--navy);padding:0}
         <div class="eyebrow">About This Service</div>
         <h2 class="block-title">Apostille on FBI Criminal Background Check</h2>
         <div class="block-body">
-          <p>If you need your <a href="https://www.usauthentication.com/apostille-for-fbi-background-check.php" style="color:var(--blue);">FBI background check</a>
- for use in another country that is part of <strong><a href="https://www.gsccca.org/notary-and-apostilles/apostilles/hague-apostille-country-list" style="color:var(--blue);">The Hague Convention</a></strong>, you will need an Apostille! We can handle the <a href="https://www.usauthentication.com/us-authentication-services/apostille-service.php" style="color:var(--blue);">entire Apostille process</a>
- on your behalf and we offer in person submission to the <a href="https://www.usauthentication.com/department-of-state-apostille.php" style="color:var(--blue);">US Department of State</a>
-! We are a licensed <a href="https://www.usauthentication.com/us-authentication-services/" style="color:var(--blue);">third-party agency</a>
- based in the Washington DC Metro area with 16+ years of experience. We offer expedited service options which take only 8-9 business days.</p>
+          <p>If you need your FBI background check for use in another country that is part of <strong><a href="https://www.gsccca.org/notary-and-apostilles/apostilles/hague-apostille-country-list" style="color:var(--blue);">The Hague Convention</a></strong>, you will need an Apostille! We can handle the entire Apostille process on your behalf and we offer in person submission to the US Department of State! We are a licensed third-party agency based in the Washington DC Metro area with 16+ years of experience. We offer expedited service options which take only 8-9 business days.</p>
           <p>Most clients can complete the process entirely online by submitting the original PDF of their FBI report. No traveling or mailing required in most cases. We will review your documents, confirm what's needed, and provide an exact quote for free.</p>
-          <p>We serve clients from all 50 states — including Minnesota, Colorado, Utah, Nevada, and Oklahoma — as well as international applicants relocating to Spain, South Korea, the EU, and beyond. Popular use cases include Spain residency visas, <a href="https://www.usauthentication.com/us-authentication-services/document-authentication.php" style="color:var(--blue);">international employment</a>
-, and dual citizenship applications.</p>
-
+          <p>We serve clients from all 50 states — including Minnesota, Colorado, Utah, Nevada, and Oklahoma — as well as international applicants relocating to Spain, South Korea, the EU, and beyond. Popular use cases include Spain residency visas, international employment, and dual citizenship applications.</p>
         </div>
       </div>
 
@@ -464,7 +622,7 @@ footer{background:#fff;border-top:4px solid var(--navy);padding:0}
               <li><span class="pc-check">✓</span> All government fees included</li>
               <li><span class="pc-check">✓</span> Email confirmation</li>
             </ul>
-            <a href="#quote" class="pc-btn">Get started →</a>
+            <a href="https://apostilleagents.com/order-form.php" class="pc-btn">Get started →</a>
           </div>
 
           <div class="pc-card pc-featured">
@@ -479,7 +637,7 @@ footer{background:#fff;border-top:4px solid var(--navy);padding:0}
               <li><span class="pc-check">✓</span> All government fees included</li>
               <li><span class="pc-check">✓</span> Email confirmation</li>
             </ul>
-            <a href="#quote" class="pc-btn pc-btn-featured">Get started →</a>
+            <a href="https://apostilleagents.com/order-form.php" class="pc-btn pc-btn-featured">Get started →</a>
           </div>
 
           <div class="pc-card">
@@ -494,7 +652,7 @@ footer{background:#fff;border-top:4px solid var(--navy);padding:0}
               <li><span class="pc-check">✓</span> Email confirmation</li>
               <li><span class="pc-check">✓</span> Digital copy emailed</li>
             </ul>
-            <a href="#quote" class="pc-btn">Get started →</a>
+            <a href="https://apostilleagents.com/order-form.php" class="pc-btn">Get started →</a>
           </div>
 
         </div>
@@ -614,6 +772,59 @@ footer{background:#fff;border-top:4px solid var(--navy);padding:0}
 
       <!-- End Testimonial Carousel -->
 
+      <hr class="divider">
+
+      <!-- FAQ Section -->
+      <div class="section-block">
+        <div class="eyebrow">Frequently Asked Questions</div>
+        <h2 class="block-title">FBI Apostille Questions Answered</h2>
+        <div class="faq-list">
+
+          <details class="faq-item" open>
+            <summary>How long does FBI apostille processing take?</summary>
+            <div class="faq-ans">
+              Our <strong>Express</strong> plan takes <strong>8–9 business days</strong> and our <strong>Standard</strong> plan takes <strong>12–14 business days</strong> from the date of in-person submission at the US Department of State in Washington DC. Economy is 5+ weeks. Note: Fridays do not count as working days at the US Dept. of State for Express and Standard orders.
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Can I expedite my FBI apostille?</summary>
+            <div class="faq-ans">
+              Yes. Our <strong>Express plan ($109 per document)</strong> offers expedited processing in just <strong>8–9 business days</strong> via in-person submission at the US Department of State. This is significantly faster than mail-in options, which typically take 6–10 weeks. <a href="#quote">Get a free quote →</a>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>What are the FBI apostille fees in Washington DC?</summary>
+            <div class="faq-ans">
+              Service fees start at <strong>$69</strong> (Economy), <strong>$89</strong> (Standard, 12–14 days), or <strong>$109</strong> (Express, 8–9 days) per document. All government fees are included. Optional add-ons: domestic FedEx shipping ($35), international FedEx shipping ($85), certified translation ($60/document). No hidden fees — ever.
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Do you provide FBI apostille services for Spain?</summary>
+            <div class="faq-ans">
+              Yes. Spain is a member of the Hague Convention, so a <strong>federal apostille from the US Department of State</strong> is required — not a state apostille. We regularly assist clients applying for Spain's non-lucrative residency visa, digital nomad visa, and Golden Visa. Certified Spanish translation of your FBI report is available for an additional $60.
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Can I submit my FBI background check online?</summary>
+            <div class="faq-ans">
+              Yes — most clients complete the entire process without traveling or mailing anything. Simply email or upload your original FBI report PDF. We confirm what's needed, provide a free exact quote, handle in-person submission at the US Department of State, then ship your apostilled document to you via FedEx.
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary>Do you serve clients from all states — Minnesota, Colorado, Utah, Nevada, Oklahoma?</summary>
+            <div class="faq-ans">
+              Yes. Because the FBI background check is a <strong>federal document</strong>, the apostille must be issued by the US Department of State in Washington DC — regardless of which state you live in. We serve clients from <strong>Minnesota, Colorado, Utah, Nevada, Oklahoma</strong>, and all other states. Submit your PDF online; no travel required in most cases.
+            </div>
+          </details>
+
+        </div>
+      </div>
+
 
     </div><!-- /main -->
 
@@ -623,32 +834,30 @@ footer{background:#fff;border-top:4px solid var(--navy);padding:0}
 
       <!-- Quote form -->
       <div class="form-card">
-        <div class="form-title">Get Your Free Quote</div>
-        <div class="form-sub-title">Response within 1 business day. No obligation.</div>
-        <div class="form-2col">
-          <div class="form-row"><label>First Name *</label><input type="text" placeholder="John"></div>
-          <div class="form-row"><label>Last Name *</label><input type="text" placeholder="Smith"></div>
-        </div>
-        <div class="form-row"><label>Email Address *</label><input type="email" placeholder="john@example.com"></div>
-        <div class="form-row"><label>Phone / WhatsApp</label><input type="tel" placeholder="+1 (___) ___-____"></div>
-        <div class="form-row">
-          <label>Service Needed *</label>
-          <select>
-            <option value="">Select service...</option>
-            <option>FBI Apostille: Economy ($69)</option>
-            <option selected>FBI Apostille: Standard ($89)</option>
-            <option>FBI Apostille: Express ($109)</option>
-            <option>Not sure? Need a review</option>
-          </select>
-        </div>
-        <div class="form-row"> <label>Destination Country *</label><input type="text" placeholder="Spain, South Korea, Colombia..."></div>
-
-        <div class="form-row">
-          <label>Notes <span style="font-weight:400;color:var(--text-xlt)">(optional)</span></label>
-          <textarea placeholder="Any specific requirements or questions..." style="width:100%;padding:9px 12px;border:0.5px solid var(--gray-bd);border-radius:var(--r);font-family:var(--font);font-size:12.5px;color:var(--text);background:var(--off-white);resize:vertical;min-height:70px;transition:border-color .15s"></textarea>
-        </div>
-        <button class="form-submit">Get My Free Quote →</button>
-        <p class="form-note">✓ No spam · Secure & confidential</p>
+        <div class="fq-title">Request a FREE Quote Now!</div>
+        <form id="fq-form" novalidate>
+          <div class="fq-row">
+            <label class="fq-label" for="fq-name">Name<sup>*</sup></label>
+            <input class="fq-input" id="fq-name" type="text" placeholder="Name" required>
+          </div>
+          <div class="fq-row">
+            <label class="fq-label" for="fq-email">Email<sup>*</sup></label>
+            <input class="fq-input" id="fq-email" type="email" placeholder="Email" required>
+          </div>
+          <div class="fq-row">
+            <label class="fq-label" for="fq-phone">Phone</label>
+            <input class="fq-input" id="fq-phone" type="tel" placeholder="Preferred Phone">
+          </div>
+          <div class="fq-row">
+            <label class="fq-label" for="fq-doctype">Document<br>Type<sup>*</sup></label>
+            <input class="fq-input" id="fq-doctype" type="text" placeholder="Document Type" required>
+          </div>
+          <div class="fq-row">
+            <label class="fq-label" for="fq-country">Country of Use<sup>*</sup></label>
+            <input class="fq-input" id="fq-country" type="text" placeholder="Country To Be Used In" required>
+          </div>
+          <button class="fq-btn" type="submit">Get FREE Quote »</button>
+        </form>
       </div>
       
 
@@ -724,6 +933,51 @@ footer{background:#fff;border-top:4px solid var(--navy);padding:0}
 // Sticky CTA
 window.addEventListener('scroll', function(){
   document.getElementById('stickyCta').classList.toggle('on', window.scrollY > 300);
+});
+
+// Free Quote form → n8n webhook
+document.getElementById('fq-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var btn = this.querySelector('.fq-btn');
+  var orig = btn.textContent;
+
+  if (!document.getElementById('fq-name').value ||
+      !document.getElementById('fq-email').value ||
+      !document.getElementById('fq-doctype').value ||
+      !document.getElementById('fq-country').value) {
+    alert('Please fill in all required fields.');
+    return;
+  }
+
+  btn.textContent = 'Sending…';
+  btn.disabled = true;
+
+  fetch('https://usauth.app.n8n.cloud/webhook/get_free_quote', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name:            document.getElementById('fq-name').value,
+      email:           document.getElementById('fq-email').value,
+      phone:           document.getElementById('fq-phone').value,
+      document_type:   document.getElementById('fq-doctype').value,
+      country_of_use:  document.getElementById('fq-country').value
+    })
+  })
+  .then(function() {
+    btn.textContent = '✓ Sent! We\'ll be in touch.';
+    btn.style.background = '#16a34a';
+    document.getElementById('fq-form').reset();
+    setTimeout(function() {
+      btn.textContent = orig;
+      btn.style.background = '';
+      btn.disabled = false;
+    }, 4000);
+  })
+  .catch(function() {
+    btn.textContent = orig;
+    btn.disabled = false;
+    alert('Something went wrong. Please try again.');
+  });
 });
 </script>
 
