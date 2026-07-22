@@ -186,6 +186,35 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 .check-icon { display: none; width: 22px; height: 22px; background: var(--green); border-radius: 50%; align-items: center; justify-content: center; flex-shrink: 0; margin-left: auto; }
 .upload-box.has-file .check-icon { display: flex; }
 
+/* Upload status: block loader → ready line */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+@keyframes doc-loader-slide {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(var(--dl-x)); }
+}
+.doc-upload-status { display: flex; align-items: center; gap: 9px; margin-top: 8px; }
+.doc-loader {
+  --dl-x: 15ch; --dl-duration: 1.4s; --dl-delay: .04s;
+  position: relative; display: inline-flex; align-items: center;
+  height: 1em; width: 16ch; overflow: hidden;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 15px; line-height: 1; color: var(--navy); user-select: none; flex-shrink: 0;
+}
+.dl-track { position: absolute; inset: 0; white-space: nowrap; color: var(--border); }
+.dl-glyph {
+  position: absolute; top: 0; left: 0; width: 1ch; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  background: white;
+  animation: doc-loader-slide var(--dl-duration) ease-in-out infinite;
+}
+.dl-g1 { z-index: 30; animation-delay: 0s; }
+.dl-g2 { z-index: 20; animation-delay: var(--dl-delay); }
+.dl-g3 { z-index: 10; animation-delay: calc(var(--dl-delay) * 2); }
+.dl-label { font-size: 12px; color: var(--text-muted); }
+.doc-ready-line { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 12px; font-weight: 600; color: var(--green); }
+.doc-ready-line svg { width: 13px; height: 13px; flex-shrink: 0; }
+@media (prefers-reduced-motion: reduce) { .dl-glyph { animation: none; } }
+
 /* Doc options */
 .doc-options { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
 .doc-checks { display: flex; flex-direction: column; gap: 9px; }
@@ -1543,7 +1572,14 @@ const PLANS = {
 let currentStep = 1;
 
 // docSlots: source of truth for document upload state
-let docSlots = [{ file: null, pages: 0, translate: false, scan: false, translate_language: '', has_cover_page: null }];
+// uploadState drives the per-card loader: 'idle' → 'loading' → 'ready'
+function newDocSlot() {
+  return { file: null, pages: 0, translate: false, scan: false, translate_language: '', has_cover_page: null, uploadState: 'idle' };
+}
+let docSlots = [newDocSlot()];
+
+const MAX_FILE_BYTES = 25 * 1024 * 1024; // 25MB per document
+const loaderTimers = {};                 // index → setTimeout id
 
 const formState = {
   first_name:'', last_name:'', email:'', phone_code:'', phone:'',
@@ -1662,9 +1698,11 @@ function selectShipping(checkbox) {
 function changeDocCount(delta) {
   const newCount = Math.max(1, Math.min(10, docSlots.length + delta));
   while (docSlots.length < newCount) {
-    docSlots.push({ file: null, pages: 0, translate: false, scan: false, translate_language: '', has_cover_page: null });
+    docSlots.push(newDocSlot());
   }
   while (docSlots.length > newCount) {
+    clearTimeout(loaderTimers[docSlots.length - 1]);
+    delete loaderTimers[docSlots.length - 1];
     docSlots.pop();
   }
   document.getElementById('doc-count-display').textContent = newCount;
@@ -1702,7 +1740,7 @@ function renderDocCards() {
       <div class="doc-card-body">
         <div class="upload-zone">
           <div class="upload-box ${slot.file ? 'has-file' : ''}" id="upload-box-${i}">
-            <input type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" onchange="handleFileUpload(${i}, this.files[0])" required/>
+            <input type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" onchange="handleFileUpload(${i}, this.files[0], this)" required/>
             <div class="upload-icon">
               ${slot.file
                 ? '<svg viewBox="0 0 24 24" fill="none" stroke="#1a9e75" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'
@@ -1711,11 +1749,27 @@ function renderDocCards() {
             </div>
             <div class="upload-text">
               <div class="up-primary">${slot.file ? slot.file.name : 'Click to upload document'}</div>
-              <div class="up-secondary">${slot.file ? `${slot.pages} page${slot.pages !== 1 ? 's' : ''} detected` : 'PDF, DOC, JPG — page count auto-detected'}</div>
+              <div class="up-secondary">${slot.file ? `${slot.pages} page${slot.pages !== 1 ? 's' : ''} detected` : 'PDF, DOC, JPG — max 25MB — page count auto-detected'}</div>
             </div>
             ${slot.file ? `<div class="check-icon"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 4.5 8.5 10 3"/></svg></div>` : ''}
           </div>
           <div class="upload-err-msg" id="upload-err-${i}">A file is required for Document ${i + 1}.</div>
+          ${slot.uploadState === 'loading' ? `
+          <div class="doc-upload-status">
+            <span class="doc-loader" role="status">
+              <span class="dl-track" aria-hidden="true">░░░░░░░░░░░░░░░░</span>
+              <span class="dl-glyph dl-g1" aria-hidden="true">█</span>
+              <span class="dl-glyph dl-g2" aria-hidden="true">▓</span>
+              <span class="dl-glyph dl-g3" aria-hidden="true">▒</span>
+              <span class="sr-only">Loading</span>
+            </span>
+            <span class="dl-label">Processing document…</span>
+          </div>` : ''}
+          ${slot.uploadState === 'ready' ? `
+          <div class="doc-ready-line">
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 6 4.5 8.5 10 3"/></svg>
+            Document ready to send
+          </div>` : ''}
         </div>
         <div class="doc-options">
           <div style="font-size:9.5px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em;padding-bottom:6px;border-bottom:1px solid var(--border);margin-bottom:4px;">ADD-ON Services</div>
@@ -1770,13 +1824,35 @@ function renderDocCards() {
   updateDocSubtotal();
 }
 
-function handleFileUpload(index, file) {
+function handleFileUpload(index, file, inputEl) {
   if (!file) return;
-  docSlots[index].file = file;
-  const box = document.getElementById('upload-box-' + index);
-  if (box) box.classList.remove('missing-file');
+  const box   = document.getElementById('upload-box-' + index);
   const errEl = document.getElementById('upload-err-' + index);
+
+  // Hard 25MB cap — reject without disturbing any file already attached to this slot
+  if (file.size > MAX_FILE_BYTES) {
+    if (inputEl) inputEl.value = '';
+    if (errEl) {
+      errEl.textContent = `File is too large (${(file.size / (1024 * 1024)).toFixed(1)} MB). Maximum size is 25MB per document.`;
+      errEl.classList.add('show');
+    }
+    if (box) box.classList.add('missing-file');
+    return;
+  }
+
+  docSlots[index].file = file;
+  docSlots[index].uploadState = 'loading';
+  if (box) box.classList.remove('missing-file');
   if (errEl) errEl.classList.remove('show');
+
+  // Re-uploading restarts the loader window
+  clearTimeout(loaderTimers[index]);
+  loaderTimers[index] = setTimeout(() => {
+    if (docSlots[index] && docSlots[index].file) {
+      docSlots[index].uploadState = 'ready';
+      renderDocCards();
+    }
+  }, 1500);
 
   if (file.type === 'application/pdf') {
     const reader = new FileReader();
@@ -2050,7 +2126,10 @@ function goNext(step) {
         const box = document.getElementById('upload-box-' + i);
         if (box) box.classList.add('missing-file');
         const errEl = document.getElementById('upload-err-' + i);
-        if (errEl) errEl.classList.add('show');
+        if (errEl) {
+          errEl.textContent = `A file is required for Document ${i + 1}.`;
+          errEl.classList.add('show');
+        }
       }
     });
     let allHaveLang = true;
@@ -2489,7 +2568,7 @@ function resetForm() {
     else if (Array.isArray(formState[k])) formState[k] = [];
     else formState[k] = '';
   });
-  docSlots = [{ file: null, pages: 0, translate: false, scan: false, translate_language: '', has_cover_page: null }];
+  docSlots = [newDocSlot()];
   document.getElementById('doc-count-display').textContent = '1';
   document.getElementById('plan-subtotal-display').textContent = '—';
   document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="date"], textarea')
