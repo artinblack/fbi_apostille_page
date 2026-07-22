@@ -1,0 +1,33 @@
+# Keywords for Google Search Scraper
+# One keyword per line. Lines starting with # are ignored.
+
+# High-volume targets (Medium, >100)
+fbi apostille
+fbi apostille services
+
+# Location-specific
+fbi apostille washington dc
+fbi apostille services washington dc
+fbi apostille services washington
+fbi apostille fees washington dc
+
+# Competitor research
+monument visa fbi apostille
+
+# Spain / international
+fbi apostille services spain
+fbi apostille spain
+
+# Informational / long-tail
+fbi apostille background check
+fbi apostille service
+fbi apostille expedite
+fbi apostille processing time
+fbi apostille wait time
+
+# State-specific
+fbi apostille services minnesota
+fbi apostille services oklahoma
+fbi apostille services utah
+fbi apostille services nevada
+fbi apostille services colorado

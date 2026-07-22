@@ -17,7 +17,9 @@ const next = nums.length ? Math.max(...nums) + 1 : 1;
 const filename = label ? `screenshot-${next}-${label}.png` : `screenshot-${next}.png`;
 const outPath = path.join(screenshotsDir, filename);
 
-const CHROME = 'C:/Users/AB/.cache/puppeteer/chrome/win64-147.0.7727.57/chrome-win64/chrome.exe';
+const CHROME = process.env.CHROME_PATH || (process.platform === 'win32'
+  ? 'C:/Users/AB/.cache/puppeteer/chrome/win64-147.0.7727.57/chrome-win64/chrome.exe'
+  : path.join(process.env.HOME || '', '.cache/puppeteer/chrome-headless-shell/linux-150.0.7871.46/chrome-headless-shell-linux64/chrome-headless-shell'));
 
 const browser = await puppeteer.launch({
   executablePath: CHROME,

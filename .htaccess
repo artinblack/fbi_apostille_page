@@ -1,20 +1,81 @@
-# Security Headers
+# ─────────────────────────────────────────────
+#  US Authentication Services — www.usauthentication.com
+#  Apache .htaccess
+# ─────────────────────────────────────────────
+
+# Disable directory browsing
+Options -Indexes
+
+# ── Rewrite engine ───────────────────────────────────────────────────────────
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Force HTTPS
+    RewriteCond %{HTTPS} off
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+    # Force www
+    RewriteCond %{HTTP_HOST} !^www\. [NC]
+    RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+    # ── Page redirects ───────────────────────────────────────────────────────
+
+    # apostille-for-fbi-background-check.php → SEO landing page
+    RewriteRule ^apostille-for-fbi-background-check\.php$ /apostille-for-fbi-background-check.html [R=301,L]
+
+    # Old duplicate pages → canonical equivalents
+    RewriteRule ^index_duplicate\.php$ / [R=301,L]
+    RewriteRule ^apostille-for-fbi-background-check-2\.php$ /apostille-for-fbi-background-check.html [R=301,L]
+
+</IfModule>
+
+# ── Security Headers ─────────────────────────────────────────────────────────
 <IfModule mod_headers.c>
     Header always set X-Content-Type-Options "nosniff"
     Header always set X-Frame-Options "SAMEORIGIN"
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
-    # CSP in report-only mode — review reports before switching to enforced
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    # CSP in report-only mode — tighten to enforced after verifying no violations
     Header always set Content-Security-Policy-Report-Only "default-src 'self' https:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com;"
 </IfModule>
 
-# Redirect duplicate pages to their canonical equivalents
-<IfModule mod_rewrite.c>
-    RewriteEngine On
+# ── Hide server info ─────────────────────────────────────────────────────────
+ServerSignature Off
 
-    # index_duplicate.php → home
-    RewriteRule ^index_duplicate\.php$ / [R=301,L]
+# Prevent access to .htaccess itself
+<Files ".htaccess">
+    Require all denied
+</Files>
 
-    # apostille-for-fbi-background-check-2.php → canonical landing page
-    RewriteRule ^apostille-for-fbi-background-check-2\.php$ /apostille-for-fbi-background-check.html [R=301,L]
+# Block direct access to the order sequence counter data
+<Files "order_seq.json">
+    Require all denied
+</Files>
+
+# ── Browser caching for static assets ────────────────────────────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg          "access plus 1 year"
+    ExpiresByType image/png           "access plus 1 year"
+    ExpiresByType image/gif           "access plus 1 year"
+    ExpiresByType image/webp          "access plus 1 year"
+    ExpiresByType image/svg+xml       "access plus 1 year"
+    ExpiresByType image/x-icon        "access plus 1 year"
+    ExpiresByType text/css            "access plus 6 months"
+    ExpiresByType application/javascript "access plus 6 months"
+    ExpiresByType font/woff           "access plus 1 year"
+    ExpiresByType font/woff2          "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+    ExpiresByType text/html           "access plus 0 seconds"
+    ExpiresByType application/xhtml+xml "access plus 0 seconds"
+</IfModule>
+
+# ── Gzip compression ─────────────────────────────────────────────────────────
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript
+    AddOutputFilterByType DEFLATE application/javascript application/json
+    AddOutputFilterByType DEFLATE application/xml text/xml
+    AddOutputFilterByType DEFLATE image/svg+xml
 </IfModule>

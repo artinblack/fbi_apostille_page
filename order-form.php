@@ -464,6 +464,7 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 
 /* ── RESPONSIVE ── */
 @media(max-width:768px){
+  .form-outer { padding: 1.5rem 4% 3rem; }
   .panel-card { padding: 1.4rem 1.2rem; }
   .field-row.cols-2,.field-row.cols-3,.field-row.cols-4 { grid-template-columns: 1fr; }
   .doc-card-body { grid-template-columns: 1fr; }
@@ -473,6 +474,18 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
   .sign-row { grid-template-columns: 1fr; }
   .svc-cards { grid-template-columns: 1fr; }
   .next-steps { grid-template-columns: 1fr; }
+}
+@media(max-width:520px){
+  .form-topbar { padding: 10px 4%; gap: 10px; }
+  .topbar-logo img { height: 38px; }
+  .topbar-divider { display: none; }
+  .form-brand-name { font-size: 14px; }
+  .form-brand-sub { display: none; }
+  .stepper-wrap { padding: 12px 3%; }
+  .step-circle { width: 26px; height: 26px; font-size: 10px; }
+  .step-label { font-size: 10px; }
+  .form-outer { padding: 1rem 3% 3rem; }
+  .panel-card { padding: 1.2rem 1rem; border-radius: 10px; }
 }
 </style>
 <script src="https://www.paypal.com/sdk/js?client-id=<?= htmlspecialchars(PAYPAL_CLIENT_ID) ?>&currency=USD&intent=capture"></script>
@@ -2451,21 +2464,16 @@ async function submitForm(paymentDetails = null) {
   fd.append('signature_date', formState.signature_date);
   fd.append('submitted_at',   formState.submitted_at);
 
-  const _ordSeq = (parseInt(localStorage.getItem('ord_seq') || '0', 10) + 1);
-  localStorage.setItem('ord_seq', _ordSeq);
-  const _now = new Date();
-  const _dd   = String(_now.getDate()).padStart(2, '0');
-  const _mm   = String(_now.getMonth() + 1).padStart(2, '0');
-  const _yyyy = _now.getFullYear();
-  const ref = 'ORD-' + String(_ordSeq).padStart(3, '0') + '-' + _dd + _mm + _yyyy;
-  fd.append('order_ref', ref);
+  const fallbackMsg = 'Order submitted — your reference number will be in your confirmation email.';
 
   try {
-    await fetch(N8N_WEBHOOK_URL, { method: 'POST', body: fd });
-    document.getElementById('order-ref-display').textContent = 'Reference: ' + ref;
+    const res  = await fetch(N8N_WEBHOOK_URL, { method: 'POST', body: fd });
+    const data = await res.json().catch(() => null);
+    document.getElementById('order-ref-display').textContent =
+      (data && data.order_ref) ? 'Reference: ' + data.order_ref : fallbackMsg;
     setStep(6);
   } catch (err) {
-    document.getElementById('order-ref-display').textContent = ref + ' — Submitted';
+    document.getElementById('order-ref-display').textContent = fallbackMsg;
     setStep(6);
   } finally {
     if (loadEl) loadEl.style.display = 'none';

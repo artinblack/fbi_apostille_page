@@ -53,3 +53,6 @@ pnpm-debug.log*
 
 # Admin panel (separate deployment, not part of main site)
 fbi_admin_page/
+
+# Scraped competitor/reference page dumps (local research only, never publish)
+scraper-reports/
