@@ -366,7 +366,13 @@ if (strpos($contentType, 'multipart/form-data') !== false) {
 // ═════════════════════════════════════════════════════════════════════════════
 //  JSON MODE — upsert the order record
 // ═════════════════════════════════════════════════════════════════════════════
-$raw = file_get_contents('php://input');
+// Two accepted encodings. The browser sends application/x-www-form-urlencoded
+// with the JSON in a 'payload' field, because shared-host mod_security rejects
+// raw JSON bodies with a 406. Raw JSON is still accepted for curl and tests.
+$raw = isset($_POST['payload'])
+    ? (string)$_POST['payload']
+    : file_get_contents('php://input');
+
 if ($raw === false || strlen($raw) > 262144) fail(413, 'body too large');
 
 $in = json_decode($raw, true);

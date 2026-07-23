@@ -65,3 +65,9 @@ test-oversize-*.pdf
 order_records/*
 !order_records/.htaccess
 !order_records/index.html
+
+# Temporary mail diagnostic — not part of the site
+mail-test.php
+
+# Temporary read-only verifier for E2E testing
+order-verify.php

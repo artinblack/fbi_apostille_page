@@ -448,6 +448,16 @@ async function fillStep5AndSubmit(page, scenario, expected, assertions, getPaylo
   });
   assertions.push({ name: 'Success panel shown', pass: successShown });
 
+  // The reference number only appears when n8n replied with one — it is the
+  // proof that the webhook accepted and processed the order, not just that the
+  // POST left the browser.
+  const orderRef = (await page.textContent('#order-ref-display').catch(() => '') || '').trim();
+  assertions.push({
+    name: `n8n response — ${orderRef || '(empty)'}`,
+    pass: true,
+    meta: { note: 'informational', orderRef },
+  });
+
   await page.waitForTimeout(1500);
   return { payload };
 }
@@ -856,6 +866,206 @@ async function runLoggingSuite(browser) {
   return LOG;
 }
 
+// ══════════════════════════════════════════════════════════════════════════════
+//  LIVE END-TO-END SUITE  (--live-e2e)
+//  Drives the real deployed form in a real browser, then reads back what was
+//  written on the server via order-verify.php. Covers lead capture, progressive
+//  updates, a genuine n8n submission, a forced failure with document backup,
+//  and abandonment.
+// ══════════════════════════════════════════════════════════════════════════════
+
+// HostGator's mod_security rejects POSTs from Linux desktop user agents with a
+// 406. Real customers are on Windows/macOS/mobile, so the tests present as one.
+const UA_WIN = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36';
+
+const E2E = [];
+function e2e(name, pass, detail) {
+  E2E.push({ name, pass, detail });
+  console.log(`   ${pass ? '✓' : '✗'} ${name}${detail ? `\n       ${String(detail).replace(/\n/g, '\n       ')}` : ''}`);
+  return pass;
+}
+
+function hexLead(tag) {
+  // deterministic, obviously-synthetic, valid 32-hex lead id
+  return (tag + Date.now().toString(16)).replace(/[^a-f0-9]/g, '0').padEnd(32, '0').slice(0, 32);
+}
+
+async function verifyLead(verifyBase, lead) {
+  const r = await fetch(`${verifyBase}&lead=${lead}`, { headers: { 'User-Agent': 'curl/8.5.0' } });
+  return r.json();
+}
+
+/** A browser context that presents as Windows and uses a known lead id. */
+async function e2eContext(browser, lead) {
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, userAgent: UA_WIN });
+  await ctx.addInitScript(id => {
+    try { sessionStorage.setItem('usa_lead_id', id); } catch (e) {}
+  }, lead);
+  return ctx;
+}
+
+const E2E_SCENARIO = {
+  id: 'e2e',
+  name: 'Standard | 2 docs | Spanish translation + scan | FedEx US | Zelle',
+  plan: 'standard',
+  contact: { firstName: 'ZZZ-E2E', lastName: 'DELETE-ME', email: 'e2e-delete-me@example.invalid', phoneCode: '+1', phone: '5550001234' },
+  docs: [
+    { file: '3pg', pages: 3, translate: true, language: 'Spanish', hasCoverPage: false, scan: true },
+    { file: '5pg', pages: 5, translate: false, hasCoverPage: false, scan: false },
+  ],
+  destinationCountry: 'Spain',
+  mailing: { name: 'ZZZ-E2E DELETE-ME', company: '', address: '1 Test Street', city: 'Springfield',
+             state: 'VA', postal: '22150', country: 'USA', phoneCode: '+1', phone: '5550001234',
+             shipping: 'fedex_domestic' },
+  payment: 'zelle',
+  signature: { mode: 'typed', text: 'ZZZ-E2E DELETE-ME' },
+};
+
+async function runLiveE2E(browser, verifyBase, allowRealN8n) {
+  const expected = calcExpectedTotal(E2E_SCENARIO);
+
+  // ── 1. Lead capture ────────────────────────────────────────────────────────
+  console.log('\n── 1. Lead capture (step 1 only, then leave) ──');
+  const lead1 = hexLead('a1');
+  {
+    const ctx = await e2eContext(browser, lead1); const page = await ctx.newPage();
+    await page.goto(FORM_URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await fillStep1(page, E2E_SCENARIO.contact, []);
+    await page.waitForTimeout(2500);
+    await ctx.close();
+  }
+  let v = await verifyLead(verifyBase, lead1);
+  e2e('Record created on the server after step 1', v.found === true, `lead ${lead1}`);
+  e2e('status = draft', v.record?.status === 'draft', `got: ${v.record?.status}`);
+  e2e('furthest_stage = step1_contact', v.record?.furthest_stage === 'step1_contact', `got: ${v.record?.furthest_stage}`);
+  e2e('contact details captured', v.record?.has_customer === true);
+
+  // ── 2. Progressive updates ─────────────────────────────────────────────────
+  console.log('\n── 2. Progressive update through steps 1→4 ──');
+  const lead2 = hexLead('b2');
+  let reviewTotal = '';
+  {
+    const ctx = await e2eContext(browser, lead2); const page = await ctx.newPage();
+    await page.goto(FORM_URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    const a = [];
+    await fillStep1(page, E2E_SCENARIO.contact, a);
+    await fillStep2(page, E2E_SCENARIO.plan, a);
+    await fillStep3(page, E2E_SCENARIO, a);
+    await fillStep4(page, E2E_SCENARIO.mailing, a);
+    reviewTotal = (await page.textContent('#review-total').catch(() => '')) || '';
+    await page.waitForTimeout(2500);
+    await ctx.close();
+  }
+  v = await verifyLead(verifyBase, lead2);
+  const r2 = v.record || {};
+  e2e('Single record updated in place (4 events, not 4 files)', r2.event_count === 4,
+      `stages: ${(r2.event_stages || []).join(' → ')}`);
+  e2e('furthest_stage = step4_shipping', r2.furthest_stage === 'step4_shipping', `got: ${r2.furthest_stage}`);
+  e2e('doc_count = 2', r2.doc_count === 2, `got: ${r2.doc_count}`);
+  e2e('destination = Spain', r2.destination === 'Spain', `got: ${r2.destination}`);
+  e2e('plan = standard', r2.plan === 'standard', `got: ${r2.plan}`);
+  e2e('shipping = fedex_domestic', r2.shipping_option === 'fedex_domestic', `got: ${r2.shipping_option}`);
+  e2e(`Stored total matches on-screen review total (${reviewTotal.trim()})`,
+      Math.abs((r2.totals?.final_total ?? -1) - parseAmount(reviewTotal)) < 0.02 &&
+      Math.abs((r2.totals?.final_total ?? -1) - expected.zelle) < 0.02,
+      `stored $${r2.totals?.final_total} | screen $${parseAmount(reviewTotal)} | expected $${expected.zelle}`);
+  e2e('Add-ons total correct ($240 translation + $10 scan)', r2.totals?.addons_subtotal === 250,
+      `got: $${r2.totals?.addons_subtotal}`);
+  e2e('Shipping cost correct ($35)', r2.totals?.shipping_cost === 35, `got: $${r2.totals?.shipping_cost}`);
+
+  // ── 3. Real submission through to n8n ──────────────────────────────────────
+  console.log(`\n── 3. Submission ${allowRealN8n ? 'to the REAL n8n webhook' : '(n8n intercepted, mocked 200)'} ──`);
+  const lead3 = hexLead('c3');
+  let orderRef = '', successShown = false;
+  {
+    const ctx = await e2eContext(browser, lead3); const page = await ctx.newPage();
+    if (!allowRealN8n) await interceptN8n(page, { status: 200 });
+    await page.goto(FORM_URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    const a = [];
+    await fillStep1(page, E2E_SCENARIO.contact, a);
+    await fillStep2(page, E2E_SCENARIO.plan, a);
+    await fillStep3(page, E2E_SCENARIO, a);
+    await fillStep4(page, E2E_SCENARIO.mailing, a);
+    await page.click('#tab-type');
+    await page.fill('#signature', E2E_SCENARIO.signature.text);
+    await page.fill('#zelle-payer-email', E2E_SCENARIO.contact.email);
+    await page.click('#zelle-submit-btn');
+    successShown = await page.waitForSelector('#panel-success.active', { timeout: 40000 }).then(() => true).catch(() => false);
+    orderRef = ((await page.textContent('#order-ref-display').catch(() => '')) || '').trim();
+    await page.waitForTimeout(4000);
+    await ctx.close();
+  }
+  e2e('Customer saw the success screen', successShown);
+  v = await verifyLead(verifyBase, lead3);
+  const r3 = v.record || {};
+  e2e('status = submitted', r3.status === 'submitted', `got: ${r3.status}`);
+  e2e('n8n returned 2xx (recorded)', r3.submission?.http_status === 200, `got: ${r3.submission?.http_status}`);
+  e2e('no error recorded', !r3.submission?.error, `got: ${r3.submission?.error}`);
+  e2e('payment method captured', r3.payment_method === 'zelle', `got: ${r3.payment_method}`);
+  e2e('signature mode captured', r3.signature_mode === 'typed', `got: ${r3.signature_mode}`);
+  e2e('NO alert email for a successful order', r3.alert_sent === false, `alert_sent: ${r3.alert_sent}`);
+  e2e('NO document backup for a successful order', (r3.backup_files || []).length === 0,
+      `files: ${(r3.backup_files || []).map(f => f.name).join(', ') || 'none'}`);
+  e2e(`n8n response shown to customer: "${orderRef}"`, true, 'informational');
+
+  // ── 4. Failure path + document backup ──────────────────────────────────────
+  console.log('\n── 4. Failure path (n8n forced to 500) ──');
+  const lead4 = hexLead('d4');
+  let successOnFail = false;
+  {
+    const ctx = await e2eContext(browser, lead4); const page = await ctx.newPage();
+    await interceptN8n(page, { status: 500 });          // never reaches the real n8n
+    await page.goto(FORM_URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    const a = [];
+    await fillStep1(page, E2E_SCENARIO.contact, a);
+    await fillStep2(page, E2E_SCENARIO.plan, a);
+    await fillStep3(page, E2E_SCENARIO, a);
+    await fillStep4(page, E2E_SCENARIO.mailing, a);
+    await page.click('#tab-type');
+    await page.fill('#signature', E2E_SCENARIO.signature.text);
+    await page.fill('#zelle-payer-email', E2E_SCENARIO.contact.email);
+    await page.click('#zelle-submit-btn');
+    successOnFail = await page.waitForSelector('#panel-success.active', { timeout: 40000 }).then(() => true).catch(() => false);
+    await page.waitForTimeout(15000);                    // background document backup
+    await ctx.close();
+  }
+  v = await verifyLead(verifyBase, lead4);
+  const r4 = v.record || {};
+  e2e('status = failed', r4.status === 'failed', `got: ${r4.status}`);
+  e2e('http_status = 500 recorded', r4.submission?.http_status === 500, `got: ${r4.submission?.http_status}`);
+  e2e('error message recorded', !!r4.submission?.error, `got: ${r4.submission?.error}`);
+  e2e('Customer still saw the success screen (UX unchanged)', successOnFail);
+  e2e('Alert email sent', r4.alert_sent === true, r4.alert_error ? `alert_error: ${r4.alert_error}` : 'alert_sent_at set');
+  e2e('Both documents backed up to the server', (r4.backup_files || []).length === 2,
+      `files: ${(r4.backup_files || []).map(f => `${f.name} (${f.bytes}b)`).join(', ') || 'none'}`);
+  e2e('Backup metadata recorded with sha256', (r4.backup_meta || []).every(m => m.sha256 && m.bytes),
+      JSON.stringify(r4.backup_meta));
+
+  // ── 5. Payload hygiene ─────────────────────────────────────────────────────
+  console.log('\n── 5. Payload hygiene (across all records above) ──');
+  for (const [label, rec] of [['draft', r2], ['submitted', r3], ['failed', r4]]) {
+    e2e(`${label} record contains no signature image`, rec.contains_signature_image === false);
+    e2e(`${label} record contains no PDF bytes`,       rec.contains_pdf_bytes === false);
+  }
+
+  // ── 6. Ledger ──────────────────────────────────────────────────────────────
+  console.log('\n── 6. Audit ledger ──');
+  const listRes = await fetch(`${verifyBase}&list=1`, { headers: { 'User-Agent': 'curl/8.5.0' } }).then(r => r.json());
+  e2e('Ledger is being appended', (listRes.ledger_lines || 0) > 0, `${listRes.ledger_lines} lines`);
+  e2e('Records present on server', (listRes.record_count || 0) >= 4, `${listRes.record_count} records`);
+
+  const pass = E2E.filter(x => x.pass).length;
+  console.log('\n╔══════════════════════════════════════════════════════════╗');
+  console.log(`║  LIVE E2E : ${pass}/${E2E.length} checks passed${' '.repeat(Math.max(0, 30 - String(pass).length - String(E2E.length).length))}║`);
+  console.log('╚══════════════════════════════════════════════════════════╝');
+  if (pass < E2E.length) {
+    console.log('\nFailed:');
+    E2E.filter(x => !x.pass).forEach(x => console.log(`  ✗ ${x.name}${x.detail ? ` — ${x.detail}` : ''}`));
+  }
+  console.log(`\nTest lead ids to delete: ${[lead1, lead2, lead3, lead4].join('  ')}`);
+  return E2E;
+}
+
 // ── HTML REPORT ───────────────────────────────────────────────────────────────
 
 function generateHtmlReport(results, timestamp) {
@@ -973,6 +1183,42 @@ async function main() {
   const urlIdx = args.indexOf('--url');
   if (urlIdx !== -1 && args[urlIdx + 1]) FORM_URL = args[urlIdx + 1];
   else if (args.includes('--local') || testLogging) FORM_URL = LOCAL_URL;
+
+  // ── Live end-to-end suite against the deployed site ──
+  if (args.includes('--live-e2e')) {
+    const keyIdx = args.indexOf('--verify-key');
+    const key    = keyIdx !== -1 ? args[keyIdx + 1] : '';
+    if (!key) { console.error('\n  --live-e2e requires --verify-key <key>\n'); process.exit(1); }
+    if (urlIdx === -1) FORM_URL = 'https://www.apostilleagents.com/order-form.php';
+    const verifyBase = new URL('/order-verify.php', FORM_URL).href + '?key=' + key;
+    const allowRealN8n = args.includes('--allow-submit');
+
+    console.log('\n╔══════════════════════════════════════════════════════════╗');
+    console.log('║   Live End-to-End Suite — deployed site + order_records   ║');
+    console.log('╚══════════════════════════════════════════════════════════╝');
+    console.log(`\n  Form   : ${FORM_URL}`);
+    console.log(`  n8n    : ${allowRealN8n ? 'REAL submission (creates one order)' : 'intercepted'}`);
+
+    const probe = await fetch(verifyBase + '&list=1', { headers: { 'User-Agent': 'curl/8.5.0' } })
+      .then(r => r.json()).catch(e => ({ error: e.message }));
+    if (probe.error || probe.record_count === undefined) {
+      console.error(`\n  ✗ order-verify.php not reachable — ${probe.error || JSON.stringify(probe)}`);
+      console.error('    Upload order-verify.php to the site root and check the key.\n');
+      process.exit(1);
+    }
+    console.log(`  verify : OK (${probe.record_count} records currently on server)`);
+
+    const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
+    try {
+      const results = await runLiveE2E(browser, verifyBase, allowRealN8n);
+      await browser.close();
+      process.exit(results.every(r => r.pass) ? 0 : 1);
+    } catch (err) {
+      await browser.close().catch(() => {});
+      console.error('\nLive E2E error:', err.stack || err.message);
+      process.exit(1);
+    }
+  }
 
   // ── Order capture log suite ──
   if (testLogging) {

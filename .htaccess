@@ -60,6 +60,17 @@ ServerSignature Off
     Require all denied
 </FilesMatch>
 
+# ── mod_security note ────────────────────────────────────────────────────────
+# Shared-host mod_security returns 406 for the browser's JSON POST and multipart
+# upload to order-log.php (curl passes, real browsers do not), silently killing
+# order capture.
+#
+# Do NOT try to fix this with SecRuleEngine/SecFilterEngine directives here:
+# this host does not allow them in .htaccess and Apache responds with a 500 for
+# the entire directory. It must be done in cPanel > Security > ModSecurity
+# (disable per-domain), or via a support ticket asking for the rule to be
+# whitelisted for /order-log.php.
+
 # ── Upload limits for order-log.php document backups ─────────────────────────
 # Per-document cap is 25MB (MAX_FILE_BYTES in order-form.php); files are uploaded
 # one per request, so these stay modest. If the host ignores php_value here, move

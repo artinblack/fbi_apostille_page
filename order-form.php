@@ -1655,16 +1655,24 @@ function snapshotState() {
   };
 }
 
+// Sent as application/x-www-form-urlencoded rather than raw JSON: shared-host
+// mod_security rejects JSON request bodies here with a 406, while an ordinary
+// form POST passes. The JSON travels inside a single 'payload' field.
+function logBody(stage, status, extra = {}) {
+  return new URLSearchParams({
+    payload: JSON.stringify({
+      lead_id: leadId(), stage, status,
+      data: Object.assign(snapshotState(), extra),
+    }),
+  });
+}
+
 async function logOrder(stage, status, extra = {}) {
   if (!ORDER_LOG_ENABLED) return;
   try {
     await fetch(ORDER_LOG_URL, {
       method: 'POST', keepalive: true,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        lead_id: leadId(), stage, status,
-        data: Object.assign(snapshotState(), extra),
-      }),
+      body: logBody(stage, status, extra),   // URLSearchParams sets the header itself
     });
   } catch (e) { /* capture is best-effort — the order flow must never depend on it */ }
 }
@@ -2765,11 +2773,8 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('pagehide', () => {
     if (!ORDER_LOG_ENABLED || currentStep >= 6 || !formState.email) return;
     try {
-      const body = JSON.stringify({
-        lead_id: leadId(), stage: 'step' + currentStep + '_abandoned',
-        status: 'abandoned', data: snapshotState(),
-      });
-      navigator.sendBeacon(ORDER_LOG_URL, new Blob([body], { type: 'application/json' }));
+      // URLSearchParams makes sendBeacon use form-encoding, same as logOrder()
+      navigator.sendBeacon(ORDER_LOG_URL, logBody('step' + currentStep + '_abandoned', 'abandoned'));
     } catch (e) { /* best-effort */ }
   });
 });
