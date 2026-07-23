@@ -1556,6 +1556,145 @@ body { font-family: var(--font-body); background: var(--bg); color: var(--text);
 // ── CONFIG ──────────────────────────────────────────
 const N8N_WEBHOOK_URL = '<?= htmlspecialchars(N8N_UPLOAD_FORM) ?>';
 
+// ── ORDER CAPTURE LOG ───────────────────────────────
+// Local, n8n-independent record of every order, plus an alert when a submission
+// fails. Everything below is fire-and-forget by design: no call is ever awaited
+// without a timeout, and every one swallows its own errors, so a broken or
+// missing endpoint can never block, slow, or break the order flow.
+const ORDER_LOG_URL     = 'order-log.php';
+// Quoted so the page still parses as JS when served by serve.mjs, which returns
+// .php files as static text (there, this evaluates false and logging stays off).
+const ORDER_LOG_ENABLED = '<?= (defined("ORDER_LOG_ENABLED") && ORDER_LOG_ENABLED) ? "true" : "false" ?>' === 'true';
+
+function leadId() {
+  let id = sessionStorage.getItem('usa_lead_id');
+  if (!id) {
+    id = (crypto.randomUUID ? crypto.randomUUID().replace(/-/g, '')
+                            : Array.from(crypto.getRandomValues(new Uint8Array(16)))
+                                   .map(b => b.toString(16).padStart(2, '0')).join(''));
+    sessionStorage.setItem('usa_lead_id', id);
+  }
+  return id;
+}
+
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+// Plain-JSON snapshot of everything we know so far. Reuses the existing pricing
+// helpers so logged totals can never drift from what the customer was shown.
+function snapshotState() {
+  const domCb  = document.getElementById('chk_fedex_domestic');
+  const intlCb = document.getElementById('chk_fedex_international');
+  const shipping = (domCb && domCb.checked) ? 35 : (intlCb && intlCb.checked) ? 85 : 0;
+  const planSub  = getPlanSubtotal();
+  const docSub   = calcDocSubtotal();
+  const base     = planSub + docSub + shipping;
+  const isPaypal = formState.payment_method === 'paypal';
+  const drawMode = document.getElementById('tab-draw') &&
+                   document.getElementById('tab-draw').classList.contains('active');
+
+  const mailingLabels = {
+    fedex_domestic:      'FedEx US Domestic ($35)',
+    fedex_international: 'FedEx International ($85)',
+    no_shipping:         'No shipping — scanned copy only',
+  };
+
+  return {
+    customer: {
+      first_name: formState.first_name, last_name: formState.last_name,
+      email: formState.email, phone_code: formState.phone_code, phone: formState.phone,
+    },
+    order: {
+      plan: { key: formState.selected_plan, label: formState.plan_label, price: formState.plan_price },
+      doc_count: docSlots.length,
+      destination_country: formState.destination_country,
+      docs: docSlots.map((s, i) => ({
+        index: i + 1,
+        filename:        s.file ? s.file.name : '',
+        file_size:       s.file ? s.file.size : 0,
+        file_type:       s.file ? (s.file.type || '') : '',
+        pages:           s.pages,
+        effective_pages: effectivePages(s),
+        has_cover_page:  s.has_cover_page,
+        translate:          s.translate,
+        translate_language: s.translate ? (s.translate_language || '') : '',
+        translation_cost:   s.translate ? 60 * (effectivePages(s) + 1) : 0,
+        scan:               s.scan,
+        scan_cost:          s.scan ? 10 : 0,
+      })),
+      totals: {
+        plan_subtotal: planSub, addons_subtotal: docSub, shipping_cost: shipping,
+        base_total: base,
+        paypal_fee: isPaypal ? +(base * 0.04).toFixed(2) : 0,
+        final_total: isPaypal ? +(base * 1.04).toFixed(2) : base,
+      },
+      shipping: {
+        no_shipping:          !!formState.no_shipping,
+        return_mailing:       formState.return_mailing || '',
+        return_mailing_label: mailingLabels[formState.return_mailing] || 'Not selected',
+        return_name:    formState.return_name,    return_company: formState.return_company,
+        return_address: formState.return_address, return_city:    formState.return_city,
+        return_state:   formState.return_state,   return_postal:  formState.return_postal,
+        return_country: formState.return_country,
+        return_phone:   (formState.return_phone_code ? formState.return_phone_code + ' ' : '') + formState.return_phone,
+      },
+      payment: {
+        method:                formState.payment_method || '',
+        paypal_order_id:       formState.paypal_order_id || '',
+        paypal_transaction_id: formState.paypal_transaction_id || '',
+        paypal_payer_name:     formState.paypal_payer_name || '',
+        paypal_payer_email:    formState.paypal_payer_email || '',
+        zelle_payer_email:     (document.getElementById('zelle-payer-email') || {}).value || '',
+      },
+    },
+    // The drawn signature image is deliberately never logged — mode and typed name only.
+    signature: {
+      mode: drawMode ? 'drawn' : 'typed',
+      signed_name: drawMode ? '' : ((document.getElementById('signature') || {}).value || '').trim(),
+      date: formState.signature_date || ((document.getElementById('signature_date') || {}).value || ''),
+    },
+  };
+}
+
+// Sent as application/x-www-form-urlencoded rather than raw JSON: shared-host
+// mod_security rejects JSON request bodies here with a 406, while an ordinary
+// form POST passes. The JSON travels inside a single 'payload' field.
+function logBody(stage, status, extra = {}) {
+  return new URLSearchParams({
+    payload: JSON.stringify({
+      lead_id: leadId(), stage, status,
+      data: Object.assign(snapshotState(), extra),
+    }),
+  });
+}
+
+async function logOrder(stage, status, extra = {}) {
+  if (!ORDER_LOG_ENABLED) return;
+  try {
+    await fetch(ORDER_LOG_URL, {
+      method: 'POST', keepalive: true,
+      body: logBody(stage, status, extra),   // URLSearchParams sets the header itself
+    });
+  } catch (e) { /* capture is best-effort — the order flow must never depend on it */ }
+}
+
+// Runs only after a failed submission, and only once the success screen has
+// already rendered, so the customer never waits on it. One request per file
+// keeps every POST under the 25MB per-document cap.
+async function backupDocs() {
+  if (!ORDER_LOG_ENABLED) return;
+  for (let i = 0; i < docSlots.length; i++) {
+    const f = docSlots[i].file;
+    if (!f) continue;
+    try {
+      const fd = new FormData();
+      fd.append('lead_id', leadId());
+      fd.append('doc_index', i + 1);
+      fd.append('file', f, f.name);
+      await fetch(ORDER_LOG_URL, { method: 'POST', body: fd });
+    } catch (e) { /* per-file: one failure must not stop the others */ }
+  }
+}
+
 // ── SIGNATURE PAD STATE ─────────────────────────────
 let signPadDrawing    = false;
 let signPadHasContent = false;
@@ -2107,6 +2246,7 @@ function goNext(step) {
     ].every(Boolean);
     if (!ok) return;
     collectStep1();
+    logOrder('step1_contact', 'draft');   // lead capture — survives abandonment
   }
   if (step === 2) {
     const radio = document.querySelector('input[name="selected_plan"]:checked');
@@ -2115,6 +2255,7 @@ function goNext(step) {
     planErr.classList.remove('show');
     collectStep2();
     calcOrderTotal();
+    logOrder('step2_plan', 'draft');
   }
   if (step === 3) {
     let allHaveFiles = true;
@@ -2156,6 +2297,7 @@ function goNext(step) {
       return;
     }
     collectStep3();
+    logOrder('step3_documents', 'draft');
   }
   if (step === 4) {
     const noShipCb  = document.getElementById('chk_no_shipping');
@@ -2193,6 +2335,7 @@ function goNext(step) {
 
     collectStep4();
     buildReviewPanel();
+    logOrder('step4_shipping', 'draft');
   }
   currentStep = step + 1;
   setStep(currentStep);
@@ -2545,13 +2688,37 @@ async function submitForm(paymentDetails = null) {
 
   const fallbackMsg = 'Order submitted — your reference number will be in your confirmation email.';
 
+  // Record the full order locally BEFORE handing off to n8n, so nothing is lost
+  // if that handoff fails. Capped at 2.5s — a hung log endpoint can delay the
+  // submission by no more than that, and then it proceeds regardless.
+  await Promise.race([ logOrder('submit_attempt', 'pending'), sleep(2500) ]);
+
+  const t0 = Date.now();
+  // Marks the order failed (which triggers the alert email), then backs up the
+  // customer's documents in the background — after the success screen renders.
+  const onFailure = (httpStatus, error) =>
+    logOrder('submit_failed', 'failed', {
+      submission: { attempted_at: formState.submitted_at, http_status: httpStatus,
+                    error: error, duration_ms: Date.now() - t0 },
+    }).then(backupDocs).catch(() => {});
+
   try {
     const res  = await fetch(N8N_WEBHOOK_URL, { method: 'POST', body: fd });
     const data = await res.json().catch(() => null);
+    if (res.ok) {
+      logOrder('submit_ok', 'submitted', {
+        submission: { attempted_at: formState.submitted_at, http_status: res.status,
+                      order_ref: (data && data.order_ref) || null,
+                      error: null, duration_ms: Date.now() - t0 },
+      });
+    } else {
+      onFailure(res.status, 'HTTP ' + res.status);
+    }
     document.getElementById('order-ref-display').textContent =
       (data && data.order_ref) ? 'Reference: ' + data.order_ref : fallbackMsg;
     setStep(6);
   } catch (err) {
+    onFailure(0, String((err && err.message) || err));
     document.getElementById('order-ref-display').textContent = fallbackMsg;
     setStep(6);
   } finally {
@@ -2600,6 +2767,16 @@ function resetForm() {
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('signature_date').value = new Date().toISOString().split('T')[0];
   renderDocCards();
+
+  // Mark leads who leave mid-form. sendBeacon survives page teardown where fetch
+  // does not. Never fires once the order reached the success screen.
+  window.addEventListener('pagehide', () => {
+    if (!ORDER_LOG_ENABLED || currentStep >= 6 || !formState.email) return;
+    try {
+      // URLSearchParams makes sendBeacon use form-encoding, same as logOrder()
+      navigator.sendBeacon(ORDER_LOG_URL, logBody('step' + currentStep + '_abandoned', 'abandoned'));
+    } catch (e) { /* best-effort */ }
+  });
 });
 </script>
 

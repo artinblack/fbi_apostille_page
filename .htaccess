@@ -54,6 +54,40 @@ ServerSignature Off
     Require all denied
 </Files>
 
+# Block the order capture ledger and any record files (belt-and-braces —
+# order_records/.htaccess already denies the whole directory)
+<FilesMatch "\.(ndjson|json\.tmp)$">
+    Require all denied
+</FilesMatch>
+
+# ── mod_security note ────────────────────────────────────────────────────────
+# Shared-host mod_security returns 406 for the browser's JSON POST and multipart
+# upload to order-log.php (curl passes, real browsers do not), silently killing
+# order capture.
+#
+# Do NOT try to fix this with SecRuleEngine/SecFilterEngine directives here:
+# this host does not allow them in .htaccess and Apache responds with a 500 for
+# the entire directory. It must be done in cPanel > Security > ModSecurity
+# (disable per-domain), or via a support ticket asking for the rule to be
+# whitelisted for /order-log.php.
+
+# ── Upload limits for order-log.php document backups ─────────────────────────
+# Per-document cap is 25MB (MAX_FILE_BYTES in order-form.php); files are uploaded
+# one per request, so these stay modest. If the host ignores php_value here, move
+# them to .user.ini or php.ini via the hosting panel.
+<IfModule mod_php.c>
+    php_value upload_max_filesize 26M
+    php_value post_max_size       28M
+    php_value memory_limit        128M
+    php_value max_execution_time  120
+</IfModule>
+<IfModule mod_php8.c>
+    php_value upload_max_filesize 26M
+    php_value post_max_size       28M
+    php_value memory_limit        128M
+    php_value max_execution_time  120
+</IfModule>
+
 # ── Browser caching for static assets ────────────────────────────────────────
 <IfModule mod_expires.c>
     ExpiresActive On
