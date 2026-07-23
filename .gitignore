@@ -56,3 +56,12 @@ fbi_admin_page/
 
 # Scraped competitor/reference page dumps (local research only, never publish)
 scraper-reports/
+
+# Generated oversize fixtures for upload-cap testing
+test-oversize-*.pdf
+
+# Order capture log — real customer PII and backed-up identity documents.
+# Never commit. (The .htaccess inside it IS tracked, via the negation below.)
+order_records/*
+!order_records/.htaccess
+!order_records/index.html

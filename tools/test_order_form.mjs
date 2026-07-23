@@ -8,7 +8,12 @@ const __dirname   = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..');
 const TRIAL_DIR   = path.join(PROJECT_ROOT, 'trial');
 const REPORT_DIR  = path.join(PROJECT_ROOT, 'scraper-reports');
-const FORM_URL    = 'https://apostilleagents.com/order-form.php';
+// Default target is the live form. --local (or --url) points it at the local PHP
+// dev server, which is what the --test-logging suite needs.
+const LIVE_URL    = 'https://apostilleagents.com/order-form.php';
+const LOCAL_URL   = 'http://localhost:8080/order-form.php';
+let   FORM_URL    = LIVE_URL;
+const RECORDS_DIR = path.join(PROJECT_ROOT, 'order_records');
 
 const PDF = {
   '1pg': path.join(TRIAL_DIR, 'test_1page.pdf'),
@@ -38,7 +43,9 @@ const SCENARIOS = [
     plan: 'economy',
     contact: contact(1),
     docs: [{ file: '1pg', pages: 1, translate: false, hasCoverPage: false, scan: false }],
-    destinationCountry: 'United States',
+    // 'United States' is not in the form's country list — it is a destination-of-
+    // apostille field, so a foreign country is required.
+    destinationCountry: 'Canada',
     mailing: { noShipping: true },
     payment: 'zelle',
     signature: { mode: 'typed', text: 'Test User One' },
@@ -169,7 +176,10 @@ function escHtml(s) {
 
 // ── N8N INTERCEPT ─────────────────────────────────────────────────────────────
 
-async function interceptN8n(page) {
+// opts.status — HTTP status to fulfil with (default 200). Set 500 to simulate an
+//               n8n outage; opts.abort aborts the request entirely (n8n unreachable).
+async function interceptN8n(page, opts = {}) {
+  const status = opts.status ?? 200;
   let capturedPayload = null;
   await page.route(
     url => url.toString().includes('/webhook/'),
@@ -180,10 +190,13 @@ async function interceptN8n(page) {
           url:      req.url(),
           postData: req.postData() || '(multipart binary — file attachments)',
         };
+        if (opts.abort) { await route.abort('failed'); return; }
         await route.fulfill({
-          status:      200,
+          status,
           contentType: 'application/json',
-          body:        JSON.stringify({ success: true, mocked: true }),
+          body: status === 200
+            ? JSON.stringify({ success: true, mocked: true, order_ref: 'TEST-REF-001' })
+            : JSON.stringify({ error: 'simulated n8n failure' }),
         });
       } else {
         await route.continue();
@@ -476,6 +489,373 @@ async function runScenario(browser, scenario, allowSubmit) {
   return { scenario, pass, assertions, payload, durationMs: Date.now() - t0, expected: calcExpectedTotal(scenario) };
 }
 
+// ══════════════════════════════════════════════════════════════════════════════
+//  ORDER CAPTURE LOG SUITE  (--test-logging)
+//  Verifies order-log.php: lead capture, progressive updates, submit success /
+//  failure recording, document backups, alert email, and — most importantly —
+//  that none of it can affect the order form.
+// ══════════════════════════════════════════════════════════════════════════════
+
+const LOG = [];
+function check(name, pass, detail) {
+  LOG.push({ name, pass, detail });
+  console.log(`   ${pass ? '✓' : '✗'} ${name}${detail ? `\n       ${String(detail).replace(/\n/g, '\n       ')}` : ''}`);
+  return pass;
+}
+
+function monthKey() {
+  const d = new Date();
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}`;
+}
+
+function recordsMonthDir() { return path.join(RECORDS_DIR, monthKey()); }
+
+function listRecords() {
+  const dir = recordsMonthDir();
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir).filter(f => f.endsWith('.json'))
+    .map(f => ({ id: f.replace(/\.json$/, ''), path: path.join(dir, f) }));
+}
+
+function readJson(p) {
+  try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return null; }
+}
+
+/** Newest record written after `since` (ms epoch). */
+function newestRecordSince(since) {
+  const recs = listRecords()
+    .map(r => ({ ...r, mtime: fs.statSync(r.path).mtimeMs }))
+    .filter(r => r.mtime >= since)
+    .sort((a, b) => b.mtime - a.mtime);
+  return recs[0] ? { ...recs[0], data: readJson(recs[0].path) } : null;
+}
+
+function wipeRecords() {
+  if (!fs.existsSync(RECORDS_DIR)) return;
+  for (const e of fs.readdirSync(RECORDS_DIR)) {
+    if (e === '.htaccess' || e === 'index.html') continue;
+    fs.rmSync(path.join(RECORDS_DIR, e), { recursive: true, force: true });
+  }
+}
+
+/** Drive the form to a given step without submitting. */
+async function driveTo(page, scenario, upTo) {
+  const a = [];
+  await page.goto(FORM_URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  if (upTo >= 1) await fillStep1(page, scenario.contact, a);
+  if (upTo >= 2) await fillStep2(page, scenario.plan, a);
+  if (upTo >= 3) await fillStep3(page, scenario, a);
+  if (upTo >= 4) await fillStep4(page, scenario.mailing, a);
+  return a;
+}
+
+const LOG_SCENARIO = {
+  id: 'log',
+  name: 'Standard | 2 docs | translate + scan | FedEx US | Zelle',
+  plan: 'standard',
+  contact: { firstName: 'Log', lastName: 'Tester', email: 'logtester@example.com', phoneCode: '+1', phone: '5550009999' },
+  docs: [
+    { file: '3pg', pages: 3, translate: true, language: 'Spanish', hasCoverPage: false, scan: true },
+    { file: '5pg', pages: 5, translate: false, hasCoverPage: false, scan: false },
+  ],
+  destinationCountry: 'Spain',
+  mailing: { name: 'Log Tester', company: '', address: '900 Main Street', city: 'Springfield',
+             state: 'VA', postal: '22150', country: 'USA', phoneCode: '+1', phone: '5550009999',
+             shipping: 'fedex_domestic' },
+  payment: 'zelle',
+  signature: { mode: 'typed', text: 'Log Tester' },
+};
+
+async function submitZelle(page, email) {
+  await page.fill('#zelle-payer-email', email);
+  await page.click('#zelle-submit-btn');
+  await page.waitForSelector('#panel-success.active', { timeout: 25000 });
+}
+
+async function runLoggingSuite(browser) {
+  const origin  = new URL(FORM_URL).origin;
+  const logUrl  = `${origin}/order-log.php`;
+  const ctxOpts = { viewport: { width: 1440, height: 900 } };
+
+  // ── 1. Lead capture ────────────────────────────────────────────────────────
+  console.log('\n── 1. Lead capture (step 1 only, then abandon) ──');
+  wipeRecords();
+  let t = Date.now();
+  {
+    const ctx = await browser.newContext(ctxOpts); const page = await ctx.newPage();
+    await driveTo(page, LOG_SCENARIO, 1);
+    await page.waitForTimeout(800);
+    await ctx.close();
+  }
+  const r1 = newestRecordSince(t);
+  check('Record file created after step 1', !!r1, r1 ? path.relative(PROJECT_ROOT, r1.path) : 'no record found');
+  check('status = draft',            r1?.data?.status === 'draft',                    `got: ${r1?.data?.status}`);
+  check('furthest_stage = step1_contact', r1?.data?.furthest_stage === 'step1_contact', `got: ${r1?.data?.furthest_stage}`);
+  check('email captured',            r1?.data?.customer?.email === LOG_SCENARIO.contact.email, `got: ${r1?.data?.customer?.email}`);
+  check('phone captured',            !!r1?.data?.customer?.phone,                     `got: ${r1?.data?.customer?.phone}`);
+  const ledgerPath = path.join(RECORDS_DIR, 'ledger.ndjson');
+  const ledger1 = fs.existsSync(ledgerPath) ? fs.readFileSync(ledgerPath, 'utf8').trim().split('\n') : [];
+  check('ledger.ndjson has 1 line',  ledger1.length === 1,                            `got ${ledger1.length}`);
+
+  // ── 2. Progressive update (one file, not four) ─────────────────────────────
+  console.log('\n── 2. Progressive update across steps 1→4 ──');
+  wipeRecords();
+  t = Date.now();
+  let reviewTotalText = '';
+  {
+    const ctx = await browser.newContext(ctxOpts); const page = await ctx.newPage();
+    await driveTo(page, LOG_SCENARIO, 4);
+    reviewTotalText = await page.textContent('#review-total').catch(() => '');
+    await page.waitForTimeout(900);
+    await ctx.close();
+  }
+  const r2 = newestRecordSince(t);
+  check('Exactly ONE record file for the session', listRecords().length === 1, `found ${listRecords().length}`);
+  check('events[] has 4 entries', r2?.data?.events?.length === 4,
+        `stages: ${(r2?.data?.events || []).map(e => e.stage).join(' → ')}`);
+  check('furthest_stage = step4_shipping', r2?.data?.furthest_stage === 'step4_shipping', `got: ${r2?.data?.furthest_stage}`);
+  const expected  = calcExpectedTotal(LOG_SCENARIO);
+  const logged    = r2?.data?.order?.totals?.final_total;
+  const displayed = parseAmount(reviewTotalText);
+  check(`Logged total matches on-screen review total (${reviewTotalText.trim()})`,
+        Math.abs(logged - displayed) < 0.02 && Math.abs(logged - expected.zelle) < 0.02,
+        `logged $${logged} | displayed $${displayed} | expected $${expected.zelle}`);
+  check('Document metadata captured for both docs', (r2?.data?.order?.docs || []).length === 2,
+        JSON.stringify((r2?.data?.order?.docs || []).map(d => `${d.filename} ${d.pages}pg tr=${d.translate} scan=${d.scan}`)));
+  check('Translation cost logged correctly ($60 × (3+1) = $240)',
+        r2?.data?.order?.docs?.[0]?.translation_cost === 240,
+        `got: ${r2?.data?.order?.docs?.[0]?.translation_cost}`);
+
+  // ── 3. Success path ────────────────────────────────────────────────────────
+  console.log('\n── 3. Success path (n8n returns 200) ──');
+  wipeRecords();
+  t = Date.now();
+  {
+    const ctx = await browser.newContext(ctxOpts); const page = await ctx.newPage();
+    await interceptN8n(page, { status: 200 });
+    await driveTo(page, LOG_SCENARIO, 4);
+    await page.fill('#signature', 'Log Tester');
+    await submitZelle(page, LOG_SCENARIO.contact.email);
+    await page.waitForTimeout(1200);
+    await ctx.close();
+  }
+  const r3 = newestRecordSince(t);
+  check('status = submitted',      r3?.data?.status === 'submitted',                 `got: ${r3?.data?.status}`);
+  check('http_status = 200',       r3?.data?.submission?.http_status === 200,        `got: ${r3?.data?.submission?.http_status}`);
+  check('order_ref recorded',      r3?.data?.submission?.order_ref === 'TEST-REF-001', `got: ${r3?.data?.submission?.order_ref}`);
+  check('NO alert email sent',     !r3?.data?.alert_sent_at && !fs.existsSync(path.join(RECORDS_DIR, 'last_alert.txt')), 'alert file absent');
+  check('NO document backup written', !fs.existsSync(path.join(recordsMonthDir(), r3?.id || 'x')), 'backup dir absent');
+
+  // ── 4. Failure path — the important one ────────────────────────────────────
+  console.log('\n── 4. Failure path (n8n returns 500) ──');
+  wipeRecords();
+  t = Date.now();
+  let successShownOnFailure = false;
+  {
+    const ctx = await browser.newContext(ctxOpts); const page = await ctx.newPage();
+    await interceptN8n(page, { status: 500 });
+    await driveTo(page, LOG_SCENARIO, 4);
+    await page.fill('#signature', 'Log Tester');
+    await submitZelle(page, LOG_SCENARIO.contact.email);
+    successShownOnFailure = await page.isVisible('#panel-success.active');
+    await page.waitForTimeout(4000);   // let the background document backup finish
+    await ctx.close();
+  }
+  const r4 = newestRecordSince(t);
+  check('status = failed',    r4?.data?.status === 'failed',                  `got: ${r4?.data?.status}`);
+  check('http_status = 500',  r4?.data?.submission?.http_status === 500,      `got: ${r4?.data?.submission?.http_status}`);
+  check('error recorded',     !!r4?.data?.submission?.error,                  `got: ${r4?.data?.submission?.error}`);
+  check('Customer still saw the success screen (UX unchanged)', successShownOnFailure);
+
+  const backupDir = path.join(recordsMonthDir(), r4?.id || 'none');
+  const backedUp  = fs.existsSync(backupDir) ? fs.readdirSync(backupDir) : [];
+  check('Document backup folder created', backedUp.length === 2, `files: ${backedUp.join(', ') || 'none'}`);
+
+  // Byte-for-byte comparison against the fixtures that were uploaded
+  let hashOk = false;
+  if (backedUp.length) {
+    const crypto = await import('crypto');
+    const sha = p => crypto.createHash('sha256').update(fs.readFileSync(p)).digest('hex');
+    const srcHash = sha(PDF['3pg']);
+    const dstPath = path.join(backupDir, 'doc_1.pdf');
+    hashOk = fs.existsSync(dstPath) && sha(dstPath) === srcHash;
+    check('doc_1.pdf is byte-identical to the uploaded fixture', hashOk,
+          `sha256 src=${srcHash.slice(0, 16)}… dst=${fs.existsSync(dstPath) ? sha(dstPath).slice(0, 16) + '…' : 'missing'}`);
+    check('Backup metadata recorded on the JSON record',
+          (r4?.data?.backup?.files || []).length === 2,
+          JSON.stringify((r4?.data?.backup?.files || []).map(f => `${f.stored_as} ${f.bytes}B (${f.original_name})`)));
+  }
+
+  // ── 5. Network failure ─────────────────────────────────────────────────────
+  console.log('\n── 5. Network failure (n8n unreachable) ──');
+  wipeRecords();
+  t = Date.now();
+  {
+    const ctx = await browser.newContext(ctxOpts); const page = await ctx.newPage();
+    await interceptN8n(page, { abort: true });
+    await driveTo(page, LOG_SCENARIO, 4);
+    await page.fill('#signature', 'Log Tester');
+    await submitZelle(page, LOG_SCENARIO.contact.email);
+    await page.waitForTimeout(4000);
+    await ctx.close();
+  }
+  const r5 = newestRecordSince(t);
+  check('status = failed via catch branch', r5?.data?.status === 'failed',        `got: ${r5?.data?.status}`);
+  check('http_status = 0 (no response)',    r5?.data?.submission?.http_status === 0, `got: ${r5?.data?.submission?.http_status}`);
+
+  // ── 6. Alert email contents ────────────────────────────────────────────────
+  console.log('\n── 6. Alert email contents ──');
+  const alertPath = path.join(RECORDS_DIR, 'last_alert.txt');
+  const alert     = fs.existsSync(alertPath) ? fs.readFileSync(alertPath, 'utf8') : '';
+  check('Alert email composed', alert.length > 0, `${alert.length} bytes`);
+  for (const [label, needle] of [
+    ['customer name',   'Log Tester'],
+    ['customer email',  LOG_SCENARIO.contact.email],
+    ['order total',     'ORDER TOTAL'],
+    ['document lines',  'Doc 1:'],
+    ['return address',  '900 Main Street'],
+    ['failure reason',  'WHY IT FAILED'],
+    ['backup location', 'order_records/'],
+    ['lead id',         'Lead id'],
+  ]) {
+    check(`Alert contains ${label}`, alert.includes(needle));
+  }
+
+  // ── 7. No double-send ──────────────────────────────────────────────────────
+  console.log('\n── 7. Alert de-duplication ──');
+  const r7id   = newestRecordSince(t)?.id;
+  const before = readJson(path.join(recordsMonthDir(), `${r7id}.json`))?.alert_sent_at;
+  // Guard against a vacuous pass: de-dupe is only meaningful once an alert
+  // actually recorded a send timestamp.
+  check('An alert was recorded as sent (precondition for de-dupe)', !!before, `alert_sent_at=${before}`);
+
+  fs.rmSync(path.join(RECORDS_DIR, 'last_alert.txt'), { force: true });
+  await new Promise(r => setTimeout(r, 1100));   // ensure a differing second-resolution timestamp
+  const dupRes = await fetch(logUrl, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ lead_id: r7id, stage: 'submit_failed', status: 'failed', data: {} }),
+  }).then(r => r.json()).catch(e => ({ ok: false, error: e.message }));
+  const after = readJson(path.join(recordsMonthDir(), `${r7id}.json`))?.alert_sent_at;
+  check('Re-sending a failure does not resend the alert', !!before && before === after,
+        `alert_sent_at before=${before} after=${after} (endpoint ok=${dupRes.ok})`);
+  check('No second alert was composed', !fs.existsSync(path.join(RECORDS_DIR, 'last_alert.txt')));
+
+  // ── 8. Non-interference ────────────────────────────────────────────────────
+  console.log('\n── 8. NON-INTERFERENCE — endpoint deleted entirely ──');
+  const logPhp  = path.join(PROJECT_ROOT, 'order-log.php');
+  const stashed = path.join(PROJECT_ROOT, 'order-log.php.stashed');
+  const timings = {};
+  {
+    // baseline: logging ON
+    const ctx = await browser.newContext(ctxOpts); const page = await ctx.newPage();
+    await interceptN8n(page, { status: 200 });
+    await driveTo(page, LOG_SCENARIO, 4);
+    await page.fill('#signature', 'Log Tester');
+    const s = Date.now();
+    await submitZelle(page, LOG_SCENARIO.contact.email);
+    timings.on = Date.now() - s;
+    await ctx.close();
+  }
+  fs.renameSync(logPhp, stashed);
+  let brokenResults = [];
+  try {
+    for (const scenario of SCENARIOS) {
+      const res = await runScenario(browser, scenario, false);
+      brokenResults.push(res);
+      console.log(`     [${scenario.id}] ${res.pass ? '✓' : '✗'} ${scenario.name}`);
+    }
+    const ctx = await browser.newContext(ctxOpts); const page = await ctx.newPage();
+    await interceptN8n(page, { status: 200 });
+    await driveTo(page, LOG_SCENARIO, 4);
+    await page.fill('#signature', 'Log Tester');
+    const s = Date.now();
+    await submitZelle(page, LOG_SCENARIO.contact.email);
+    timings.off = Date.now() - s;
+    await ctx.close();
+  } finally {
+    fs.renameSync(stashed, logPhp);   // always restore
+  }
+  const allPass = brokenResults.every(r => r.pass);
+  check(`All ${SCENARIOS.length} order scenarios still pass with order-log.php DELETED`, allPass,
+        brokenResults.filter(r => !r.pass).map(r => `[${r.scenario.id}] ` +
+          r.assertions.filter(a => !a.pass).map(a => a.name).join('; ')).join('\n') || 'every scenario passed');
+  check('Submit latency cost of logging is negligible', Math.abs(timings.on - timings.off) < 1500,
+        `with logging: ${timings.on}ms | without: ${timings.off}ms | delta: ${timings.on - timings.off}ms`);
+
+  // ── 9. Upload rejection ────────────────────────────────────────────────────
+  console.log('\n── 9. Malicious / oversized upload rejection ──');
+  const failedId = listRecords().map(r => ({ ...r, d: readJson(r.path) }))
+                                .find(r => r.d?.status === 'failed')?.id;
+  if (!failedId) {
+    check('Upload rejection tests', false, 'no failed record available to test against');
+  } else {
+    const post = async (name, type, buf) => {
+      const fd = new FormData();
+      fd.append('lead_id', failedId);
+      fd.append('doc_index', '1');
+      fd.append('file', new Blob([buf], { type }), name);
+      const res = await fetch(logUrl, { method: 'POST', body: fd });
+      return { status: res.status, body: await res.json().catch(() => ({})) };
+    };
+    const php = await post('shell.php', 'application/x-php', Buffer.from('<?php system($_GET["c"]); ?>'));
+    check('PHP web shell upload REJECTED', php.status === 415 || php.status === 400,
+          `HTTP ${php.status} — ${php.body.error || ''}`);
+    const shellPath = path.join(recordsMonthDir(), failedId);
+    const stray = fs.existsSync(shellPath) ? fs.readdirSync(shellPath).filter(f => /\.(php|phtml)$/i.test(f)) : [];
+    check('No .php file written to disk', stray.length === 0, `found: ${stray.join(', ') || 'none'}`);
+
+    const big = await post('big.pdf', 'application/pdf', Buffer.alloc(26 * 1024 * 1024, 0x25));
+    check('Oversized (26MB) upload REJECTED', big.status === 413 || big.status === 415,
+          `HTTP ${big.status} — ${big.body.error || ''}`);
+
+    const badLead = await fetch(logUrl, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ lead_id: '../../../etc/passwd', stage: 'x', status: 'draft', data: {} }),
+    });
+    check('Path-traversal lead_id REJECTED', badLead.status === 400, `HTTP ${badLead.status}`);
+  }
+
+  // ── 10. Payload hygiene ────────────────────────────────────────────────────
+  console.log('\n── 10. Payload hygiene ──');
+  const allRecordText = listRecords().map(r => fs.readFileSync(r.path, 'utf8')).join('\n');
+  check('No base64 signature image stored in any record', !allRecordText.includes('data:image/png'));
+  check('No PDF bytes stored in any record',              !allRecordText.includes('%PDF-'));
+  check('Signature mode recorded instead',                allRecordText.includes('"mode"'));
+
+  // ── 11. Retention ──────────────────────────────────────────────────────────
+  console.log('\n── 11. 30-day retention cleanup ──');
+  if (failedId) {
+    const dir = path.join(recordsMonthDir(), failedId);
+    if (fs.existsSync(dir)) {
+      const old = Date.now() / 1000 - 31 * 86400;
+      fs.utimesSync(dir, old, old);
+      // cleanup runs on ~1 request in 20 — hit it enough times to be certain
+      for (let i = 0; i < 120 && fs.existsSync(dir); i++) {
+        await fetch(logUrl, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lead_id: 'f'.repeat(32), stage: 'cleanup_probe', status: 'draft', data: {} }),
+        }).catch(() => {});
+      }
+      check('Backup files older than 30 days deleted', !fs.existsSync(dir), `dir: ${path.relative(PROJECT_ROOT, dir)}`);
+      check('JSON record retained after cleanup', fs.existsSync(path.join(recordsMonthDir(), `${failedId}.json`)));
+      check('Ledger retained after cleanup',      fs.existsSync(ledgerPath));
+    } else {
+      check('Retention test', false, 'no backup dir to age');
+    }
+  }
+
+  // ── SUMMARY ────────────────────────────────────────────────────────────────
+  const pass = LOG.filter(l => l.pass).length;
+  console.log('\n╔══════════════════════════════════════════════════════════╗');
+  console.log(`║  ORDER LOG SUITE : ${pass}/${LOG.length} checks passed${' '.repeat(Math.max(0, 24 - String(pass).length - String(LOG.length).length))}║`);
+  console.log('╚══════════════════════════════════════════════════════════╝');
+  if (pass < LOG.length) {
+    console.log('\nFailed checks:');
+    LOG.filter(l => !l.pass).forEach(l => console.log(`  ✗ ${l.name}${l.detail ? ` — ${l.detail}` : ''}`));
+  }
+  return LOG;
+}
+
 // ── HTML REPORT ───────────────────────────────────────────────────────────────
 
 function generateHtmlReport(results, timestamp) {
@@ -584,8 +964,51 @@ ${cards}
 async function main() {
   const args        = process.argv.slice(2);
   const allowSubmit = args.includes('--allow-submit');
+  const testLogging = args.includes('--test-logging');
+  const headless    = args.includes('--headless') || testLogging;
   const scenIdx     = args.indexOf('--scenario');
   let   scenarios   = SCENARIOS;
+
+  // Target selection — the logging suite needs the local PHP server
+  const urlIdx = args.indexOf('--url');
+  if (urlIdx !== -1 && args[urlIdx + 1]) FORM_URL = args[urlIdx + 1];
+  else if (args.includes('--local') || testLogging) FORM_URL = LOCAL_URL;
+
+  // ── Order capture log suite ──
+  if (testLogging) {
+    console.log('\n╔══════════════════════════════════════════════════════════╗');
+    console.log('║      Order Capture Log Suite  (order-log.php)            ║');
+    console.log('╚══════════════════════════════════════════════════════════╝');
+    console.log(`\n  Target : ${FORM_URL}`);
+
+    // The endpoint must actually execute — a Node static server would return the source
+    try {
+      const probe = await fetch(new URL('/order-log.php', FORM_URL).href, { method: 'POST' });
+      const txt   = await probe.text();
+      if (txt.includes('<?php')) {
+        console.error('\n  ✗ order-log.php is being served as text, not executed.');
+        console.error('    Start the PHP dev server first:');
+      console.error('      php -S localhost:8080 -d post_max_size=28M -d upload_max_filesize=26M\n');
+        process.exit(1);
+      }
+    } catch (e) {
+      console.error(`\n  ✗ Cannot reach ${FORM_URL} — ${e.message}`);
+      console.error('    Start the PHP dev server first:');
+      console.error('      php -S localhost:8080 -d post_max_size=28M -d upload_max_filesize=26M\n');
+      process.exit(1);
+    }
+
+    const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
+    try {
+      const results = await runLoggingSuite(browser);
+      await browser.close();
+      process.exit(results.every(r => r.pass) ? 0 : 1);
+    } catch (err) {
+      await browser.close().catch(() => {});
+      console.error('\nLogging suite error:', err.stack || err.message);
+      process.exit(1);
+    }
+  }
 
   if (scenIdx !== -1 && args[scenIdx + 1]) {
     try {
@@ -620,11 +1043,11 @@ async function main() {
     console.log(`    [${s.id}] ${s.name.padEnd(55)} → ${tot}`);
   }
 
-  await waitForKeypress('\n▶  Set up your screen recording, then press ENTER to start...\n');
+  if (!headless) await waitForKeypress('\n▶  Set up your screen recording, then press ENTER to start...\n');
 
   const browser = await chromium.launch({
-    headless: false,
-    slowMo:   150,
+    headless,
+    slowMo:   headless ? 0 : 150,
     args:     ['--no-sandbox'],
   });
 
